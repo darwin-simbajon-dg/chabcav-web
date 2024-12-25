@@ -17,17 +17,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Install Railway CLI
+      # Step 2: Log in to Docker Hub (optional if you want to push to Docker Hub)
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: dps0421
+          password: $p1derS0421
+
+      # Step 3: Build Docker image
+      - name: Build Docker image
+        run: docker build -t my-app:latest .
+
+       # Step 4: Push Docker image to Railway
       - name: Install Railway CLI
         run: |
           curl -fsSL https://railway.app/install.sh | sh
-          echo 'export PATH="$HOME/.railway/$PATH"' >> $GITHUB_ENV
-
-       # Step 3: Link Railway Project
-      - name: Link Railway Project
-        env:
-          RAILWAY_API_TOKEN: 4d8a19bf-d6f2-4ec6-a287-7973951a1bc4
-        run: railway link --project=3c8c5294-0f7f-458f-82f0-532df1c89143
+          echo 'export PATH="$HOME/.railway/bin:$PATH"' >> $GITHUB_ENV
 
       # Step 4: Deploy to Railway
       - name: Deploy to Railway
