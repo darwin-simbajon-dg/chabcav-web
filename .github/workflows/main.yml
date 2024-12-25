@@ -21,7 +21,7 @@ jobs:
       - name: Install Railway CLI
         run: |
           curl -fsSL https://railway.app/install.sh | sh
-          echo 'export PATH="$HOME/.railway/bin:$PATH"' >> $GITHUB_ENV
+          echo 'export PATH="$HOME/.railway/$PATH"' >> $GITHUB_ENV
 
       # Step 3: Deploy to Railway
       - name: Deploy to Railway
