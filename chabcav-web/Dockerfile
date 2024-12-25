@@ -1,7 +1,7 @@
 # Stage 1: Build the React app
 FROM node:18-alpine as build
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json ./chabcav-web
 RUN npm install
 COPY . .
 RUN npm run build
