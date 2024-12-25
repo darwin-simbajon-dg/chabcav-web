@@ -17,11 +17,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Railway CLI
-      - name: Set up Railway
-        uses: railwayapp/cli-action@v2
-        with:
-          token: ${{ secrets.RAILWAY_API_TOKEN }}
+      # Step 2: Install Railway CLI
+      - name: Install Railway CLI
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+          echo 'export PATH="$HOME/.railway/bin:$PATH"' >> $GITHUB_ENV
+          source $GITHUB_ENV
+
+      # Step 3: Authenticate with Railway
+      - name: Authenticate Railway CLI
+        env:
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+        run: railway login --token $RAILWAY_API_TOKEN
 
       # Step 3: Deploy to Railway
       - name: Deploy to Railway
