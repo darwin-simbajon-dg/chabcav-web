@@ -26,11 +26,11 @@ jobs:
        # Step 3: Link Railway Project
       - name: Link Railway Project
         env:
-          RAILWAY_API_TOKEN: 46517dd6-c94f-41a2-a8cc-fa6bbfa5e447
+          RAILWAY_API_TOKEN: 4d8a19bf-d6f2-4ec6-a287-7973951a1bc4
         run: railway link --project=3c8c5294-0f7f-458f-82f0-532df1c89143
 
       # Step 4: Deploy to Railway
       - name: Deploy to Railway
         env:
-          RAILWAY_API_TOKEN: 46517dd6-c94f-41a2-a8cc-fa6bbfa5e447
+          RAILWAY_API_TOKEN: 4d8a19bf-d6f2-4ec6-a287-7973951a1bc4
         run: railway up
