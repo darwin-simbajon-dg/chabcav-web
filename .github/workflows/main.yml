@@ -24,12 +24,8 @@ jobs:
           echo 'export PATH="$HOME/.railway/bin:$PATH"' >> $GITHUB_ENV
           source $GITHUB_ENV
 
-      # Step 3: Set up Railway authentication
-      - name: Set up Railway authentication
+      # Step 3: Deploy to Railway using API token
+      - name: Deploy to Railway
         env:
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
-        run: echo $RAILWAY_API_TOKEN | railway login
-
-      # Step 3: Deploy to Railway
-      - name: Deploy to Railway
-        run: railway up
+        run: railway up --token $RAILWAY_API_TOKEN
