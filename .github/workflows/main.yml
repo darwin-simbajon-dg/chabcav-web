@@ -26,6 +26,6 @@ jobs:
       # Step 3: Deploy to Railway
       - name: Deploy to Railway
         env:
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+          RAILWAY_API_TOKEN: 46517dd6-c94f-41a2-a8cc-fa6bbfa5e447
           RAILWAY_PROJECT: 3c8c5294-0f7f-458f-82f0-532df1c89143
         run: railway up
