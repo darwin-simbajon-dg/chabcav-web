@@ -22,7 +22,6 @@ jobs:
         run: |
           curl -fsSL https://railway.app/install.sh | sh
           echo 'export PATH="$HOME/.railway/bin:$PATH"' >> $GITHUB_ENV
-          source $GITHUB_ENV
 
       # Step 3: Deploy to Railway using API token
       - name: Deploy to Railway
