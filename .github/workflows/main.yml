@@ -16,7 +16,7 @@ jobs:
       # Step 2: Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/chabcav-web-app/chabcav-web-app:latest -f chabcav-web-app/Dockerfile .
+          docker build -t chabcav-web-app:latest ./chabcav-web
 
       # Step 3: Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
