@@ -20,7 +20,7 @@ jobs:
 
       # Step 3: Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
-        run: echo "" | docker login ghcr.io -u ${{ github.actor }} -p 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
+        run: echo "${{ secrets.GT_TOKEN }}" | docker login ghcr.io -u darwin-simbajon-dg --password-stdin
 
       # Step 4: Push Docker image to GHCR
       - name: Push Docker image
