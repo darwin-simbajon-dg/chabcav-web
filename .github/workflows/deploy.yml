@@ -14,7 +14,7 @@ jobs:
         image: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
         credentials:
           username: ${{ github.actor }}
-          password: ${{ secrets.DOCKER_PAT }}
+          password: ${{ secrets.GT_TOKEN }}
       env:
         SVC_ID: chabcav-web-app
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
