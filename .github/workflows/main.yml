@@ -18,6 +18,12 @@ jobs:
         run: |
           docker build -t ghcr.io/${{ github.repository }}/chabcav-web-app:latest ./chabcav-web
 
+      # Step 4: Push Docker image to Railway
+      - name: Install Railway CLI
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+          echo 'export PATH="$HOME/.railway/bin:$PATH"' >> $GITHUB_ENV
+
       # Step 3: Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GT_TOKEN }}" | docker login ghcr.io -u darwin-simbajon-dg --password-stdin
