@@ -15,9 +15,12 @@ jobs:
         credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.GT_TOKEN }}
-      env:
+  deploy:    
+     runs-on: ubuntu-latest
+     container: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
+     env:
         SVC_ID: chabcav-web-app
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      steps:
+     steps:
         - uses: actions/checkout@v3
         - run: railway up --service=${{ env.SVC_ID }}
