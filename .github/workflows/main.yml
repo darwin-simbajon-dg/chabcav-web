@@ -26,7 +26,12 @@ jobs:
 
       # Step 3: Build Docker image
       - name: Build Docker image
-        run: docker build -t my-app:latest ./chabcav-web
+        run: docker build -t chabcav-web-app ./chabcav-web
+
+      # Step 4: Push Docker image to Docker Hub
+      - name: Push Docker image
+        run: |
+          docker push dps0421/chabcav-web-app:latest
 
        # Step 4: Push Docker image to Railway
       - name: Install Railway CLI
@@ -38,4 +43,4 @@ jobs:
       - name: Deploy to Railway
         env:
           RAILWAY_API_TOKEN: 4d8a19bf-d6f2-4ec6-a287-7973951a1bc4
-        run: railway up --services=chabcav-web
+        run: railway up --service=chabcav-web
