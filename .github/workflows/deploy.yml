@@ -1,0 +1,19 @@
+name: Deploy to Railway
+
+on:
+  workflow_run:
+    workflows:
+      - Build Workflow  # Name of the first workflow
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
+    env:
+      SVC_ID: chabcav-web-app
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - run: railway up --service=${{ env.SVC_ID }}
