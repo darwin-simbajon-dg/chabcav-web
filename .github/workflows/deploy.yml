@@ -1,5 +1,3 @@
-name: Deploy to Railway
-
 on:
   workflow_run:
     workflows:
@@ -9,18 +7,20 @@ on:
 
 jobs:
   login:
-      runs-on: ubuntu-latest
-      container:
-        image: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
-        credentials:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GT_TOKEN }}
-  deploy:    
-     runs-on: ubuntu-latest
-     container: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
-     env:
-        SVC_ID: chabcav-web-app
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-     steps:
-        - uses: actions/checkout@v3
-        - run: railway up --service=${{ env.SVC_ID }}
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GT_TOKEN }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
+    env:
+      SVC_ID: chabcav-web-app
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - run: railway up --service=${{ env.SVC_ID }}
