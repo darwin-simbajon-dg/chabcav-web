@@ -6,22 +6,18 @@ on:
       - completed
 
 jobs:
-  login:
+  deploy:
     runs-on: ubuntu-latest
+    container: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
+    env:
+      SVC_ID: chabcav-web-app
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GT_TOKEN }}    
-  deploy:
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
-    env:
-      SVC_ID: chabcav-web-app
-      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-    steps:
+          password: ${{ secrets.GT_TOKEN }}       
       - uses: actions/checkout@v3
       - run: railway up --service=${{ env.SVC_ID }}
