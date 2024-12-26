@@ -1,4 +1,4 @@
-name: Deploy to Railway
+name: Build Workflow
 
 on:
   push:
@@ -30,12 +30,4 @@ jobs:
 
       # Step 4: Push Docker image to GHCR
       - name: Push Docker image
-        run: docker push ghcr.io/${{ github.repository }}/chabcav-web-app:latest
-        
-      # Step 5: Deploy using Railway
-      - name: Railway Deployment
-        run: |
-          docker run --rm \
-            -e SVC_ID=chabcav-web-app \
-            -e RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} \
-            ghcr.io/${{ github.repository }}/chabcav-web-app:latest railway up --service=$SVC_ID
+        run: docker push ghcr.io/${{ github.repository }}/chabcav-web-app:latest  
