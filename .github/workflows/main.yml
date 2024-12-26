@@ -6,7 +6,7 @@ on:
 
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       # Step 1: Check out the repository
@@ -26,12 +26,10 @@ jobs:
       - name: Push Docker image
         run: docker push ghcr.io/${{ github.repository }}/chabcav-web-app:latest
         
-  deploy:
-    runs-on: ubuntu-latest
-    container: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
-    env:
-      SVC_ID: chabcav-web-app
-      RAILWAY_TOKEN: 4d8a19bf-d6f2-4ec6-a287-7973951a1bc4
-    steps:
-      - uses: actions/checkout@v3
-      - run: railway up --service=chabcav-web-app
+      # Step 5: Deploy using Railway
+      - name: Railway Deployment
+        run: |
+          docker run --rm \
+            -e SVC_ID=chabcav-web-app \
+            -e RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} \
+            ghcr.io/${{ github.repository }}/chabcav-web-app:latest railway up --service=$SVC_ID
