@@ -10,11 +10,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    container: 
+    container:
       image: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
       credentials:
-         username: ${{ github.actor }}
-         password: ${{ secrets.DOCKER_PAT }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.DOCKER_PAT }}
     env:
       SVC_ID: chabcav-web-app
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
