@@ -1,14 +1,13 @@
-name: CI/CD Workflow
+name: Deploy to Railway
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
       # Step 1: Check out the repository
       - name: Checkout code
@@ -17,22 +16,22 @@ jobs:
       # Step 2: Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository }}/chabcav-web-app:latest .
+          docker build -t ghcr.io/chabcav-web-app/chabcav-web-app:latest .
 
       # Step 3: Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
         run: echo "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" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # Step 4: Push the Docker image to GitHub Container Registry
+      # Step 4: Push Docker image to GHCR
       - name: Push Docker image
-        run: docker push ghcr.io/${{ github.repository }}/chabcav-web-app:latest
-
-      # Step 5: Deploy using Railway CLI
-      - name: Railway Deployment
-        uses: docker://ghcr.io/${{ github.repository }}/chabcav-web-app:latest
-        env:
-          SVC_ID: my-service-id
-          RAILWAY_TOKEN: 4d8a19bf-d6f2-4ec6-a287-7973951a1bc4
-        with:
-          entrypoint: '/bin/bash'
-        run: railway up --service=chabcav-web-app
+        run: docker push ghcr.io/chabcav-web-app/chabcav-web-app:latest
+        
+  deploy:
+    runs-on: ubuntu-latest
+    container: ghcr.io/chabcav-web-app/chabcav-web-app:latest
+    env:
+      SVC_ID: chabcav-web-app
+      RAILWAY_TOKEN: 4d8a19bf-d6f2-4ec6-a287-7973951a1bc4
+    steps:
+      - uses: actions/checkout@v3
+      - run: railway up --service=chabcav-web-app
