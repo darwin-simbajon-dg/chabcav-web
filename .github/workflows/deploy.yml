@@ -10,11 +10,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    container: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
+    container: 
+      image: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
+      credentials:
+       username: ${{ github.actor }}
+       password: ${{ secrets.DOCKER_PAT }}
     env:
       SVC_ID: chabcav-web-app
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
-      - run: echo "${{ secrets.DOCKER_PAT }}" | docker login ghcr.io -u darwin-simbajon-dg --password-stdin
       - uses: actions/checkout@v3
       - run: railway up --service=${{ env.SVC_ID }}
