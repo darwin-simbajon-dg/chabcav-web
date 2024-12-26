@@ -16,7 +16,7 @@ jobs:
       # Step 2: Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t chabcav-web-app:latest ./chabcav-web
+          docker build -t ghcr.io/${{ github.repository }}/chabcav-web-app:latest ./chabcav-web
 
       # Step 3: Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
@@ -24,11 +24,11 @@ jobs:
 
       # Step 4: Push Docker image to GHCR
       - name: Push Docker image
-        run: docker push ghcr.io/chabcav-web-app/chabcav-web-app:latest
+        run: docker push ghcr.io/${{ github.repository }}/chabcav-web-app:latest
         
   deploy:
     runs-on: ubuntu-latest
-    container: ghcr.io/chabcav-web-app/chabcav-web-app:latest
+    container: ghcr.io/${{ github.repository }}/chabcav-web-app:latest
     env:
       SVC_ID: chabcav-web-app
       RAILWAY_TOKEN: 4d8a19bf-d6f2-4ec6-a287-7973951a1bc4
