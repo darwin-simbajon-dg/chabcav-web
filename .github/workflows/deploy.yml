@@ -19,7 +19,7 @@ jobs:
 
       # Step 2: Install Railway CLI
       - name: Install Railway CLI
-        shell: bash
+        shell: sh
         run: |
           curl -Lo railway https://github.com/railwayapp/cli/releases/latest/download/railway-linux-amd64
           chmod +x railway
