@@ -17,7 +17,7 @@ jobs:
       env: 
         DOCKER_TOKEN: ${{ secrets.HEROKU_API_KEY }}
       run: |
-        echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+        echo $HEROKU_API_KEY | docker login --username=_ --password-stdin registry.heroku.com
 
     - name: Build Docker image
       run: docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/chabcav-web-app ./chabcav-web
