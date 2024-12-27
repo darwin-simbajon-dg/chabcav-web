@@ -20,9 +20,10 @@ jobs:
       # Step 2: Install Railway CLI
       - name: Install Railway CLI
         run: |
-          curl -fsSL https://railway.app/install | sh
-          echo "$HOME/.railway/bin" >> $GITHUB_PATH
+          curl -Lo railway https://github.com/railwayapp/cli/releases/latest/download/railway-linux-amd64
+          chmod +x railway
+          sudo mv railway /usr/local/bin/
 
        # Step 3: Deploy to Railway
-      - name: Install Railway CLI
+      - name: Deploy to Railway 
         run: railway up --service=${{ env.SVC_ID }}
