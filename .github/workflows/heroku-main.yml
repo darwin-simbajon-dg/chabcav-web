@@ -20,10 +20,10 @@ jobs:
         echo $DOCKER_TOKEN | docker login --username=_ --password-stdin registry.heroku.com
 
     - name: Build Docker image
-      run: docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/chabcav-web-app ./chabcav-web
+      run: docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web ./chabcav-web
 
     - name: Push Docker image to Heroku
-      run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/chabcav-web-app
+      run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
 
     - name: Release Heroku app
       run: |
