@@ -13,19 +13,16 @@ jobs:
       SVC_ID: chabcav-web-app
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:     
-      - uses: actions/checkout@v3
-      - run: |
-          # Download the script
-          curl -fsSL https://railway.app/install.sh -o install.sh
-          # Debug: Check the content of the script
-          cat install.sh
-          # Install tar if not present
-          if ! command -v tar &> /dev/null; then
-            sudo apt-get update && sudo apt-get install -y tar
-          fi
-          # Run the installation script
-          sh install.sh
-          # Add Railway to PATH
-          echo 'export PATH="$HOME/.railway/bin:$PATH"' >> $GITHUB_ENV
-        shell: bash
-      - run: railway up --service=${{ env.SVC_ID }}
+       # Step 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Install Railway CLI
+      - name: Install Railway CLI
+        run: |
+          curl -fsSL https://railway.app/install | sh
+          echo "$HOME/.railway/bin" >> $GITHUB_PATH
+
+       # Step 3: Deploy to Railway
+      - name: Install Railway CLI
+        run: railway up --service=${{ env.SVC_ID }}
