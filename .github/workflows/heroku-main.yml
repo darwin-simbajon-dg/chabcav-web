@@ -1,30 +1,38 @@
-name: Deploy to Heroku
+name: Deploy React App to Heroku
 
 on:
   push:
     branches:
-      - main
+      - main  # Adjust if your default branch is not `main`
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Log in to Heroku Container Registry
-      env: 
-        DOCKER_TOKEN: ${{ secrets.HEROKU_API_KEY }}
-      run: |
-        echo $DOCKER_TOKEN | docker login --username=_ --password-stdin registry.heroku.com
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
 
-    - name: Build Docker image
-      run: docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web ./chabcav-web
+      # Install dependencies and build the React app
+      - name: Install dependencies
+        run: |
+          npm install
+          npm run build
 
-    - name: Push Docker image to Heroku
-      run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
-
-    - name: Release Heroku app
-      run: |
-        heroku container:release chabcav-web-app --app ${{ secrets.HEROKU_APP_NAME }}
+      # Deploy to Heroku
+      - name: Deploy to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          npm install -g heroku
+          heroku git:remote -a chabcav-web-app
+          git add .
+          git commit -m "Deploy React App"
+          git push heroku main --force
