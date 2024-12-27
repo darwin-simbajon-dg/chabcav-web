@@ -23,6 +23,7 @@ jobs:
       # Install dependencies and build the React app
       - name: Install dependencies
         run: |
+          cd chabcav-web
           npm install
           npm run build
 
