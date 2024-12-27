@@ -17,7 +17,7 @@ jobs:
       # Step 2: Log in to Railway's container registry
       - name: Log in to Railway's container registry
         env:
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+          RAILWAY_API_TOKEN: ${{ secrets.DOCKER_PASSWORD }}
         run: echo $RAILWAY_API_TOKEN | docker login --username=dps0421 --password-stdin registry.railway.app
 
       # Step 3: Build the Docker image
