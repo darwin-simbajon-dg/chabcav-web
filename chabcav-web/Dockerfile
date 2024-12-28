@@ -12,5 +12,6 @@ RUN npm run build
 # Stage 2: Serve the React app with Nginx
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
+ENV LISTEN_PORT 8080
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;", "-c", "/etc/nginx/nginx.conf"]
