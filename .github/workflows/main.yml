@@ -1,33 +1,25 @@
-name: Build Workflow
+name: Deploy to Heroku
 
 on:
   push:
-    branches: [main]
-
+    branches:
+      - main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      # Step 1: Check out the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      # Step 2: Build the Docker image
-      - name: Build Docker image
-        run: |
-          docker build -t ghcr.io/${{ github.repository }}/chabcav-web-app:latest ./chabcav-web
+    - name: Log in to the Heroku Container Registry
+      run: echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
 
-      # Step 4: Push Docker image to Railway
-      - name: Install Railway CLI
-        run: |
-          curl -fsSL https://railway.app/install.sh | sh
-          echo 'export PATH="$HOME/.railway/bin:$PATH"' >> $GITHUB_ENV
+    - name: Build and push Docker image to Heroku
+      run: |
+        docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web ./chabcav-web
+        docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
 
-      # Step 3: Log in to GitHub Container Registry
-      - name: Log in to GitHub Container Registry
-        run: echo "${{ secrets.GT_TOKEN }}" | docker login ghcr.io -u darwin-simbajon-dg --password-stdin
-
-      # Step 4: Push Docker image to GHCR
-      - name: Push Docker image
-        run: docker push ghcr.io/${{ github.repository }}/chabcav-web-app:latest  
+    - name: Release Docker image to Heroku
+      run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
