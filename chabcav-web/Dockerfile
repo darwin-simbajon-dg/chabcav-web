@@ -1,10 +1,9 @@
 # Stage 1: Build the React app
 FROM node:18-alpine AS build
 RUN apk add --no-cache bash curl
-RUN npm install -g railway
 WORKDIR /app
 COPY package.json ./ 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 RUN npm install                         
 COPY . .   
 RUN npm run build
