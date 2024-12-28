@@ -1,6 +1,7 @@
 # Stage 1: Build the React app
 FROM node:18-alpine AS build
 RUN apk add --no-cache bash curl
+RUN apt-get update && apt-get install -y findutils && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY package.json ./ 
 COPY nginx.conf /etc/nginx/nginx.conf
