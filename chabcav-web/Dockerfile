@@ -3,7 +3,8 @@ FROM node:18-alpine AS build
 RUN apk add --no-cache bash curl
 RUN npm install -g railway
 WORKDIR /app
-COPY package.json ./  
+COPY package.json ./ 
+COPY nginx.conf /etc/nginx/nginx.conf 
 RUN npm install                         
 COPY . .   
 RUN npm run build
@@ -12,4 +13,4 @@ RUN npm run build
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;", "-c", "/etc/nginx/nginx.conf"]
