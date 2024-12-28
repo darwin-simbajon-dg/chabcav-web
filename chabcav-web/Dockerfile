@@ -4,7 +4,7 @@ RUN apk add --no-cache bash curl
 RUN npm install -g railway
 WORKDIR /app
 COPY package.json ./ 
-COPY nginx.conf /etc/nginx/nginx.conf 
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 RUN npm install                         
 COPY . .   
 RUN npm run build
