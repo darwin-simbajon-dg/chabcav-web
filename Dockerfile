@@ -3,7 +3,7 @@ FROM node:18-alpine AS build
 RUN apk add --no-cache bash curl
 RUN apk add --no-cache findutils
 WORKDIR /app
-COPY package.json ./ 
+COPY ./package.json ./ 
 RUN npm install                         
 COPY . .   
 RUN npm run build
