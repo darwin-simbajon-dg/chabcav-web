@@ -1,4 +1,4 @@
-name: Deploy to Heroku
+name: UAT - Deploy to Heroku
 
 on:
   push:
