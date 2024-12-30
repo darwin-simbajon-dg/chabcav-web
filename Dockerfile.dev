@@ -3,7 +3,7 @@ FROM node:18-alpine AS build
 RUN apk add --no-cache bash curl
 RUN apk add --no-cache findutils
 WORKDIR /app
-COPY package.json ./ 
+COPY chabcav-web/package.json chabcav-web/tsconfig.json ./ 
 RUN npm install                         
 COPY chabcav-web/ ./   
 RUN npm run build
