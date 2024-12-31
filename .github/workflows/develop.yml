@@ -3,7 +3,7 @@ name: Deploy to Railway
 on:
   push:
     branches:
-      - main  # Adjust to your default branch
+      - develop  # Adjust to your default branch
 
 jobs:
   deploy:
