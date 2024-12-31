@@ -1,7 +1,7 @@
 # Stage 1: Build the React app
 FROM node:18-alpine AS build
 WORKDIR /app
-COPY chabcav-web/package*.json ./ 
+COPY chabcav-web/package*.json chabcav-web/tsconfig*.json ./ 
 RUN npm install                         
 COPY chabcav-web/ /.   
 RUN npm run build
