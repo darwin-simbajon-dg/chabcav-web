@@ -31,14 +31,5 @@ jobs:
       # Step 2: Trigger Railway Deployment
       - name: Deploy to Railway
         env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          curl -X POST "https://backboard.railway.app/graphql/v2" \
-            -H "Authorization: Bearer $RAILWAY_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "query": "mutation Deploy($image: String!) { createDeployment(input: { projectId: \"3c8c5294-0f7f-458f-82f0-532df1c89143\", image: $image }) { deployment { id status } } }",
-              "variables": {
-                "image": "ghcr.io/darwin.simbajon-dg/chabcav-web:latest" 
-              }
-            }'
+         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up --service chabcav-web
