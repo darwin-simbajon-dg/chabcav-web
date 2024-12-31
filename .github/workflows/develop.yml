@@ -33,9 +33,6 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     container: ghcr.io/darwin-simbajon-dg/chabcav-web:latest
-    env:
-      SVC_ID: chabcav-web
-      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
     steps:
     - name: Checkout repository
