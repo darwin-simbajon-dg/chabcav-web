@@ -27,6 +27,15 @@ jobs:
         run: |
           docker build -t ghcr.io/${{ github.repository }}:latest -f Dockerfile.dev .
           docker push ghcr.io/${{ github.repository }}:latest
+       
+      - name: Install Railway CLI
+        run: |
+          curl -sSL https://railway.app/install.sh | sh
+
+      - name: Set Railway Token
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: echo "Railway token set"
 
       # Step 4: Deploy the image to Railway
       - name: Deploy to Railway
