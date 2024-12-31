@@ -28,16 +28,17 @@ jobs:
           docker build -t ghcr.io/${{ github.repository }}:latest -f Dockerfile.dev .
           docker push ghcr.io/${{ github.repository }}:latest
        
-      - name: Install Railway CLI
-        run: |
-          curl -sSL https://railway.app/install.sh | sh
-
-      - name: Set Railway Token
+      # Step 2: Trigger Railway Deployment
+      - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: echo "Railway token set"
-
-      # Step 4: Deploy the image to Railway
-      - name: Deploy to Railway
         run: |
-          railway up --image ghcr.io/${{ github.repository }}:latest
+          curl -X POST "https://backboard.railway.app/graphql" \
+            -H "Authorization: Bearer $RAILWAY_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "query": "mutation Deploy($image: String!) { createDeployment(input: { projectId: 3c8c5294-0f7f-458f-82f0-532df1c89143, image: $image }) { deployment { id status } } }",
+              "variables": {
+                "image": "ghcr.io/darwin.simbajon-dg/chabcav-web:latest"
+              }
+            }'
