@@ -2,7 +2,8 @@
 FROM node:18-alpine AS build
 WORKDIR /app
 COPY chabcav-web/package*.json ./ 
-RUN npm install                    
+RUN npm install                   
+COPY chabcav-web/tsconfig*.json ./  
 COPY chabcav-web/ ./
 RUN npm run build
 
