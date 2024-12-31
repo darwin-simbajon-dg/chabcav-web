@@ -31,27 +31,7 @@ jobs:
         file: ./Dockerfile.dev # Specify the custom Dockerfile name
         context: . # Ensure the correct context is used
 
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Install Railway CLI
-      run: |
-        curl -sSL https://railway.app/install.sh | sh
-
-    - name: Set Railway Token
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      run: echo "Railway token set"
-
-    - name: Deploy to Railway
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      run: railway up --service chabcav-web
       
 
   
