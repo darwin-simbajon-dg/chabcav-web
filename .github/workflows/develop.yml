@@ -37,8 +37,16 @@ jobs:
             -H "Authorization: Bearer $RAILWAY_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{
-              "query": "mutation Deploy($image: String!) { createDeployment(input: { projectId: \"3c8c5294-0f7f-458f-82f0-532df1c89143\", image: $image }) { deployment { id status } } }",
+              "query": "mutation deploymentTriggerCreate($input: DeploymentTriggerCreateInput!) { deploymentTriggerCreate(input: $input) { __typename baseEnvironmentOverrideId branch checkSuites environmentId id projectId provider repository serviceId validCheckSuites } }",
               "variables": {
-                "image": "ghcr.io/darwin.simbajon-dg/chabcav-web:latest"
+                "input": {
+                  "projectId": "3c8c5294-0f7f-458f-82f0-532df1c89143",
+                  "serviceId": "d2a7195a-cf7b-4d2d-af38-625d25b54934",
+                  "branch": "develop",
+                  "repository": "ghcr.io/darwin.simbajon-dg/chabcav-web:latest",
+                  "provider": "DOCKER",
+                  "checkSuites": []
+                }
               }
             }'
+
