@@ -1,38 +1,34 @@
-name: Build, Push, and Deploy React App to Railway
+name: Deploy to Railway
 
 on:
   push:
     branches:
-      - develop  # Adjust to your default branch
+      - main  # Adjust to your default branch
 
 jobs:
-  build-push-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
+      # Step 1: Checkout code
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Log in to Railway Docker Registry
-      - name: Log in to Railway Docker Registry
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          echo $RAILWAY_TOKEN | docker login registry.railway.app --username $RAILWAY_TOKEN --password-stdin
+      # Step 2: Log in to GitHub Container Registry
+      - name: Log in to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GITHUB_ACTOR }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 3: Build the Docker image
-      - name: Build Docker Image
+      # Step 3: Build and push the Docker image
+      - name: Build and Push Docker Image
         run: |
-          docker build -t registry.railway.app/chabcav-web:latest -f Dockerfile.dev .
+          docker build -t ghcr.io/${{ github.repository }}:latest .
+          docker push ghcr.io/${{ github.repository }}:latest
 
-      # Step 4: Push the Docker image to Railway
-      - name: Push Docker Image
+      # Step 4: Deploy the image to Railway
+      - name: Deploy to Railway
         run: |
-          docker push registry.railway.app/chabcav-web:latest
-
-      - name: Deploy Existing Image
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway up --image registry.railway.app/chabcav-web:latest
+          railway up --image ghcr.io/${{ github.repository }}:latest
