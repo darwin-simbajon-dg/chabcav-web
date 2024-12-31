@@ -28,7 +28,7 @@ jobs:
       with:
         push: true
         tags: ghcr.io/darwin-simbajon-dg/chabcav-api:latest
-
+        file: Dockerfile.dev
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
