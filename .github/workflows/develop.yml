@@ -27,7 +27,7 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         push: true
-        tags: ghcr.io/darwin-simbajon-dg/chabcav-web-app:latest
+        tags: ghcr.io/darwin-simbajon-dg/chabcav-web:latest
         file: ./Dockerfile.dev # Specify the custom Dockerfile name
         context: . # Ensure the correct context is used
 
