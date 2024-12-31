@@ -5,7 +5,7 @@ WORKDIR /app
 COPY chabcav-web/package*.json chabcav-web/tsconfig*.json ./
 RUN npm install     
 COPY chabcav-web/ ./                     
-RUN npm run build
+RUN npm --no-cache run build
 
 # Stage 2: Serve the React app with Nginx
 FROM nginx:alpine
