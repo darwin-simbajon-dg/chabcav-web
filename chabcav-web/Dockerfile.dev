@@ -2,7 +2,7 @@
 FROM node:18-alpine AS build
 WORKDIR /app
 COPY chabcav-web/package*.json ./ 
-COPY chabcav-web/tsconfig*.json ./  
+COPY chabcav-web/tsconfig*.json ./  sdfsdf
 RUN npm install                   
 COPY chabcav-web/ ./
 RUN npm run build
