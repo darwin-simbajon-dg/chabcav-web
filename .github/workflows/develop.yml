@@ -39,7 +39,7 @@ jobs:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
     - uses: actions/checkout@v3
-    - run: railway link --project-id 3c8c5294-0f7f-458f-82f0-532df1c89143
+    - run: railway link --project 3c8c5294-0f7f-458f-82f0-532df1c89143 --service d2a7195a-cf7b-4d2d-af38-625d25b54934
     - run: railway up --service=d2a7195a-cf7b-4d2d-af38-625d25b54934 --image gchr.io/darwin-simbajon-dg/chabcav-web:latest
       
 
