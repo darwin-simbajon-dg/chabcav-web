@@ -9,30 +9,16 @@ jobs:
     
   deploy:
     runs-on: ubuntu-latest
-    
+    container: ghcr.io/railwayapp/cli:latest
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Download Railway CLI
-      run: |
-        curl -sSL https://github.com/railwayapp/cli/releases/latest/download/railway-linux-amd64 -o railway
-        ls -l railway
-        chmod +x railway
-        sudo mv railway /usr/local/bin/railway
-
-    - name: Verify Railway CLI Installation
-      run: railway --version
-
-    - name: Link Railway Project
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      run: railway link --project 3c8c5294-0f7f-458f-82f0-532df1c89143 --service d2a7195a-cf7b-4d2d-af38-625d25b54934
-
-    - name: Deploy to Railway
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      run: railway up --detach
+      - env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway link --project 3c8c5294-0f7f-458f-82f0-532df1c89143 --service d2a7195a-cf7b-4d2d-af38-625d25b54934
+      - env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up --detach
 
     
       
