@@ -18,6 +18,13 @@ jobs:
       run: |
         curl -sSL https://railway.app/install.sh | sh
 
+    - name: Authenticate Railway CLI
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      run: |
+        echo $RAILWAY_TOKEN > ~/.railway
+        echo "Authentication completed"
+
     - name: Link Railway Project
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
