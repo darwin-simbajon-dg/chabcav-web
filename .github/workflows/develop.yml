@@ -18,10 +18,15 @@ jobs:
       run: |
         curl -sSL https://railway.app/install.sh | sh
 
+    - name: Link Railway Project
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      run: railway link --project 3c8c5294-0f7f-458f-82f0-532df1c89143 --service d2a7195a-cf7b-4d2d-af38-625d25b54934
+
     - name: Deploy to Railway
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      run: railway up --service d2a7195a-cf7b-4d2d-af38-625d25b54934 --image ghcr.io/darwin-simbajon-dg/chabcav-web:latest
+      run: railway up --detach
 
     
       
