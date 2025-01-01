@@ -38,12 +38,8 @@ jobs:
       SVC_ID: my-service
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
-    - name: Set Railway Token
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      run: echo "Railway token is set"
-    - run: railway link --project 3c8c5294-0f7f-458f-82f0-532df1c89143 --service d2a7195a-cf7b-4d2d-af38-625d25b54934
-    - run: railway up --service=d2a7195a-cf7b-4d2d-af38-625d25b54934 --image gchr.io/darwin-simbajon-dg/chabcav-web:latest
+    - run: RAILWAY_TOKEN=$RAILWAY_TOKEN railway link --project 3c8c5294-0f7f-458f-82f0-532df1c89143 --service d2a7195a-cf7b-4d2d-af38-625d25b54934
+    - run: RAILWAY_TOKEN=$RAILWAY_TOKEN railway up --service=d2a7195a-cf7b-4d2d-af38-625d25b54934 --image gchr.io/darwin-simbajon-dg/chabcav-web:latest
       
 
   
