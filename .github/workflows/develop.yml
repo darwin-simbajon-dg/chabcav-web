@@ -16,7 +16,9 @@ jobs:
 
     - name: Install Railway CLI
       run: |
-        curl -sSL https://railway.app/install.sh | sh
+        curl -sSL https://github.com/railwayapp/cli/releases/latest/download/railway-linux-amd64.tar.gz -o railway.tar.gz
+        tar -xzf railway.tar.gz -C /usr/local/bin
+        chmod +x /usr/local/bin/railway
 
     - name: Authenticate Railway CLI
       env:
