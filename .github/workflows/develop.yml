@@ -14,18 +14,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Install Railway CLI
+    - name: Download Railway CLI
       run: |
-        curl -sSL https://github.com/railwayapp/cli/releases/latest/download/railway-linux-amd64 -o /usr/local/bin/railway
-        chmod +x /usr/local/bin/railway
+        curl -sSL https://github.com/railwayapp/cli/releases/latest/download/railway-linux-amd64 -o railway
+        ls -l railway
+        chmod +x railway
         sudo mv railway /usr/local/bin/railway
 
-    - name: Authenticate Railway CLI
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      run: |
-        echo $RAILWAY_TOKEN > ~/.railway
-        echo "Authentication completed"
+    - name: Verify Railway CLI Installation
+      run: railway --version
 
     - name: Link Railway Project
       env:
