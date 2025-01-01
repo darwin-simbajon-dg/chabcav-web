@@ -34,12 +34,31 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
-    env:
-      SVC_ID: my-service
-      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    
     steps:
-    - run: RAILWAY_TOKEN=$RAILWAY_TOKEN railway link --project 3c8c5294-0f7f-458f-82f0-532df1c89143 --service d2a7195a-cf7b-4d2d-af38-625d25b54934
-    - run: RAILWAY_TOKEN=$RAILWAY_TOKEN railway up --service=d2a7195a-cf7b-4d2d-af38-625d25b54934 --image gchr.io/darwin-simbajon-dg/chabcav-web:latest
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install Railway CLI
+      run: |
+        curl -sSL https://railway.app/install.sh | sh
+
+    - name: Set Railway Token
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      run: echo "Railway token set"
+
+    - name: Link Railway Project
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      run: railway link --project 3c8c5294-0f7f-458f-82f0-532df1c89143 --service d2a7195a-cf7b-4d2d-af38-625d25b54934
+
+    - name: Deploy to Railway
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      run: railway up --service d2a7195a-cf7b-4d2d-af38-625d25b54934 --image ghcr.io/darwin-simbajon-dg/chabcav-web:latest
+
+    
       
 
   
