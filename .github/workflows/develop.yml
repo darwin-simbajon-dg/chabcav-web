@@ -18,6 +18,7 @@ jobs:
       run: |
         curl -sSL https://github.com/railwayapp/cli/releases/latest/download/railway-linux-amd64 -o /usr/local/bin/railway
         chmod +x /usr/local/bin/railway
+        sudo mv railway /usr/local/bin/railway
 
     - name: Authenticate Railway CLI
       env:
