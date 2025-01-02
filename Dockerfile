@@ -2,9 +2,9 @@
 FROM node:18-alpine AS build
 RUN apk add --no-cache bash curl
 WORKDIR /app
-COPY package.json ./ 
+COPY package.json . 
 RUN npm install                         
-COPY . .   
+COPY chabcav-web/ .   
 RUN npm run build
 
 # Stage 2: Serve the React app with Nginx
