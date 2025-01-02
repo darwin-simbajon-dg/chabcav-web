@@ -28,7 +28,6 @@ jobs:
       with:
         push: true
         tags: ghcr.io/darwin-simbajon-dg/chabcav-web:latest
-        file: chabcav-web/Dockerfile.dev
   
   deploy:
     needs: build-and-push
