@@ -24,8 +24,10 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  /* display: flex; */
+  /* place-items: center; */
+  background: url('/public/images/spanish.jpg') no-repeat center center;
+  background-size: cover;
   min-width: 320px;
   min-height: 100vh;
 }
