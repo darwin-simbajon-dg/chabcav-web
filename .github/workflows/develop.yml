@@ -30,6 +30,7 @@ jobs:
         tags: ghcr.io/darwin-simbajon-dg/chabcav-web:latest
   
   deploy:
+    needs: build-and-push
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
     env:
