@@ -3,15 +3,49 @@ import './App.css'
 import Header from './components/Header'
 import Login from './components/Login'
 import Content from './components/Content'
+import { useEffect, useState } from 'react';
+import PageData from './models/PageData';
 
 function App() {
-  // const [count, setCount] = useState(0)
+  const [data, setData] = useState<PageData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+
+    const fetchData = async() => {
+
+      try {        
+        const apiBaseUrl = import.meta.env.VITE_CHABCAV_API_BASE_URL;
+        const response = await fetch(`${apiBaseUrl}/cms/configurations`);
+        if(!response.ok){
+          throw new Error(`HTTP error! status: ${response.json()}`);
+        }
+        else{
+          const result: PageData = await response.json();
+          setData(result);
+        }
+      } catch (error) {
+        setError(error instanceof Error ? error.message: 'Unknown error');
+      }
+    }
+
+    fetchData();
+
+  }, []);
+
+  if(error) {
+    return <div>Error: [error]</div>
+  }
+
+  if(!data){
+    return <div>Loading...</div>
+  }
 
   return (
-    <div className='secDiv'>
-        <Header />
+    <div>
+        <Header bannerImage={data.bannerImage} />
         <Login/>
-        <Content />
+        <Content content={data.content} />
       </div>
   )
 }

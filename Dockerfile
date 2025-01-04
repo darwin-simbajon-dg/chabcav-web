@@ -7,7 +7,7 @@ RUN npm install
 COPY chabcav-web/ .   
 RUN npm run build
 
-# Stage 2: Serve the React app with Nginx
+# Stage 2: Serve the React app with Nginx server
 FROM nginx:alpine
 COPY nginx-dev.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/build /usr/share/nginx/html
