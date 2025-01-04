@@ -5,7 +5,6 @@ import Login from './components/Login'
 import Content from './components/Content'
 import { useEffect, useState } from 'react';
 import PageData from './models/PageData';
-import config from './config';
 
 function App() {
   const [data, setData] = useState<PageData | null>(null);
