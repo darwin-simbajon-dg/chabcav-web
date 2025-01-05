@@ -4,7 +4,7 @@ RUN apk add --no-cache bash curl
 WORKDIR /app
 COPY chabcav-web/package.json . 
 RUN npm install                         
-COPY chabcav-web/ .   
+COPY chabcav-web/ .   fdsf
 
 # ARG REACT_APP_API_BASE_URL
 ARG VITE_APP_API_BASE_URL
