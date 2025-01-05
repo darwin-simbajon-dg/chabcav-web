@@ -15,7 +15,7 @@ function App() {
     const fetchData = async() => {
 
       try {        
-        const apiBaseUrl = process.env.VITE_APP_API_BASE_URL;
+        const apiBaseUrl = 'https://chabcav-api-development.up.railway.app'; //process.env.VITE_APP_API_BASE_URL;
 
         console.log(process.env);
         console.log(process.env.meta);
