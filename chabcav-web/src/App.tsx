@@ -15,7 +15,7 @@ function App() {
     const fetchData = async() => {
 
       try {        
-        const apiBaseUrl = import.meta.env.VITE_CHABCAV_API_BASE_URL;
+        const apiBaseUrl = process.env.VITE_CHABCAV_API_BASE_URL;
 
         console.log(apiBaseUrl);
         console.log(`${apiBaseUrl}/cms/configurations`);
