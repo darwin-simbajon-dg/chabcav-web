@@ -17,7 +17,8 @@ function App() {
       try {        
         const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
-        console.log(apiBaseUrl);
+        console.log(process.env);
+        console.log(process.env.meta);
         console.log(`${apiBaseUrl}/cms/configurations`);
 
         const response = await fetch(`${apiBaseUrl}/cms/configurations`);
