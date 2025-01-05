@@ -16,6 +16,10 @@ function App() {
 
       try {        
         const apiBaseUrl = import.meta.env.VITE_CHABCAV_API_BASE_URL;
+
+        console.log(apiBaseUrl);
+        console.log(`${apiBaseUrl}/cms/configurations`);
+
         const response = await fetch(`${apiBaseUrl}/cms/configurations`);
         if(!response.ok){
           throw new Error(`HTTP error! status: ${response.json()}`);
