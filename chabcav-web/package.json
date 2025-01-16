@@ -12,8 +12,14 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.7",
+    "jsvectormap": "^1.6.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.3.1",
+    "react-quill": "^2.0.0",
+    "react-router-dom": "^7.1.1",
+    "@popperjs/core": "^2.11.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

@@ -1,0 +1,30 @@
+// sidebarConfig.ts
+export const SidebarConfig = [
+    {
+      title: "Profile",
+      icon: "/src/assets/css/accounts/img/team-3.jpg",
+      items: [
+        { title: "My Profile", link: "../../pages/pages/profile/overview.html" },
+        { title: "Settings", link: "../../pages/pages/account/settings.html" },
+        { title: "Logout", link: "../../pages/authentication/signin/basic.html" },
+      ],
+    },
+    {
+      title: "Activity",
+      icon: "browse_activity",
+      items: [
+        { title: "Go to Lesson", link: "../../pages/dashboards/analytics.html" },
+      ],
+    },
+    {
+      title: "Chapters",
+      icon: "browse_activity",
+      items: [
+        { title: "Chapter 1", link: "../../pages/dashboards/analytics.html" },
+        { title: "Chapter 2", link: "../../pages/dashboards/analytics.html" },
+        { title: "Chapter 3", link: "../../pages/dashboards/analytics.html" },
+      ],
+    },
+  ];
+
+  export default SidebarConfig;
