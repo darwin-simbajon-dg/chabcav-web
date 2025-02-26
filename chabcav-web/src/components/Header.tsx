@@ -32,12 +32,13 @@ const Header: React.FC = () => {
             </div>
           </div>
         </div>
-        <div
+        {/* <div
           className="position-absolute top-0 start-50 mt-7"
           style={{ zIndex: 10, width: "100%", maxWidth: "900px" }}
         >
+        
+        </div> */}
           <Login />
-        </div>
       </header>
     );
 

@@ -1,7 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const UserProfilePage: React.FC = () => {
+  const [information, setInformation] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [location, setLocation] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch("http://localhost/profile/9b9499c4-584c-4816-a768-d7348a07237a", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch profile data");
+      }
+
+      const data = await response.json();
+
+      setInformation(data.information);
+      setFullName(data.fullname);
+      setEmail(data.email);
+      setLocation(data.location);
+      setPhoneNumber(data.phoneNumber);
+
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <div className="container-fluid" style={{ paddingLeft: '250px' }}>
@@ -103,22 +135,20 @@ const UserProfilePage: React.FC = () => {
               </div>
               <div className="card-body p-3">
                 <p className="text-sm">
-                  Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer is no. If two
-                  equally difficult paths, choose the one more painful in the short term (pain
-                  avoidance is creating an illusion of equality).
+                  {information}
                 </p>
                 <ul className="list-group">
                   <li className="list-group-item border-0 ps-0 pt-0 text-sm">
-                    <strong className="text-dark">Full Name:</strong> Alec M. Thompson
+                    <strong className="text-dark">Full Name:</strong> {fullName}
                   </li>
                   <li className="list-group-item border-0 ps-0 text-sm">
-                    <strong className="text-dark">Mobile:</strong> (44) 123 1234 123
+                    <strong className="text-dark">Mobile:</strong> {phoneNumber}
                   </li>
                   <li className="list-group-item border-0 ps-0 text-sm">
-                    <strong className="text-dark">Email:</strong> alecthompson@mail.com
+                    <strong className="text-dark">Email:</strong> {email}
                   </li>
                   <li className="list-group-item border-0 ps-0 text-sm">
-                    <strong className="text-dark">Location:</strong> USA
+                    <strong className="text-dark">Location:</strong> {location}
                   </li>
                 </ul>
               </div>
