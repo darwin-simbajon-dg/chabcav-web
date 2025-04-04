@@ -31,50 +31,130 @@ ChartJS.register(
   );
 
   
-  
+
 
 const Dashboard: React.FC = () => {
- 
+  interface CountryData {
+    country: string;
+    flag: string;
+    noOfUsers: number;
+  }
+
+  interface CountryCoordinates {
+    name: string;
+    coords: [number, number];
+  }
+  
+
+  const [userCountryData, setUserCountryData] = React.useState<CountryData[]>([]);
+  const [barChartData, setBarChartData] = React.useState<number[]>([]);
+  const [monthlyVisit, setMonthlyVisit] = React.useState<number[]>([]);
+  const [monthlyCompletedLessons, setMonthlyCompletedLessons] = React.useState<number[]>([]);
+  const [monthlyTotalVisit, setMonthlyTotalVisit] = React.useState<number>(0);
+  const [totalUsers, setTotalUsers] = React.useState<number>(0);
+  const [countryCoordinates, setCountryCoordinates] = React.useState<CountryCoordinates[]>([]);
         // Table data
-        const countryData = [
-          { country: "United States", flag: "/src/assets/css/accounts/img/icons/flags/US.png", sales: 2500, value: "$230,900", bounce: "29.9%" },
-          { country: "Germany", flag: "/src/assets/css/accounts/img/icons/flags/DE.png", sales: 3900, value: "$440,000", bounce: "40.22%" },
-          { country: "Great Britain", flag: "/src/assets/css/accounts/img/icons/flags/GB.png", sales: 1400, value: "$190,700", bounce: "23.44%" },
-          { country: "Brazil", flag: "/src/assets/css/accounts/img/icons/flags/BR.png", sales: 562, value: "$143,960", bounce: "32.14%" },
-        ];
+        // const countryData = [
+        //   { country: "United States", flag: "/src/assets/css/accounts/img/icons/flags/US.png", sales: 2500, value: "$230,900", bounce: "29.9%" },
+        //   { country: "Germany", flag: "/src/assets/css/accounts/img/icons/flags/DE.png", sales: 3900, value: "$440,000", bounce: "40.22%" },
+        //   { country: "Great Britain", flag: "/src/assets/css/accounts/img/icons/flags/GB.png", sales: 1400, value: "$190,700", bounce: "23.44%" },
+        //   { country: "Brazil", flag: "/src/assets/css/accounts/img/icons/flags/BR.png", sales: 562, value: "$143,960", bounce: "32.14%" },
+        // ];
     
     
   //Data and options for Bar Chart
   useEffect(() => {
-     const map = new JsVectorMap({
-       selector: '#world-map',
-       map: 'world', // Match the map name
-       zoomOnScroll: true,
-       zoomButtons: true,
-       markers: [
-         { name: 'USA', coords: [40.71296415909766, -74.00437720027804] },
-         { name: 'Germany', coords: [51.17661451970939, 10.97947735117339]},
-         { name: 'Brazil', coords: [-7.596735421549542, -54.781694323779185] },
-         { name: 'Russia', coords: [62.318222797104276, 89.81564777631716] },
-         { name: 'China', coords: [22.320178999475512, 114.17161225541399] },
-       ]
+
+    async function fetchDashboardData(){
+      const response = await fetch("http://localhost/dashboard", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+     })
+
+    const data = await response.json();
+
+    const countryData: CountryData[] = data.result.countryData.map((item: any) => ({
+      country: item.country,
+      flag: item.flag,
+      noOfUsers: item.noOfUsers,
+    }));
+
+    const countryCoords: CountryCoordinates[] = data.result.mapCoordinates.map((item: any) => ({
+      name: item.country,
+      coords: [item.coords[0], item.coords[1]] as [number, number],
+    }));
+
+    const noOfUsersInAWeek = data.result.noOfUsersInAWeek.map((item: any) => item);
+    const monthlyUserData = data.result.monthlyVisit.map((item: any) => item);
+    // const monthlyUserVisits = data.result.monthlyVisit.map((item: any) => item);
+    const monthlyCompletedLessonsData = data.result.noOfUsersThatCompletedPerMonth.map((item: any) => item);
+    const totalUsers = data.result.totalUsers;
+
+    setUserCountryData(countryData);
+    setBarChartData(noOfUsersInAWeek);
+    setMonthlyVisit(monthlyUserData);
+    setMonthlyCompletedLessons(monthlyCompletedLessonsData);
+    setMonthlyTotalVisit(data.result.noOfVisits);
+    setTotalUsers(totalUsers);
+    setCountryCoordinates(countryCoords);
+     console.log(data.result);
+
+
+
+    }
+
+    fetchDashboardData();
+
+    //  const map = new JsVectorMap({
+    //    selector: '#world-map',
+    //    map: 'world', // Match the map name
+    //    zoomOnScroll: true,
+    //    zoomButtons: true,
+    //    markers: 
+    //   //  countryCoordinates
+    //    [
+    //      { name: 'USA', coords: [40.71296415909766, -74.00437720027804] },
+    //      { name: 'Germany', coords: [51.17661451970939, 10.97947735117339]},
+    //      { name: 'Brazil', coords: [-7.596735421549542, -54.781694323779185] },
+    //      { name: 'Russia', coords: [62.318222797104276, 89.81564777631716] },
+    //      { name: 'China', coords: [22.320178999475512, 114.17161225541399] },
+    //    ]
       
        
-     });
+    //  });
  
      // Clean up the map instance on unmount
      return () => {
-       map.destroy();
+      //  map.destroy();
      };
    }, []);
+
+   useEffect(() => {
+    if (countryCoordinates.length === 0) return;
+  
+    const map = new JsVectorMap({
+      selector: "#world-map",
+      map: "world",
+      zoomOnScroll: true,
+      zoomButtons: true,
+      markers: countryCoordinates
+    });
+  
+    return () => {
+      map.destroy();
+    };
+  }, [countryCoordinates]);
  
 
   const barData: ChartData<"bar", number[], string> = {
     labels: ["M", "T", "W", "T", "F", "S", "S"],
     datasets: [
       {
-        label: "Sales",
-        data: [50, 45, 22, 28, 50, 60, 76],
+        label: "Visits",
+        data: barChartData,
         backgroundColor: "#43A047",
         borderRadius: 4,
         barThickness: "flex",
@@ -107,8 +187,21 @@ const Dashboard: React.FC = () => {
     labels: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
     datasets: [
       {
+        label: "Visits",
+        data: monthlyCompletedLessons,
+        borderColor: "#43A047",
+        pointBackgroundColor: "#43A047",
+        pointBorderColor: "transparent",
+      },
+    ],
+  };
+
+  const monhtlyVisitlineData = {
+    labels: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+    datasets: [
+      {
         label: "Mobile apps",
-        data: [120, 230, 130, 440, 250, 360, 270, 180, 90, 300, 310, 220],
+        data: monthlyVisit,
         borderColor: "#43A047",
         pointBackgroundColor: "#43A047",
         pointBorderColor: "transparent",
@@ -172,22 +265,22 @@ const Dashboard: React.FC = () => {
           <div className="row mb-4">
             {[
               {
-                title: "Website Views",
-                description: "Last Campaign Performance",
+                title: "Website Visit",
+                description: "Daily Traffic",
                 chartId: "chart-bars",
-                updateInfo: "campaign sent 2 days ago",
+                updateInfo: "just updated",
                 chart: <Bar data={barData} options={barOptions} />
               },
               {
-                title: "Daily Sales",
-                description: "(+15%) increase in today sales.",
+                title: "Monthly Visit",
+                description: "Daily Sessions",
                 chartId: "chart-line",
-                updateInfo: "updated 4 min ago",
-                chart: <Line data={lineData} options={lineOptions} />
+                updateInfo: "just updated",
+                chart: <Line data={monhtlyVisitlineData} options={lineOptions} />
               },
               {
-                title: "Completed Tasks",
-                description: "Last Campaign Performance",
+                title: "No. of Users That Completed Lessons Per Month",
+                description: "Daily Sessions",
                 chartId: "chart-line-tasks",
                 updateInfo: "just updated",
                 chart: <Line data={lineData} options={lineOptions} />
@@ -220,56 +313,56 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Stats Section */}
-          <div className="row">
-            {[
-              { title: "Bookings", value: 281, icon: "weekend", growth: "+55%" },
-              {
-                title: "Today's Users",
-                value: "2,300",
-                icon: "leaderboard",
-                growth: "+3%",
+            <div className="row justify-content">
+            {[{
+              title: "Visits",
+              value: monthlyTotalVisit,
+              icon: "leaderboard",
+              growth: ""
               },
-              { title: "Revenue", value: "$34,000", icon: "store", growth: "+35%" },
-              { title: "Followers", value: "+2,910", icon: "person_add", growth: "Just updated" },
+              {
+              title: "Total Users",
+              value: totalUsers,
+              icon: "leaderboard",
+              growth: ""
+              },
             ].map((stat, index) => (
               <div
-                key={index}
-                className={`col-lg-3 col-md-6 col-sm-6 ${
-                  index > 1 ? "mt-lg-0 mt-4" : ""
-                }`}
+              key={index}
+              className="col-lg-6 col-md-5 col-sm-12 mb-4"
               >
-                <div className="card mb-2">
-                  <div className="card-header p-2 ps-3">
-                    <div className="d-flex justify-content-between">
-                      <div>
-                        <p className="text-sm mb-0 text-capitalize">{stat.title}</p>
-                        <h4 className="mb-0">{stat.value}</h4>
-                      </div>
-                      <div className="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
-                        <i className="material-symbols-rounded opacity-10">{stat.icon}</i>
-                      </div>
-                    </div>
+              <div className="card mb-2">
+                <div className="card-header p-2 ps-3">
+                <div className="d-flex justify-content-between">
+                  <div>
+                  <p className="text-sm mb-0 text-capitalize">{stat.title}</p>
+                  <h4 className="mb-0">{stat.value}</h4>
                   </div>
-                  <hr className="dark horizontal my-0" />
-                  <div className="card-footer p-2 ps-3">
-                    <p className="mb-0 text-sm">
-                      <span className="text-success font-weight-bolder">
-                        {stat.growth}
-                      </span>{" "}
-                      than last week
-                    </p>
+                  <div className="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
+                  <i className="material-symbols-rounded opacity-10">{stat.icon}</i>
                   </div>
                 </div>
+                </div>
+                <hr className="dark horizontal my-0" />
+                <div className="card-footer p-2 ps-3">
+                <p className="mb-0 text-sm">
+                  <span className="text-success font-weight-bolder">
+                  {stat.growth}
+                  </span>{" "}
+                  than last week
+                </p>
+                </div>
+              </div>
               </div>
             ))}
-          </div>
+            </div>
         </div>
       </div>
       <div className="mt-4">
       <div className="card mb-4">
         <div className="card-header pb-0">
-          <h6 className="mb-0">Sales by Country</h6>
-          <p className="mb-2 text-sm">Check the sales, value and bounce rate by country.</p>
+          <h6 className="mb-0">Users by Country</h6>
+          <p className="mb-2 text-sm">Users accessing the site by country.</p>
         </div>
         <div className="card-body p-3">
           <div className="row">
@@ -280,13 +373,13 @@ const Dashboard: React.FC = () => {
                   <thead>
                     <tr>
                       <th>Country</th>
-                      <th>Sales</th>
-                      <th>Value</th>
-                      <th>Bounce</th>
+                      <th>No. of Users</th>
+                      {/* <th>Value</th>
+                      <th>Bounce</th> */}
                     </tr>
                   </thead>
                   <tbody>
-                    {countryData.map((data, index) => (
+                    {userCountryData.map((data, index) => (
                       <tr key={index}>
                         <td>
                           <div className="d-flex align-items-center">
@@ -294,9 +387,9 @@ const Dashboard: React.FC = () => {
                             <span className="ms-3">{data.country}</span>
                           </div>
                         </td>
-                        <td>{data.sales}</td>
-                        <td>{data.value}</td>
-                        <td>{data.bounce}</td>
+                        <td>{data.noOfUsers}</td>
+                        {/* <td>{data.value}</td> */}
+                        {/* <td>{data.bounce}</td> */}
                       </tr>
                     ))}
                   </tbody>
