@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+//import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Chart as ChartJS,
     ChartData,
@@ -42,7 +43,7 @@ const Dashboard: React.FC = () => {
           { country: "Great Britain", flag: "/src/assets/css/accounts/img/icons/flags/GB.png", sales: 1400, value: "$190,700", bounce: "23.44%" },
           { country: "Brazil", flag: "/src/assets/css/accounts/img/icons/flags/BR.png", sales: 562, value: "$143,960", bounce: "32.14%" },
         ];
-    
+      const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     
   //Data and options for Bar Chart
   useEffect(() => {
@@ -154,10 +155,29 @@ const Dashboard: React.FC = () => {
     },
   };
 
+   // Function to handle mouse movement
+    useEffect(() => {
+      const handleMouseMove = (event: MouseEvent) => {
+        if (event.clientX <= 10) {
+          setIsSidebarCollapsed(false); // Expand if mouse is at the leftmost 10px
+        } else if (event.clientX > 260) {
+          setIsSidebarCollapsed(true); // Collapse if mouse moves far from the sidebar
+        }
+      };
+  
+      window.addEventListener("mousemove", handleMouseMove);
+  
+      return () => {
+        window.removeEventListener("mousemove", handleMouseMove);
+      };
+    }, []);
  
 
   return (
-    <div className="container-fluid py-4" style={{paddingLeft: "250px"}}>
+    <div className="container-fluid py-4" 
+    style={{paddingLeft: "250px", transition: "margin 0.3s ease-in-out",
+      marginLeft: isSidebarCollapsed ? "0" : "250px",
+      width: isSidebarCollapsed ? "100%" : "calc(100% - 250px)",}}>
       {/* Page Header */}
       <div className="row">
         <div className="col-lg-12 position-relative z-index-2">

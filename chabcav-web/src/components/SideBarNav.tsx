@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+//sidebarmenu 
+import React, { Component, useEffect, useState } from "react";
 import "../assets/css/accounts/css/nucleo-icons.css";
 import "../assets/css/accounts/css/nucleo-svg.css";
 import "../assets/css/accounts/css/material-dashboard.css";
@@ -7,13 +8,109 @@ import UserSettings from "../pages/account/components/UserSettings";
 import UserProfilePage from "../pages/account/UserProfilePage";
 import Dashboard from "../pages/account/Dashboard";
 import LessonEditor from '../pages/Lessons/LessonEditor';
-import MultiStepForm from "../pages/account/MultiStepForm";
+//import MultiStepForm from "../pages/account/MultiStepForm";
 import { useNavigate } from "react-router-dom";
 import clsLogo from "../assets/css/accounts/img/clslogo.webp";
+//import axios from "axios";
+import { useLesson } from "../context/FlowContext";
+import BookView from "../pages/account/ChapterLessonView";
+import ViewDictionary from "../pages/account/ViewDictionary";
+import UploadDictionary from "../pages/Lessons/UploadDictionary";
 
 
 const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [chapters, setChapters] = useState<string[]>([]);
+  const [selectedChapter, setSelectedChapter] = useState<string>("");
+  const { setChaptername } = useLesson();
+  //const [config, setConfig] = useState<any>(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+ 
+
+  //Fetaure to get all chapters name in sidebar menu
+  // useEffect(() => {
+  //   const fetchChapters = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost/user/get-all-lessons");
+  //       console.log("Fetched Chapters Name:", response.data);
+
+  //       if (response.data && Array.isArray(response.data.lessons)) {
+  //         const uniqueChapters = Array.from(new Set(response.data.lessons.map((lesson) => lesson.chaptername)));
+  //         setChapters(uniqueChapters);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching lessons:", error);
+  //     }
+  //   };
+
+  //   fetchChapters();
+  // }, []);
+
+  //Fetaure to get all lessons name in the main page
+  // useEffect(() => {
+  //   const fetchLessonsName = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost/user/get-all-lessons");
+  //       console.log("Fetched Lessons Name:", response.data);
+
+  //       if (response.data && Array.isArray(response.data.lessons)) {
+  //         const uniqueLessons = Array.from(new Set(response.data.lessons.map((lesson) => lesson.lessonname)));
+  //         setLessonname(uniqueLessons);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching lessons:", error);
+  //     }
+  //   };
+
+  //   fetchLessonsName();
+  // }, []);
+
+  /*const handleToggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };*/
+
+ /*const handleChapterClick = (chaptername: string) => {
+    console.log("Selected Chapter:", chaptername);
+    setSelectedChapter(chaptername);
+    setChaptername(chaptername); // Use the correct chaptername directly
+  };*/
+
+//   const handleChapterClick = (chaptername: string) => {
+//     console.log("Selected Chapter:", chaptername);
+//     setSelectedChapter(chaptername);
+//     setChaptername(chaptername); // ✅ Ensure the global context updates
+// };
+
+//   useEffect(() => {
+//     if (selectedChapter) {
+//       console.log(`Current selected chapter: ${selectedChapter}`);
+//      // handleChapterClick
+//     }
+//   }, [selectedChapter]);
+
+  /*useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        const response = await axios.get("http://localhost/user/get-all-lessons");
+        console.log("Fetched Lessons:", response.data);
+  
+        if (response.data && Array.isArray(response.data.lessons)) {
+          const uniqueChapters = Array.from(new Set(response.data.lessons.map((lesson) => lesson.chaptername)));
+          setChapters(uniqueChapters);
+  
+          // Automatically set the first chapter
+          if (uniqueChapters.length > 0) {
+            setSelectedChapter(uniqueChapters[0]); // 🔹 Auto-select first chapter
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching lessons:", error);
+      }
+    };
+  
+    fetchLessons();
+  }, []);*/
+  
 
     const userLessonConfig = [
       {
@@ -32,13 +129,24 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
       //     { title: "Go to Lesson", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel" },
       //   ],
       // },
+      // {
+      //   title: "All Chapters",
+      //   icon: "browse_activity",
+      //   items: chapters.map((chaptername) => ({
+      //     title: chaptername,
+      //     link: "../../pages/dashboards/analytics.html",
+      //     component: MultiStepForm,
+      //     step: "LessonPanel",
+      //    // onClick: () => setSelectedChapter(chapter.chaptername),
+      //   })),
+      // },
       {
-        title: "Chapters",
+        title: "Activity",
         icon: "browse_activity",
         items: [
-          { title: "Chapter 1", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel"  },
-          { title: "Chapter 2", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel"  },
-          { title: "Chapter 3", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel"  },
+          { title: "All Chapters", link: "../../pages/dashboards/analytics.html", icon: '', component: BookView, step: "LessonPanel"  },
+          { title: "Dictionary", link: "../../pages/dashboards/analytics.html", icon: '', component: ViewDictionary, step: "LessonPanel"  },
+          //{ title: "Chapter 3", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel"  },
         ],
       },
     ];
@@ -58,7 +166,8 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         icon: "admin_panel_settings",
         items: [
           { title: "Dashboard", link: "../../pages/dashboards/analytics.html", icon: "dashboard", component: Dashboard, step: "AdminPanel" },
-          { title: "Lessons", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: LessonEditor, step: "AdminPanel" },
+          { title: "Add Lessons", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: LessonEditor, step: "AdminPanel" },
+          { title: "Update Dictionary", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: UploadDictionary, step: "AdminPanel" },
         ],
       },
     ];
@@ -77,21 +186,37 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         title: "Activity",
         icon: "browse_activity",
         items: [
-          { title: "Go to Lesson", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel" },
+          { title: "Go to Chapters", link: "../../pages/dashboards/analytics.html", icon: '', component: BookView, step: "LessonPanel" },
+          { title: "Dictionary", link: "../../pages/dashboards/analytics.html", icon: '', component: ViewDictionary, step: "LessonPanel" },
         ],
       },
     ];
 
     const handleSidebarClick = (step: string) => {
       localStorage.setItem("Step", step);
-  
+      if (step === "Logout") {
+        localStorage.clear();
+        navigate("/");
+      } else {
+       // setChaptername(selectedChapter);
+        updateSidebarConfig(step);
+      }
+    };
+
+    /*const handleSidebarClick = (step: string, chapterName?: string) => {
+      if (chapterName) {
+        console.log("Navigating to Chapter:", chapterName); // Debugging
+        setSelectedChapter(chapterName); // ✅ Updates state
+      }
+    
       if (step === "Logout") {
         localStorage.clear();
         navigate("/");
       } else {
         updateSidebarConfig(step);
       }
-    };
+    };*/
+    
 
     const [sidebarConfig, setSideBarConfig] = useState(adminConfig);
 
@@ -110,7 +235,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
       if (step) {
         updateSidebarConfig(step);
       }
-    }, [sidebarConfig]);
+    }, []);
 
     // const [sidebarConfig, setSideBarConfig] = useState(adminConfig);
 
@@ -157,9 +282,27 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
     //   }, []);
 
   return (
-    <aside className="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start bg-white my-2">
+   
+    <aside className={`sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start bg-white my-2 ${
+      isCollapsed ? "collapsed" : ""
+    }`}
+    onMouseEnter={() => setIsCollapsed(false)}
+    onMouseLeave={() => setIsCollapsed(true)}
+    style={{
+      width: isCollapsed ? "0" : "250px",
+          transition: "width 0.3s ease",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          position: "fixed",
+          height: "100vh",
+          zIndex: 1000,
+          flexDirection: "column",
+          alignItems: isCollapsed ? "center" : "flex-start", // Center when collapsed
+    }}
+    >
       {/* Sidenav Header */}
-      <div className="sidenav-header">
+      <div className="sidenav-header d-flex align-items-center" style={{ width: "80%" }}> 
+        
         <i
           className="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
           aria-hidden="true"
@@ -178,13 +321,14 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
             height="26"
             alt="main_logo"
           />
-          <span className="ms-1 text-sm text-dark">CLS</span>
+         {!isCollapsed && <span className="ms-1 text-sm text-dark">CLS</span>}
         </a>
+  
       </div>
       <hr className="horizontal dark mt-0 mb-2" />
 
       {/* Dynamic Sidebar Menu */}
-      <div className="collapse navbar-collapse w-auto h-auto" id="sidenav-collapse-main">
+      <div className="collapse navbar-collapse w-auto h-auto" id="sidenav-collapse-main" style={{ width: "100%", textAlign: "center", padding: 0 }}>
         <ul className="navbar-nav">
           {sidebarConfig.map((section, index) => (
             <li key={index} className="nav-item mb-2 mt-0">
@@ -206,20 +350,27 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
               <div className="collapse" id={`section-${index}`}>
                 <ul className="nav">
                   {section.items.map((item, subIndex) => (
-                    <li key={subIndex} className="nav-item" onClick={() => {onNavigate(item.component); handleSidebarClick(item.step)}}>
+                    <li key={subIndex} className="nav-item" onClick={() => {onNavigate(item.component); /*handleChapterClick(item.title);*/ handleSidebarClick(item.step)}}>
                       <a className="nav-link text-dark" href="#">
                         <i className={`material-symbols-rounded opacity-5`}>{item.icon}</i>
                         <span className="sidenav-normal ms-3 ps-1">{item.title}</span>
                       </a>
                     </li>
+                    
                   ))}
+                  
                 </ul>
+                
               </div>
             </li>
+            
           ))}
         </ul>
       </div>
+      
+      
     </aside>
+
   );
 };
 

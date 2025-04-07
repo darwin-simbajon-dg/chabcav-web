@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BasicInfo from "../components/BasicInfo";
 import ChangePassword from "../components/ChangePassword";
 import Profile from "../Profile";
@@ -8,6 +8,7 @@ import Profile from "../Profile";
 const UserSettings: React.FC = () => {
 
 const [ChildComponent, setChildComponent] = useState<React.FC | null>();
+const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
 const handleNavigationClick = (Component: React.FC) => {
     setChildComponent(() => Component);
@@ -23,8 +24,32 @@ const data = {
       ]
 }
 
+ // Function to handle mouse movement
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      if (event.clientX <= 10) {
+        setIsSidebarCollapsed(false); // Expand if mouse is at the leftmost 10px
+      } else if (event.clientX > 260) {
+        setIsSidebarCollapsed(true); // Collapse if mouse moves far from the sidebar
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
   return (
-    <main className="main-content max-height-vh-100 h-100">
+    <main
+      className="main-content max-height-vh-100 h-100"
+      style={{
+        transition: "margin 0.3s ease-in-out",
+        marginLeft: isSidebarCollapsed ? "0" : "250px",
+        width: isSidebarCollapsed ? "100%" : "calc(100% - 250px)",
+      }}
+    >
       {/* Navbar */}
       <nav className="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl">
         <div className="container-fluid py-1 px-3">         
