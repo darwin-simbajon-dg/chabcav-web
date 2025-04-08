@@ -15,6 +15,8 @@ import clsLogo from "../assets/css/accounts/img/clslogo.webp";
 
 const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
     const navigate = useNavigate();
+    const [imageUrl, setImageUrl] = useState("/assets/images/bruce-mars.jpg");
+
 
     const userLessonConfig = [
       {
@@ -50,7 +52,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         title: "Profile",
         icon: "/assets/images/team-3.jpg",
         items: [
-          { title: "My Profile", link: "../../pages/pages/profile/overview.html", component: UserProfilePage, icon: '', step: "AdminPanel" },
+          // { title: "My Profile", link: "../../pages/pages/profile/overview.html", component: UserProfilePage, icon: '', step: "AdminPanel" },
           { title: "Settings", link: "../../pages/pages/account/settings.html", component: UserSettings, icon: '', step: "AdminPanel"  },
           { title: "CMS", link: "../../pages/pages/account/settings.html", component: UserCMS, icon: '', step: "AdminPanel"  },
           { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: '', component: null, step: "Logout"  },
@@ -87,7 +89,8 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
     ];
 
     const handleSidebarClick = (step: string) => {
-      localStorage.setItem("Step", step);
+    
+    localStorage.setItem("Step", step);
   
       if (step === "Logout") {
         localStorage.clear();
@@ -107,9 +110,49 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
       } else if (step === "LessonPanel") {
         setSideBarConfig(userLessonConfig);
       }
+
+      
     };
   
     useEffect(() => {
+
+      async function fetchData() {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          throw new Error("No auth token found");
+        }
+        const claims = JSON.parse(atob(token.split('.')[1]));
+        const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
+  
+        if(userId !== undefined){
+          const response = await fetch(`http://localhost/profile/${userId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+            }
+          });
+    
+          if (!response.ok) {
+            throw new Error("Failed to fetch profile data");
+          }
+    
+
+          const data = await response.json();
+          
+          if(!data) {
+            setImageUrl(`http://localhost/uploads/${data.imageid}`); // Assuming the response contains the image URL
+            localStorage.setItem("Step", data.role);
+          }
+         
+
+        }
+       
+
+      }
+
+      fetchData();
+
       const step = localStorage.getItem("Step");
       if (step) {
         updateSidebarConfig(step);
@@ -201,7 +244,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
                 aria-expanded="false"
               >
                 {section.icon.startsWith("/") ? (
-                  <img src={section.icon} className="avatar" alt={section.title} />
+                  <img src={imageUrl} className="avatar" alt={section.title} />
                 ) : (
                   <i className={`material-symbols-rounded opacity-5`}>{section.icon}</i>
                 )}
