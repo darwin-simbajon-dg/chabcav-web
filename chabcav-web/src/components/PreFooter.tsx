@@ -14,19 +14,19 @@ const Prefooter: React.FC = () => {
           <div className="row">
             <div className="col-lg-5 col-md-8 m-auto text-start">
               <h5 className="text-white mb-lg-0 mb-5">
-                For being a bright color. For standing out. But the time is now to be okay
-                to be the greatest you.
+              Dr. Enrique R. Escalante
+              
               </h5>
             </div>
             <div className="col-lg-6 m-auto">
               <div className="row">
                 <div className="col-sm-4 col-6 ps-sm-0 ms-auto">
-                  <button
+                  {/* <button
                     type="button"
                     className="btn bg-gradient-warning mb-0 ms-lg-3 ms-sm-2 mb-sm-0 mb-2 me-auto w-100 d-block"
-                  >
-                    Start Now
-                  </button>
+                  > */}
+                    Serves as a reference for this project
+                  {/* </button> */}
                 </div>
               </div>
             </div>

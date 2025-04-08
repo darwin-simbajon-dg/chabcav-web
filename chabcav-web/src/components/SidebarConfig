@@ -6,6 +6,7 @@ export const SidebarConfig = [
       items: [
         { title: "My Profile", link: "../../pages/pages/profile/overview.html" },
         { title: "Settings", link: "../../pages/pages/account/settings.html" },
+        { title: "CMS", link: "../../pages/pages/account/settings.html" },
         { title: "Logout", link: "../../pages/authentication/signin/basic.html" },
       ],
     },

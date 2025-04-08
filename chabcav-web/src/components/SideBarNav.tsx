@@ -5,6 +5,7 @@ import "../assets/css/accounts/css/material-dashboard.css";
 import NavigationProperties from "../models/NavigationProperties";
 import UserSettings from "../pages/account/components/UserSettings";
 import UserProfilePage from "../pages/account/UserProfilePage";
+import UserCMS from "../pages/account/UserCMS";
 import Dashboard from "../pages/account/Dashboard";
 import LessonEditor from '../pages/Lessons/LessonEditor';
 import MultiStepForm from "../pages/account/MultiStepForm";
@@ -22,6 +23,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         items: [
           { title: "My Profile", link: "../../pages/pages/profile/overview.html", icon: '', component: UserProfilePage, step: "UserPanel" },
           { title: "Settings", link: "../../pages/pages/account/settings.html", icon: '', component: UserSettings, step: "UserPanel" },
+          { title: "CMS", link: "../../pages/pages/account/settings.html", icon: '', component: UserCMS, step: "UserPanel" },
           { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: '', component: null, step: "Logout" },
         ],
       },
@@ -50,6 +52,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         items: [
           { title: "My Profile", link: "../../pages/pages/profile/overview.html", component: UserProfilePage, icon: '', step: "AdminPanel" },
           { title: "Settings", link: "../../pages/pages/account/settings.html", component: UserSettings, icon: '', step: "AdminPanel"  },
+          { title: "CMS", link: "../../pages/pages/account/settings.html", component: UserCMS, icon: '', step: "AdminPanel"  },
           { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: '', component: null, step: "Logout"  },
         ],
       },
@@ -70,6 +73,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         items: [
           { title: "My Profile", link: "../../pages/pages/profile/overview.html" , icon: '', component: UserProfilePage, step: "UserPanel" },
           { title: "Settings", link: "../../pages/pages/account/settings.html", icon: '', component: UserSettings, step: "UserPanel" },
+          { title: "CMS", link: "../../pages/pages/account/settings.html", icon: '', component: UserCMS, step: "UserPanel" },
           { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: '', component: null, step: "Logout" },
         ],
       },
@@ -110,7 +114,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
       if (step) {
         updateSidebarConfig(step);
       }
-    }, [sidebarConfig]);
+    }, []);
 
     // const [sidebarConfig, setSideBarConfig] = useState(adminConfig);
 

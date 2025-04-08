@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 // import Toast from "./Toast";
 import SpinnerModal from "./SpinnerModal";
 import { useToast } from "../context/ToastContext";
+import Toast from "./Toast";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +13,31 @@ const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false); // State to control spinner
   const navigate = useNavigate();
   const { showToast } = useToast();
+
+  const handleChangePassword = async (e:React.FormEvent) => {
+    e.preventDefault();
+    try {
+       const response = await fetch("http://localhost/user/forgot-password", {
+
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({email})
+       })
+
+        if(!response.ok){
+          const errorData = await response.json();
+          showToast(errorData.message || "Unable to process your request please contact support");
+        }
+
+        showToast("Password Reset Link Sent to your email");
+    } catch (error) {
+      
+    }
+  
+  }
+  
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,6 +156,12 @@ const Login: React.FC = () => {
           Don't have an account? &nbsp;
           <a href="/register" className="text-primary text-gradient font-weight-bold">
              Sign up
+          </a>
+        </p>
+
+        <p className="mb-4 text-sm mx-auto" style= {{color: "white"}}>
+          <a href="/enter-emailAddress" className="text-primary text-gradient font-weight-bold">
+             Forgot Password?
           </a>
         </p>
       </div>

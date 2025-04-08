@@ -73,9 +73,9 @@ const Main = () => {
       {/* Card Section */}
       <div className="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-4">
         {/* Features Section */}
-        <FeaturesSection />
+        {/* <FeaturesSection /> */}
         <TestimonialSection />
-        <SecondFeatureSection />
+        {/* <SecondFeatureSection /> */}
         <FeatureCards />
         {/* Add other sections like Testimonials, Footer here */}
         <Prefooter />
