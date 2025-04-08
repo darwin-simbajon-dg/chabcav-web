@@ -1,75 +1,105 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { useLesson } from "../../context/FlowContext";
 
+interface LessonViewerProps {
+  selectedChapter: string;
+}
 
-const LessonViewer: React.FC = () => {
-  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
+const LessonViewer: React.FC<LessonViewerProps> = ({ selectedChapter }) => {
+  const [lessons, setLessons] = useState<
+    { lessonid: string; lessonname: string; lessoncontent: string; chaptername: string }[]
+  >([]);
+  const { chaptername } = useLesson(); 
   const contentRef = useRef<HTMLDivElement | null>(null);
+  const [isNextEnabled, setIsNextEnabled] = useState(false);
+  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
 
-const lessons = [
-    {
-      id: 1,
-      title: "Lesson 1: Introduction to React",
-      content: `
-        <h1>Welcome to React</h1>
-        <p>React is a JavaScript library for building user interfaces.</p>
-        <p>It allows you to create reusable components and manage state effectively.</p>
-      `,
-    },
-    {
-      id: 2,
-      title: "Lesson 2: JSX Basics",
-      content: `
-        <h1>Understanding JSX</h1>
-        <p>JSX is a syntax extension for JavaScript that allows you to write HTML-like code within React components.</p>
-      `,
-    },
-    {
-      id: 3,
-      title: "Lesson 3: Components and Props",
-      content: `
-        <h1>Components in React</h1>
-        <p>Components are the building blocks of any React application.</p>
-      `,
-    },
-  ];
-  
+  useEffect(() => {
+    if (!chaptername) return; // Prevent empty requests
 
-  const currentLesson = lessons[currentLessonIndex];
+    const fetchLessons = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost/user/get-lessons-by-chapter?chapterName=${selectedChapter}`
+        );
+        console.log("Fetched Lessons for:", chaptername, response.data);
+        if (response.data && Array.isArray(response.data.lessons)) {
+          setLessons(response.data.lessons);
+        } else {
+          setLessons([]); // No lessons found
+        }
+      } catch (error) {
+        console.error("Error fetching lessons:", error);
+      }
+    };
 
-  // Scroll to top when lesson changes
+    fetchLessons();
+  }, [chaptername]);
+
   useEffect(() => {
     if (contentRef.current) {
       contentRef.current.scrollTop = 0;
+      setIsNextEnabled(false);
     }
   }, [currentLessonIndex]);
 
-  // Handle scroll detection
+  if (!selectedChapter) {
+    return <p>Please select a chapter.</p>;
+  }
+
+  if (lessons.length === 0) {
+    return <p>No lessons available for {selectedChapter}.</p>;
+  }
+
   const handleScroll = () => {
     if (contentRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
-      if (scrollTop + clientHeight >= scrollHeight) {
-        moveToNextLesson();
+      if (scrollTop + clientHeight >= scrollHeight - 10) {
+        setIsNextEnabled(true);
       }
     }
   };
 
-  // Navigate to next lesson
   const moveToNextLesson = () => {
     if (currentLessonIndex < lessons.length - 1) {
       setCurrentLessonIndex((prevIndex) => prevIndex + 1);
+      setIsNextEnabled(false);
     } else {
       alert("You have completed all lessons!");
     }
   };
 
-  return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      {/* Lesson Title */}
-      <div style={{ padding: "20px", background: "#f8f9fa", borderBottom: "1px solid #ddd" }}>
-        <h1>{currentLesson.title}</h1>
-      </div>
+  const currentLesson = lessons[currentLessonIndex];
 
-      {/* Lesson Content */}
+  /**  Format lesson content dynamically and add speech synthesis */
+  const formatLessonContent = (text: string) => {
+    return text.split(" ").map((word, index) => (
+      <span key={index} style={{ marginRight: "8px", cursor: "pointer" }}>
+        {word}{" "}
+        <span
+          onClick={() => speakText(word)}
+          style={{ marginLeft: "5px", color: "blue" }}
+        >
+          🗣️
+        </span>
+      </span>
+    ));
+  };
+
+  const speakText = (text: string) => {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    synth.speak(utterance);
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh", left: "100%" }}>
+      <div style={{ padding: "20px", background: "#f8f9fa", borderBottom: "1px solid #ddd" }}>
+        <h3>{currentLesson.chaptername}</h3>
+        <h2>{currentLesson.lessonname}</h2>
+      </div>
       <div
         ref={contentRef}
         onScroll={handleScroll}
@@ -81,11 +111,10 @@ const lessons = [
           border: "1px solid #ddd",
           margin: "10px",
         }}
-        dangerouslySetInnerHTML={{ __html: currentLesson.content }}
-      />
-
-      {/* Navigation Buttons */}
-      <div style={{ padding: "20px", background: "#f8f9fa", borderTop: "1px solid #ddd", textAlign: "right" }}>
+      >
+        {formatLessonContent(currentLesson.lessoncontent)}
+      </div>
+      <div style={{ padding: "10px", background: "#f8f9fa", borderTop: "1px solid #ddd", textAlign: "center" }}>
         <button
           onClick={() => setCurrentLessonIndex((prevIndex) => Math.max(0, prevIndex - 1))}
           disabled={currentLessonIndex === 0}
@@ -93,12 +122,9 @@ const lessons = [
         >
           Previous
         </button>
-        <button
-          onClick={moveToNextLesson}
-          disabled={currentLessonIndex === lessons.length - 1}
-        >
-          Next
-        </button>
+        {/* <button onClick={moveToNextLesson} disabled={!isNextEnabled}>
+          Next Lesson
+        </button> */}
       </div>
     </div>
   );

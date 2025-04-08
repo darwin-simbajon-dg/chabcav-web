@@ -6,7 +6,7 @@ const UserProfilePage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [location, setLocation] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [imageUrl, setImageUrl] = useState("/assets/images/bruce-mars.jpg");
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);  const [imageUrl, setImageUrl] = useState("/assets/images/bruce-mars.jpg");
 
 
 
@@ -24,8 +24,8 @@ const UserProfilePage: React.FC = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("authToken")}`
-        }
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
+        },
       });
 
       if (!response.ok) {
@@ -33,21 +33,43 @@ const UserProfilePage: React.FC = () => {
       }
 
       const data = await response.json();
-
       setInformation(data.information);
       setFullName(data.fullname);
       setEmail(data.email);
       setLocation(data.location);
       setPhoneNumber(data.phonenumber);
       setImageUrl(`http://localhost/uploads/${data.imageid}`); // Assuming the response contains the image URL
-
     }
 
     fetchData();
   }, []);
 
+  // Function to handle mouse movement
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      if (event.clientX <= 10) {
+        setIsSidebarCollapsed(false); // Expand if mouse is at the leftmost 10px
+      } else if (event.clientX > 260) {
+        setIsSidebarCollapsed(true); // Collapse if mouse moves far from the sidebar
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
   return (
-    <div className="container-fluid" style={{ paddingLeft: '250px' }}>
+    <div
+      className="container-fluid"
+      style={{
+        transition: "margin 0.3s ease-in-out",
+        marginLeft: isSidebarCollapsed ? "0" : "250px",
+        width: isSidebarCollapsed ? "100%" : "calc(100% - 250px)",
+      }}
+    >
       {/* Page Header */}
       <div
         className="page-header min-height-300 border-radius-xl mt-4"
@@ -78,54 +100,10 @@ const UserProfilePage: React.FC = () => {
               {/* <p className="mb-0 font-weight-normal text-sm">CEO / Co-Founder</p> */}
             </div>
           </div>
-          {/* <div className="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
-            <div className="nav-wrapper position-relative end-0">
-              <ul className="nav nav-pills nav-fill p-1" role="tablist">
-                <li className="nav-item">
-                  <a
-                    className="nav-link mb-0 px-0 py-1 active"
-                    data-bs-toggle="tab"
-                    href="#app"
-                    role="tab"
-                    aria-selected="true"
-                  >
-                    <i className="material-symbols-rounded text-lg position-relative">home</i>
-                    <span className="ms-1">App</span>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a
-                    className="nav-link mb-0 px-0 py-1"
-                    data-bs-toggle="tab"
-                    href="#messages"
-                    role="tab"
-                    aria-selected="false"
-                  >
-                    <i className="material-symbols-rounded text-lg position-relative">email</i>
-                    <span className="ms-1">Messages</span>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a
-                    className="nav-link mb-0 px-0 py-1"
-                    data-bs-toggle="tab"
-                    href="#settings"
-                    role="tab"
-                    aria-selected="false"
-                  >
-                    <i className="material-symbols-rounded text-lg position-relative">settings</i>
-                    <span className="ms-1">Settings</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div> */}
         </div>
 
         {/* Sections */}
         <div className="row">
-          
-
           <div className="col-md-6 col-xl-4">
             {/* Profile Information */}
             <div className="card card-plain h-100">
@@ -136,18 +114,13 @@ const UserProfilePage: React.FC = () => {
                   </div>
                   <div className="col-md-4 text-end">
                     <a href="#edit-profile">
-                      <i
-                        className="fas fa-user-edit text-secondary text-sm"
-                        title="Edit Profile"
-                      ></i>
+                      <i className="fas fa-user-edit text-secondary text-sm" title="Edit Profile"></i>
                     </a>
                   </div>
                 </div>
               </div>
               <div className="card-body p-3">
-                <p className="text-sm">
-                  {information}
-                </p>
+                <p className="text-sm">{information}</p>
                 <ul className="list-group">
                   <li className="list-group-item border-0 ps-0 pt-0 text-sm">
                     <strong className="text-dark">Full Name:</strong> {fullName}
