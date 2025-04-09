@@ -113,7 +113,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
   }, []);*/
   
     const [imageUrl, setImageUrl] = useState("/assets/images/bruce-mars.jpg");
-
+  
 
     const userLessonConfig = [
       {
@@ -122,7 +122,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         items: [
           { title: "My Profile", link: "../../pages/pages/profile/overview.html", icon: '', component: UserProfilePage, step: "UserPanel" },
           { title: "Settings", link: "../../pages/pages/account/settings.html", icon: '', component: UserSettings, step: "UserPanel" },
-          { title: "CMS", link: "../../pages/pages/account/settings.html", icon: '', component: UserCMS, step: "UserPanel" },
+         // { title: "CMS", link: "../../pages/pages/account/settings.html", icon: '', component: UserCMS, step: "UserPanel" },
           { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: '', component: null, step: "Logout" },
         ],
       },
@@ -184,7 +184,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         items: [
           { title: "My Profile", link: "../../pages/pages/profile/overview.html" , icon: '', component: UserProfilePage, step: "UserPanel" },
           { title: "Settings", link: "../../pages/pages/account/settings.html", icon: '', component: UserSettings, step: "UserPanel" },
-          { title: "CMS", link: "../../pages/pages/account/settings.html", icon: '', component: UserCMS, step: "UserPanel" },
+          //{ title: "CMS", link: "../../pages/pages/account/settings.html", icon: '', component: UserCMS, step: "UserPanel" },
           { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: '', component: null, step: "Logout" },
         ],
       },
@@ -200,7 +200,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
 
     const handleSidebarClick = (step: string) => {
     
-    localStorage.setItem("Step", step);
+      localStorage.setItem("Step", step);
       if (step === "Logout") {
         localStorage.clear();
         navigate("/");

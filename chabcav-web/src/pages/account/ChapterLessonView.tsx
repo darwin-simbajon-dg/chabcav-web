@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import MultiStepForm from "./MultiStepForm";
 import { useLesson } from "../../context/FlowContext";
+import SpinnerModal from "../../components/SpinnerModal";
 
 interface Lesson {
     lessonid: string;
@@ -18,6 +19,7 @@ const [chapters, setChapters] = useState<Chapter[]>([]);
 const [selectedChapter, setSelectedChapter] = useState<string | null>(null);
 const { setChaptername } = useLesson();
 const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+const [isLoading, setIsLoading] = useState(true);
 
 useEffect(() => {
     const fetchLessons = async () => {
@@ -62,7 +64,20 @@ useEffect(() => {
       }
     };
 
-    fetchLessons();
+    function loadingAnimation() {
+      let timer: NodeJS.Timeout;
+      if (isLoading) {
+        timer = setTimeout(() => {
+          setIsLoading(false);
+          fetchLessons();
+        }, 500); 
+      }
+      return () => clearTimeout(timer); // Cleanup the timer on unmount or when loading changes
+     }
+
+    loadingAnimation();
+
+    loadingAnimation() 
   }, []);
 
   const handleChapterClick = (chaptername: string) => {
@@ -123,8 +138,8 @@ useEffect(() => {
   }, [selectedChapter]);
   
   return (
-    <> <div className="card"        
-     style={{
+    <> <div className="card"
+      style={{
         position: "fixed",
         top: 0,
         left: 0,
@@ -132,96 +147,106 @@ useEffect(() => {
         height: "100%",
         //backgroundColor: "white", 
         backgroundColor: "rgba(0, 0, 0, 0.8)", // Semi-transparent background
-        zIndex: selectedChapter? "9999" : "none", // Ensure it overlays everything
+        zIndex: selectedChapter ? "9999" : "none", // Ensure it overlays everything
         display: selectedChapter ? "flex" : "none", // Show only when selectedChapter is set
         //display: "flex",
         justifyContent: "center",
         alignItems: "center",
-    }}
-            >
-         {selectedChapter && (
-            <>
-                <MultiStepForm 
-                    selectedChapter={selectedChapter} 
-                    onChapterChange={setChaptername} 
-                />
-            </>
-        )}
-    </div>    
+      }}
+    >
+      <SpinnerModal show={isLoading} />
+      {selectedChapter && (
+        <>
+          <MultiStepForm
+            selectedChapter={selectedChapter}
+            onChapterChange={setChaptername}
+          />
+        </>
+      )}
+    </div>
 
- <div className="container-fluid"  >
+      <div className="container-fluid"  >
 
-    <div className="row mt-5" style={{ color: "white", fontSize: "20px", 
-    fontWeight: "800" , transition: "margin 0.3s ease-in-out",
-        marginLeft: isSidebarCollapsed ? "0" : "250px",
-        width: isSidebarCollapsed ? "100%" : "calc(100% - 250px)",}} >
-        
-        {chapters.map((chapter, index) => (
-            <div 
-                key={chapter.chaptername}
-                className={`${
-                    index % 3 === 0
-                        ? "col-lg-4"
-                        : "col-lg-4 mb-lg-0 mb-4"
+        <div className="row mt-5" style={{
+          color: "white", fontSize: "20px",
+          fontWeight: "800", transition: "margin 0.3s ease-in-out",
+          marginLeft: isSidebarCollapsed ? "0" : "250px",
+          width: isSidebarCollapsed ? "100%" : "calc(100% - 250px)",
+        }} >
+
+          {chapters.map((chapter, index) => (
+            <div
+              key={chapter.chaptername}
+              className={`${index % 3 === 0
+                  ? "col-lg-4"
+                  : "col-lg-4 mb-lg-0 mb-4"
                 }`}
-                onClick={() => handleChapterClick(chapter.chaptername)}
+              onClick={() => handleChapterClick(chapter.chaptername)}
             >
-                
-                <div 
-                    style={{
-                       backgroundImage: `url('/ChapterBg.jpg')`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        width: "350px",
-                        height: "400px",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        textAlign: "center",
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-                        padding: "20px",
-                        margin: "10px",
-                        transition: "transform 0.3s ease-in-out", //smooth transition   
-                    }}
-                    className="card"
-                >
-                    <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
-                        <a className="d-block blur-shadow-image"> 
-                            {/* Uncomment and provide a valid image URL if needed */}
-                            {/* <img
+
+              <div
+                style={{
+                  backgroundImage: `url('/ChapterBg.jpg')`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  width: "350px",
+                  height: "400px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                  padding: "20px",
+                  margin: "10px",
+                  transition: "transform 0.3s ease-in-out", //smooth transition   
+                }}
+                className="card"
+              >        <img
+                  src="/ChabCavLogo.png"
+                  alt="ChabCav Logo"
+                  style={{
+                    width: "110px",
+                    marginBottom: "10px",
+                  }}
+                />
+                <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
+                  <a className="d-block blur-shadow-image">
+                    {/* Uncomment and provide a valid image URL if needed */}
+                    {/* <img
                                 src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80"
                                 alt="Chapter Background"
                                 className="img-fluid shadow border-radius-lg"
                                 loading="lazy"
                             /> */}
-                        </a>
-                        
-                    </div>
-                    <div style={{ color: "white", fontSize: "20px", fontWeight: "bold" , transition: "margin 0.3s ease-in-out",
-                }} className="card-body hover:scale-105">
-                        <h5 className="font-weight-normal">{chapter.chaptername}</h5>
-                        <ul style={{ listStyle: "none", padding: 0, color: "white", fontSize: "14px" }}>
-                            {chapter.lessons.map((lesson, index) => (
-                                <li key={index} className="py-1">{lesson.lessonname}</li>
-                            ))}
-                        </ul>
-                        
-                        <button className="btn btn-outline-dark btn-sm mb-0" type="button">
-                            Open this Chapter
-                        </button>
-                        
-                    </div>
-                </div>
-                
-            </div>
-        ))}
-    </div>
+                  </a>
 
-    </div>
-       
-   </>
+                </div>
+                <div style={{
+                  color: "white", fontSize: "20px", fontWeight: "bold", transition: "margin 0.3s ease-in-out",
+                }} className="card-body hover:scale-105">
+                  <h5 className="font-weight-normal">{chapter.chaptername}</h5>
+                  <ul style={{ listStyle: "none", padding: 0, color: "white", fontSize: "14px" }}>
+                    {chapter.lessons.map((lesson, index) => (
+                      <li key={index} className="py-1">{lesson.lessonname}</li>
+                    ))}
+                  </ul>
+
+                  <button className="btn btn-outline-dark btn-sm mb-0" type="button">
+                    Open this Chapter
+                  </button>
+
+                </div>
+              </div>
+
+            </div>
+          ))}
+        </div>
+
+      </div>
+
+    </>
   );
 };
 export default BookView;

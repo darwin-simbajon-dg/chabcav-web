@@ -12,6 +12,7 @@ const UserCMS: React.FC = () => {
   const [location, setLocation] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [imageDataList, setImageDataList] = useState<ImageData[]>([]);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   
 async function handleCMSChanges(e: React.FormEvent) {
@@ -77,8 +78,29 @@ async function handleCMSChanges(e: React.FormEvent) {
 
   }, []);
 
+   // Function to handle mouse movement
+      useEffect(() => {
+        const handleMouseMove = (event: MouseEvent) => {
+          if (event.clientX <= 10) {
+            setIsSidebarCollapsed(false); // Expand if mouse is at the leftmost 10px
+          } else if (event.clientX > 260) {
+            setIsSidebarCollapsed(true); // Collapse if mouse moves far from the sidebar
+          }
+        };
+    
+        window.addEventListener("mousemove", handleMouseMove);
+    
+        return () => {
+          window.removeEventListener("mousemove", handleMouseMove);
+        };
+      }, []);
+
   return (
-    <div className="container-fluid" style={{ paddingLeft: '250px', cursor: "pointer" }}>
+    <div className="card p-4 shadow-sm mb-4" style={{ paddingLeft: '250px', cursor: "pointer",  marginTop: "0px", 
+        transition: "margin 0.3s ease-in-out",
+        marginLeft: isSidebarCollapsed ? "0" : "250px",
+        width: isSidebarCollapsed ? "100%" : "calc(100% - 250px)"
+    }}>
         <div
             className="page-header min-vh-75"
             style={{

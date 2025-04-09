@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useLesson } from "../../context/FlowContext";
+import SpinnerModal from "../../components/SpinnerModal";
+import CompletedChapterButton from "../Lessons/CompletedChapters";
 
 const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newChapter: string) => void }> = ({
   selectedChapter,
@@ -16,13 +18,14 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
   const [buttonPosition, setButtonPosition] = useState<{ top: number; left: number } | null>(null);
   const [isCardVisible, setIsCardVisible] = useState(true);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+ // const [chapterCompleted, setChapterCompleted] = useState(false);
 
   useEffect(() => {
     console.log("Current chaptername in MultiStepForm:", chaptername);
     if (!chaptername) return;
     // Reset visibility when a new chapter is selected
     setIsCardVisible(true);
-
     const fetchLessons = async () => {
       try {
         const response = await axios.get(
@@ -39,11 +42,41 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
       }
     };
 
-    fetchLessons();
+    function loadingAnimation() {
+      let timer: NodeJS.Timeout;
+      if (isLoading) {
+        timer = setTimeout(() => {
+          setIsLoading(false);
+          fetchLessons();
+        }, 500); 
+      }
+      return () => clearTimeout(timer); // Cleanup the timer on unmount or when loading changes
+     }
+
+    loadingAnimation();
     setCurrentLesson(0);
     setIsBottomReached(false);
   }, [chaptername]);  // Runs when the chapter changes
 
+  // useEffect(() => {
+  //   const handleUsersProgress = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost/user/users-progress", {
+  //         params: { chaptername: chaptername, },
+  //       });
+  //       console.log("User's Progress:", response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching user's progress:", error);
+  //     }
+  //   }
+  // }, []);
+
+  // function completeChapter() {
+  //   if () {
+  //     setChapterCompleted(true);
+  //   }
+   
+  // }
 
   useEffect(() => {
     document.addEventListener("mouseup", handleTextSelection);
@@ -54,22 +87,47 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
 
   const handleTextSelection = () => {
     const selection = window.getSelection();
-    if (selection && selection.toString().trim() !== "") {
+  
+    if (selection && selection.toString().trim() !== "" && contentRef.current) {
       const selectedText = selection.toString().trim();
       setHighlightedWord(selectedText);
-
+  
       const range = selection.getRangeAt(0);
       const rect = range.getBoundingClientRect();
-
+      const containerRect = contentRef.current.getBoundingClientRect();
+  
+      // Calculate position relative to the card-body container
+      const buttonTop = rect.top - containerRect.top  + 10;
+      const buttonLeft = rect.right - containerRect.left + contentRef.current.scrollLeft + 200;
+  
       setButtonPosition({
-        top: rect.top + window.scrollY - 10,
-        left: rect.left + window.scrollX + rect.width + 5,
+        top: buttonTop,
+        left: buttonLeft,
       });
     } else {
       setHighlightedWord(null);
       setButtonPosition(null);
     }
   };
+
+  // const handleTextSelection = () => {
+  //   const selection = window.getSelection();
+  //   if (selection && selection.toString().trim() !== "") {
+  //     const selectedText = selection.toString().trim();
+  //     setHighlightedWord(selectedText);
+
+  //     const range = selection.getRangeAt(0);
+  //     const rect = range.getBoundingClientRect();
+
+  //     setButtonPosition({
+  //       top: rect.top + window.scrollY - 10,
+  //       left: rect.left + window.scrollX + rect.width + 5,
+  //     });
+  //   } else {
+  //     setHighlightedWord(null);
+  //     setButtonPosition(null);
+  //   }
+  // };
 
   /*const handleTextSelection = () => {
     const selection = window.getSelection();
@@ -94,7 +152,7 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
   const speakText = (text: string) => {
     const synth = window.speechSynthesis;
     const utterance = new SpeechSynthesisUtterance(text);
-    const availableLanguages = ["es-MX", "es-ES", "es-CO", "es-ES"];
+    const availableLanguages = ["es-MX", "es-ES"];
     utterance.lang = availableLanguages.find((lang) => synth.getVoices().some((voice) => voice.lang === lang)) || "en-US";
     synth.speak(utterance);
   };
@@ -137,7 +195,7 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
 
   const handleNextLesson = () => {
     if (currentLesson < lessons.length - 1) {
-      setCurrentLesson((prev) => prev + 1);
+      //setCurrentLesson((prev) => prev + 1);
       setIsBottomReached(false);
       resetScrollPosition();
     } else {
@@ -146,6 +204,10 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
       //moveToNextChapter();
     }
   };
+
+// function handleCahpterCompleted(string usersname, string chaptername) {
+  
+// }
 
   // const moveToNextChapter = async () => {
   //   try {
@@ -196,14 +258,14 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
     };
   }, []);
 
-  // Resize handler
-  const [screenHeight, setScreenHeight] = useState(window.innerHeight);
+  ///Resize handler
+  //  const [screenHeight, setScreenHeight] = useState(window.innerHeight);
 
-  useEffect(() => {
-    const handleResize = () => setScreenHeight(window.innerHeight);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // useEffect(() => {
+  //   const handleResize = () => setScreenHeight(window.innerHeight);
+  //   window.addEventListener("resize", handleResize);
+  //    return () => window.removeEventListener("resize", handleResize);
+  //  }, []);
 
   return (
 
@@ -218,6 +280,7 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
       }}
 
     >
+      <SpinnerModal show={isLoading} />
       <div className="row">
         <div className="col-12">
           <div className="multisteps-form mb-9">
@@ -281,11 +344,13 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
                       position: "relative",
                     }}
                   >
+                    
                     <div
                       className="multisteps-form__content"
                       dangerouslySetInnerHTML={{ __html: lessons[currentLesson]?.lessoncontent }}
                     />
                   </div>
+                  
                   <div className="button-row d-flex mt-4">
 
                     {/* {currentLesson > 0 && (
@@ -293,6 +358,7 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
                       //   Previous Lesson
                       // </button>
                     )} */}
+                  
                     <button
                       className="btn bg-gradient-success ms-auto mb-0"
                       type="button"
@@ -300,7 +366,9 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
                       disabled={!isBottomReached}
                     >
                       Complete Chapter
+                   
                     </button>
+                    {/* <CompletedChapterButton selectedChapter={chaptername} /> */}
 
                     {/* {currentLesson < lessons.length - 1 ? (
                       <button

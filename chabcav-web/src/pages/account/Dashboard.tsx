@@ -54,6 +54,7 @@ const Dashboard: React.FC = () => {
   const [monthlyTotalVisit, setMonthlyTotalVisit] = React.useState<number>(0);
   const [totalUsers, setTotalUsers] = React.useState<number>(0);
   const [countryCoordinates, setCountryCoordinates] = React.useState<CountryCoordinates[]>([]);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
         // Table data
         // const countryData = [
         //   { country: "United States", flag: "/src/assets/css/accounts/img/icons/flags/US.png", sales: 2500, value: "$230,900", bounce: "29.9%" },
@@ -267,7 +268,7 @@ const Dashboard: React.FC = () => {
  
 
   return (
-    <div className="container-fluid py-4" 
+    <div className="card p-4 shadow-sm mb-4" 
     style={{paddingLeft: "250px", transition: "margin 0.3s ease-in-out",
       marginLeft: isSidebarCollapsed ? "0" : "250px",
       width: isSidebarCollapsed ? "100%" : "calc(100% - 250px)",}}>
