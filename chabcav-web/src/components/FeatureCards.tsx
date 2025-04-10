@@ -1,6 +1,8 @@
 import React from "react";
+import CardUrls from "../models/CardUrls";
 
-const FeatureCards: React.FC = () => {
+const FeatureCards: React.FC<CardUrls> = ({urls}) => {
+ 
   return (
     <section className="features-3 py-4">
       <div className="container">
@@ -25,10 +27,10 @@ const FeatureCards: React.FC = () => {
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
                   <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441482142-1297391438285686-2974495117336394948-n-1080x1296.jpg?v=1TojCn"
-                    alt="Campus 6"
-                    className="img-fluid shadow border-radius-lg"
-                    loading="lazy"
+                  src={urls && urls.length > 0 ? urls[0] : ""}
+                  alt="Campus 6"
+                  className="img-fluid shadow border-radius-lg"
+                  loading="lazy"
                   />
                 </a>
               </div>
@@ -49,7 +51,8 @@ const FeatureCards: React.FC = () => {
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
                   <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441549978-478114801425205-6537926792892865305-n-694x833.jpg?v=1TojCn"
+                    // src="https://r.mobirisesite.com/910167/assets/images/441549978-478114801425205-6537926792892865305-n-694x833.jpg?v=1TojCn"
+                    src={urls && urls.length > 0 ? urls[3] : ""}
                     alt="Virtual Office"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -75,7 +78,8 @@ const FeatureCards: React.FC = () => {
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
                   <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441489322-473613091898724-7919112223862581296-n-694x833.jpg?v=1TojCn"
+                  src={urls && urls.length > 0 ? urls[1] : ""}
+                    // src="https://r.mobirisesite.com/910167/assets/images/441489322-473613091898724-7919112223862581296-n-694x833.jpg?v=1TojCn"
                     alt="Cozy Spots"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -99,7 +103,8 @@ const FeatureCards: React.FC = () => {
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
                   <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441568339-443647471614286-8735612661788619240-n-1080x1296.jpg?v=1TojCn"
+                  src={urls && urls.length > 0 ? urls[4] : ""}
+                    // src="https://r.mobirisesite.com/910167/assets/images/441568339-443647471614286-8735612661788619240-n-1080x1296.jpg?v=1TojCn"
                     alt="Co-working Spaces"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -125,7 +130,8 @@ const FeatureCards: React.FC = () => {
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
                   <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441888247-1628473944631717-5704146367515044747-n-694x833.jpg?v=1TojCn"
+                  src={urls && urls.length > 0 ? urls[2] : ""}
+                    // src="https://r.mobirisesite.com/910167/assets/images/441888247-1628473944631717-5704146367515044747-n-694x833.jpg?v=1TojCn"
                     alt="Home Office"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -149,7 +155,8 @@ const FeatureCards: React.FC = () => {
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
                   <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441577533-2212279502451537-8703496605716778471-n-1080x1296.jpg?v=1TojCn"
+                  src={urls && urls.length > 0 ? urls[5] : ""}
+                    // src="https://r.mobirisesite.com/910167/assets/images/441577533-2212279502451537-8703496605716778471-n-1080x1296.jpg?v=1TojCn"
                     alt="Private Space"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -174,7 +181,8 @@ const FeatureCards: React.FC = () => {
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
                   <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441888247-1628473944631717-5704146367515044747-n-694x833.jpg?v=1TojCn"
+                  src={urls && urls.length > 0 ? urls[6] : ""}
+                    // src="https://r.mobirisesite.com/910167/assets/images/441888247-1628473944631717-5704146367515044747-n-694x833.jpg?v=1TojCn"
                     alt="Home Office"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -198,7 +206,8 @@ const FeatureCards: React.FC = () => {
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
                   <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441577533-2212279502451537-8703496605716778471-n-1080x1296.jpg?v=1TojCn"
+                  src={urls && urls.length > 0 ? urls[7] : ""}
+                    // src="https://r.mobirisesite.com/910167/assets/images/441577533-2212279502451537-8703496605716778471-n-1080x1296.jpg?v=1TojCn"
                     alt="Private Space"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"

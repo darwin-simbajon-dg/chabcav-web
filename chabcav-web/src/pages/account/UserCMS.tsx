@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useToast } from "../../context/ToastContext";
+import SpinnerModal from "../../components/SpinnerModal";
 
 interface ImageData{
     id: string;
@@ -6,52 +8,24 @@ interface ImageData{
 }
 const UserCMS: React.FC = () => {
   const[bannerImage, setBannerImage] = useState("");
-  const [information, setInformation] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [location, setLocation] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const[card1Image, setCard1Image] = useState("");
+  const[card2Image, setCard2Image] = useState("");
+  const[card3Image, setCard3Image] = useState("");
+  const[card4Image, setCard4Image] = useState("");
+  const[card5Image, setCard5Image] = useState("");
+  const[card6Image, setCard6Image] = useState("");
+  const[card7Image, setCard7Image] = useState("");
+  const[card8Image, setCard8Image] = useState("");
+  const[midContentImage, setMidContentImage] = useState("");
+  const[content, setContent] = useState("");
+  const[headline, setHeadline] = useState("");
   const [imageDataList, setImageDataList] = useState<ImageData[]>([]);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const { showToast } = useToast();
+  const [isLoading, setIsLoading] = useState(false); // State to control spinner
 
-  
-async function handleCMSChanges(e: React.FormEvent) {
-    e.preventDefault();
-
-    const formData = new FormData();
-    imageDataList.forEach((imageData) => {
-        formData.append(imageData.id, imageData.image);
-    });
-
-    formData.forEach((value, key) => {
-        console.log(`${key}: ${value}`);
-      });
-    try {
-        const response = await fetch("http://localhost/api/cms/upload", {
-            method: "POST",
-            headers: {
-            // "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
-            },
-            body: formData,
-        });
-
-        if (!response.ok) {
-            throw new Error("Failed to submit image data");
-        }
-        const bannerImage = formData.get("banner");
-        setBannerImage(`http://localhost/uploads/${bannerImage}`);
-        const result = await response.json();
-        console.log("Image data submitted successfully:", result);
-    } catch (error) {
-        console.error("Error submitting image data:", error);
-    }
-
-    
- }
-
-  useEffect(() => {
-    async function fetchData() {
-      const response = await fetch("http://localhost/profile/9b9499c4-584c-4816-a768-d7348a07237a", {
+  async function fetchCMS(){
+    const response = await fetch("http://localhost/api/cms", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -64,17 +38,103 @@ async function handleCMSChanges(e: React.FormEvent) {
       }
 
       const data = await response.json();
+      console.log(data);
+      setBannerImage(`http://localhost/uploads/${data.banner}`);
+      setMidContentImage(`http://localhost/uploads/${data.midcontentimage}`);
+      setCard1Image(`http://localhost/uploads/${data.card1}`);
+      setCard2Image(`http://localhost/uploads/${data.card2}`);
+      setCard3Image(`http://localhost/uploads/${data.card3}`);
+      setCard4Image(`http://localhost/uploads/${data.card4}`);
+      setCard5Image(`http://localhost/uploads/${data.card5}`);
+      setCard6Image(`http://localhost/uploads/${data.card6}`);
+      setCard7Image(`http://localhost/uploads/${data.card7}`);
+      setCard8Image(`http://localhost/uploads/${data.card8}`);
+      setContent(data.content);
+      setHeadline(data.headline);
+}  
 
-      setInformation(data.information);
-      setFullName(data.fullname);
-      setEmail(data.email);
-      setLocation(data.location);
-      setPhoneNumber(data.phoneNumber);
+async function handleContentChanges() {
+    try {
+        const response = await fetch("http://localhost/api/cms/update-contents", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+            },
+            body: JSON.stringify({
+              content: content,
+              headline: headline,
+            }),
+        });
 
+        if (!response.ok) {
+            throw new Error("Failed to fetch profile data");
+        }
+
+        const data = await response.json();
+
+        if(data){
+          showToast("Content Changes Saved Successfully", "success");
+        }
+        else{
+          showToast("Content Changes Failed", "error");
+        }
+
+
+        console.log(data);
+    } catch (error) {
+        console.error("Error fetching content changes:", error);
     }
+}
 
-    fetchData();
+async function handleCMSChanges(e: React.FormEvent) {
+    e.preventDefault();
+    setIsLoading(true); // Show spinner
+    const formData = new FormData();
+    imageDataList.forEach((imageData) => {
+        formData.append(imageData.id, imageData.image);
+    });
 
+    formData.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+      });
+    try {
+        if (imageDataList.length) {
+            console.warn("No images to upload. Skipping the request.");
+            const response = await fetch("http://localhost/api/cms/upload", {
+              method: "POST",
+              headers: {
+              // "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
+              },
+              body: formData,
+          });
+  
+          if (!response.ok) {
+              setIsLoading(false); // Hide spinner
+              throw new Error("Failed to submit image data");
+              
+          }
+          setIsLoading(false);
+          //const result = await response.json();
+          //console.log("Image data submitted successfully:", result);
+        }
+
+        await handleContentChanges();
+        await fetchCMS();
+        setIsLoading(false); // Hide spinner
+
+        
+    } catch (error) {
+        console.error("Error submitting image data:", error);
+    }
+    
+    
+ }
+
+  useEffect(() => {
+  
+    
+    fetchCMS();
 
   }, []);
 
@@ -96,6 +156,8 @@ async function handleCMSChanges(e: React.FormEvent) {
       }, []);
 
   return (
+    <>
+    <SpinnerModal show={isLoading} />
     <div className="card p-4 shadow-sm mb-4" style={{ paddingLeft: '250px', cursor: "pointer",  marginTop: "0px", 
         transition: "margin 0.3s ease-in-out",
         marginLeft: isSidebarCollapsed ? "0" : "250px",
@@ -122,105 +184,10 @@ async function handleCMSChanges(e: React.FormEvent) {
           </div>
         </div>
       {/* Page Header */}
-      {/* <div
-        className="page-header min-height-300 border-radius-xl mt-4"
-        style={{
-          backgroundImage:
-            "",
-          backgroundSize: "cover",
-        }}
-      >
-        <span className="mask bg-gradient-dark opacity-6"></span>
-      </div> */}
-
+     
       {/* Profile Card */}
       <div className="card card-body mx-2 mx-md-2 mt-n6">
-        {/* <div className="row gx-4 mb-2">
-          <div className="col-auto">
-            <div className="avatar avatar-xl position-relative">
-              <label htmlFor="profileImageUpload">
-                <img
-                  src="../../assets/img/bruce-mars.jpg"
-                  alt="profile_image"
-                  className="w-100 border-radius-lg shadow-sm"
-                  style={{ cursor: "pointer" }}
-                />
-              </label>
-              <input
-                type="file"
-                id="profileImageUpload"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      const imgElement = document.querySelector(
-                        ".avatar img"
-                      ) as HTMLImageElement;
-                      if (imgElement) {
-                        imgElement.src = reader.result as string;
-                      }
-                    };
-                    reader.readAsDataURL(file);
-                  }
-                }}
-              />
-            </div>
-          </div>
-          <div className="col-auto my-auto">
-            <div className="h-100">
-              <h5 className="mb-1">DonJon</h5>
-              <p className="mb-0 font-weight-normal text-sm">Tambay</p>
-            </div>
-          </div> */}
-
-
-
-          {/* <div className="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
-            <div className="nav-wrapper position-relative end-0">
-              <ul className="nav nav-pills nav-fill p-1" role="tablist">
-                <li className="nav-item">
-                  <a
-                    className="nav-link mb-0 px-0 py-1 active"
-                    data-bs-toggle="tab"
-                    href="#app"
-                    role="tab"
-                    aria-selected="true"
-                  >
-                    <i className="material-symbols-rounded text-lg position-relative">home</i>
-                    <span className="ms-1">App</span>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a
-                    className="nav-link mb-0 px-0 py-1"
-                    data-bs-toggle="tab"
-                    href="#messages"
-                    role="tab"
-                    aria-selected="false"
-                  >
-                    <i className="material-symbols-rounded text-lg position-relative">email</i>
-                    <span className="ms-1">Messages</span>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a
-                    className="nav-link mb-0 px-0 py-1"
-                    data-bs-toggle="tab"
-                    href="#settings"
-                    role="tab"
-                    aria-selected="false"
-                  >
-                    <i className="material-symbols-rounded text-lg position-relative">settings</i>
-                    <span className="ms-1">Settings</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-            
-          </div> */}
+       
            <div className="col-10 mx-auto bg-gradient-dark border-radius-lg">
             <div className="row py-5">
               {/* Image Section */}
@@ -228,8 +195,8 @@ async function handleCMSChanges(e: React.FormEvent) {
                 <label>
                   <img
                     className="img border-radius-md w-100 position-relative z-index-2"
-                    style={{ maxWidth: "600px", height: "auto", marginTop: "auto", marginBottom: "auto" }}
-                    src="https://r.mobirisesite.com/910167/assets/images/maxresdefault-1256x707.jpg?v=1TojCn&auto=format&fit=crop&w=934&q=80"
+                    style={{ maxWidth: "600px", height: "auto", marginTop: "auto", marginBottom: "auto" }}                   
+                    src={midContentImage}
                     loading="lazy"
                     alt="card image"
                     onClick={() => {
@@ -245,13 +212,17 @@ async function handleCMSChanges(e: React.FormEvent) {
                 <textarea
                   className="form-control text-white bg-transparent border-0 text-3xl"
                   rows={3}
-                  defaultValue="Chabacano de Ciudad de Caivte History"
+                  defaultValue={headline}
+                  onChange={(e) => setHeadline(e.target.value)}
+                  // defaultValue="Chabacano de Ciudad de Caivte History"
                   style={{ resize: "none" }}
                 />
                 <textarea
                  className="text-lg text-white bg-transparent border-0 text-8xl w-100"  
                  rows={10}
-                 defaultValue="Welcome to the Chabacano language as spoken in the City of Cavite. The city once hosted a Spanish fort thus providing constant interaction with the Spaniards who lived there. The inhabitants of the place have to learn the foreign tongue and eventually mix and blend it with their language and the result is the delightful mixture of Spanish and Tagalog – Chabacano "
+                 defaultValue={content}
+                 onChange={(e) => setContent(e.target.value)}
+                //  defaultValue="Welcome to the Chabacano language as spoken in the City of Cavite. The city once hosted a Spanish fort thus providing constant interaction with the Spaniards who lived there. The inhabitants of the place have to learn the foreign tongue and eventually mix and blend it with their language and the result is the delightful mixture of Spanish and Tagalog – Chabacano "
                  style={{ resize: "none" }}
                 >
                 </textarea>
@@ -279,9 +250,9 @@ async function handleCMSChanges(e: React.FormEvent) {
 
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 {/* <a className="d-block blur-shadow-image"> */}
-                    <label htmlFor="profileImageUpload2">
-                  <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441482142-1297391438285686-2974495117336394948-n-1080x1296.jpg?v=1TojCn"
+                    <label htmlFor="card1FileInput">
+                  <img                   
+                    src={card1Image}
                     alt="Campus 6"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -292,19 +263,20 @@ async function handleCMSChanges(e: React.FormEvent) {
                 {/* </a> */}
               </div>
               <div className="card-body">
+                Card 1
               </div>
             </div>
 
             {/* Card 2 */}
             <div className="card mt-5"
              onClick={() => {
-                const input = document.getElementById("fileInputCard2") as HTMLInputElement;
+                const input = document.getElementById("card4FileInput") as HTMLInputElement;
                 input.click();
               }}>
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
-                  <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441549978-478114801425205-6537926792892865305-n-694x833.jpg?v=1TojCn"
+                  <img                   
+                    src={card2Image}
                     alt="Virtual Office"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -312,6 +284,7 @@ async function handleCMSChanges(e: React.FormEvent) {
                 </a>
               </div>
               <div className="card-body">
+                Card 4
               </div>
             </div>
           </div>
@@ -320,13 +293,13 @@ async function handleCMSChanges(e: React.FormEvent) {
           <div className="col-lg-4 mb-lg-0 mb-4">
             <div className="card"
              onClick={() => {
-                const input = document.getElementById("fileInputCard3") as HTMLInputElement;
+                const input = document.getElementById("card2FileInput") as HTMLInputElement;
                 input.click();
               }}>
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
-                  <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441489322-473613091898724-7919112223862581296-n-694x833.jpg?v=1TojCn"
+                  <img 
+                    src={card3Image}
                     alt="Cozy Spots"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -334,19 +307,20 @@ async function handleCMSChanges(e: React.FormEvent) {
                 </a>
               </div>
               <div className="card-body">
+              Card 2
               </div>
             </div>
 
             {/* Card 4 */}
             <div className="card mt-5"
              onClick={() => {
-                const input = document.getElementById("fileInputCard4") as HTMLInputElement;
+                const input = document.getElementById("card5FileInput") as HTMLInputElement;
                 input.click();
               }}>
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
-                  <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441568339-443647471614286-8735612661788619240-n-1080x1296.jpg?v=1TojCn"
+                  <img                   
+                    src={card4Image}
                     alt="Co-working Spaces"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -354,6 +328,7 @@ async function handleCMSChanges(e: React.FormEvent) {
                 </a>
               </div>
               <div className="card-body">
+              Card 5
               </div>
             </div>
           </div>
@@ -362,13 +337,13 @@ async function handleCMSChanges(e: React.FormEvent) {
           <div className="col-lg-4">
             <div className="card"
              onClick={() => {
-                const input = document.getElementById("fileInputCard5") as HTMLInputElement;
+                const input = document.getElementById("card3FileInput") as HTMLInputElement;
                 input.click();
               }}>
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
-                  <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441888247-1628473944631717-5704146367515044747-n-694x833.jpg?v=1TojCn"
+                  <img   
+                    src={card5Image}
                     alt="Home Office"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -376,19 +351,20 @@ async function handleCMSChanges(e: React.FormEvent) {
                 </a>
               </div>
               <div className="card-body">
+              Card 3
               </div>
             </div>
 
             {/* Card 6 */}
             <div className="card mt-5"
              onClick={() => {
-                const input = document.getElementById("fileInputCard6") as HTMLInputElement;
+                const input = document.getElementById("card6FileInput") as HTMLInputElement;
                 input.click();
               }}>
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
-                  <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441577533-2212279502451537-8703496605716778471-n-1080x1296.jpg?v=1TojCn"
+                  <img                   
+                    src={card6Image}
                     alt="Private Space"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -396,6 +372,7 @@ async function handleCMSChanges(e: React.FormEvent) {
                 </a>
               </div>
               <div className="card-body">
+              Card 6
               </div>
             </div>
           </div>
@@ -403,13 +380,13 @@ async function handleCMSChanges(e: React.FormEvent) {
           <div className="col-lg-4">
             <div className="card"
              onClick={() => {
-                const input = document.getElementById("fileInputCard7") as HTMLInputElement;
+                const input = document.getElementById("card7FileInput") as HTMLInputElement;
                 input.click();
               }}>
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
-                  <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441888247-1628473944631717-5704146367515044747-n-694x833.jpg?v=1TojCn"
+                  <img                   
+                    src={card7Image}
                     alt="Home Office"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -417,6 +394,7 @@ async function handleCMSChanges(e: React.FormEvent) {
                 </a>
               </div>
               <div className="card-body">
+              Card 7
               </div>
             </div>
 
@@ -427,13 +405,13 @@ async function handleCMSChanges(e: React.FormEvent) {
             <div className="col-lg-4">
             <div className="card"
              onClick={() => {
-                const input = document.getElementById("fileInputCard8") as HTMLInputElement;
+                const input = document.getElementById("card8FileInput") as HTMLInputElement;
                 input.click();
               }}>
               <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
                 <a className="d-block blur-shadow-image">
-                  <img
-                    src="https://r.mobirisesite.com/910167/assets/images/441577533-2212279502451537-8703496605716778471-n-1080x1296.jpg?v=1TojCn"
+                  <img               
+                    src={card8Image}
                     alt="Home Office"
                     className="img-fluid shadow border-radius-lg"
                     loading="lazy"
@@ -441,6 +419,7 @@ async function handleCMSChanges(e: React.FormEvent) {
                 </a>
               </div>
               <div className="card-body">
+              Card 8
               </div>
             </div> 
           </div>
@@ -452,7 +431,7 @@ async function handleCMSChanges(e: React.FormEvent) {
                 </button>
       <input
                 type="file"
-                id="fileInputCard1"
+                id="card1FileInput"
                 style={{ display: "none" }}
                 accept="image/*"
                 onChange={(e) => {
@@ -477,7 +456,7 @@ async function handleCMSChanges(e: React.FormEvent) {
               />
                 <input
                 type="file"
-                id="fileInputCard2"
+                id="card2FileInput"
                 style={{ display: "none" }}
                 accept="image/*"
                 onChange={(e) => {
@@ -502,7 +481,7 @@ async function handleCMSChanges(e: React.FormEvent) {
               />
                 <input
                 type="file"
-                id="fileInputCard3"
+                id="card3FileInput"
                 style={{ display: "none" }}
                 accept="image/*"
                 onChange={(e) => {
@@ -527,7 +506,7 @@ async function handleCMSChanges(e: React.FormEvent) {
               />
                 <input
                 type="file"
-                id="fileInputCard4"
+                id="card4FileInput"
                 style={{ display: "none" }}
                 accept="image/*"
                 onChange={(e) => {
@@ -552,7 +531,7 @@ async function handleCMSChanges(e: React.FormEvent) {
               />
                 <input
                 type="file"
-                id="fileInputCard5"
+                id="card5FileInput"
                 style={{ display: "none" }}
                 accept="image/*"
                 onChange={(e) => {
@@ -577,7 +556,7 @@ async function handleCMSChanges(e: React.FormEvent) {
               />
                 <input
                 type="file"
-                id="fileInputCard6"
+                id="card6FileInput"
                 style={{ display: "none" }}
                 accept="image/*"
                 onChange={(e) => {
@@ -602,7 +581,7 @@ async function handleCMSChanges(e: React.FormEvent) {
               />
                 <input
                 type="file"
-                id="fileInputCard7"
+                id="card7FileInput"
                 style={{ display: "none" }}
                 accept="image/*"
                 onChange={(e) => {
@@ -627,7 +606,7 @@ async function handleCMSChanges(e: React.FormEvent) {
               />
                 <input
                 type="file"
-                id="fileInputCard8"
+                id="card8FileInput"
                 style={{ display: "none" }}
                 accept="image/*"
                 onChange={(e) => {
@@ -703,6 +682,8 @@ async function handleCMSChanges(e: React.FormEvent) {
                 }}
               />
     </div>
+    </>
+    
   );
 };
 

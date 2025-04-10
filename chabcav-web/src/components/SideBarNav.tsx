@@ -166,6 +166,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
       }
     }, []);
 
+
     // const [sidebarConfig, setSideBarConfig] = useState(adminConfig);
 
     //   const handleSidebarClick = (step: string) => {

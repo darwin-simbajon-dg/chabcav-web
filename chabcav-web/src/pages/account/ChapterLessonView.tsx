@@ -96,13 +96,6 @@ useEffect(() => {
       };
     }, []);
 
-    function closebtn(event: MouseEvent) {
-      const closeButton = document.querySelector(".btn-close.text-white.me-3");
-      if (closeButton && event.target === closeButton) {
-        setSelectedChapter(null);
-      }
-      return selectedChapter;
-    }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

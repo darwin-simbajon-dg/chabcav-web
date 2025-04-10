@@ -420,7 +420,4 @@ const BasicInfo: React.FC = () => {
 };
 
 export default BasicInfo;
-function showToast(arg0: string) {
-  throw new Error("Function not implemented.");
-}
 

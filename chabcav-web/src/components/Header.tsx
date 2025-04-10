@@ -1,14 +1,26 @@
-import React from "react";
 import Login from "./Login";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  backgroundImageUrl: string;
+}
+
+const Header: React.FC<HeaderProps> = ({backgroundImageUrl}) => {
+// const [bannerImage, setBannerImage] = React.useState<string>("");
+
+
+  // useEffect(()=>{
+  //   setBannerImage(backgroundImageUrl);
+    
+  // },[])
+
+
     return (
         <header>
         <div
           className="page-header min-vh-75"
           style={{
             backgroundImage:
-              "url('/src/assets/css/accounts/img/cls.webp')",
+              `url(${backgroundImageUrl})`,
           }}
         >
           <span className="mask bg-gradient-dark opacity-5"></span>
