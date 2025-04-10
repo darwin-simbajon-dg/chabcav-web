@@ -11,20 +11,21 @@ const Dictionary: React.FC = () => {
 
   const handleSearch = async () => {
     if (!query.trim()) return;
-  
+
     setLoading(true);
     setError(null);
     setResults([]);
-  
+
     try {
       const res = await axios.get("http://localhost/api/dictionary/search", {
         params: { query },
       });
       if (res.data.length === 0) {
         setError("❌ No results found. Please try another word.");
-      } else {
-        setResults(res.data.map(item => item.extracted_text)); // Extract only the extracted_text
+      } else { 
+        setResults(res.data);
       }
+      
     } catch (err) {
       setError("❌ Search failed. Please try again.");
       console.error(err);

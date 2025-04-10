@@ -1,5 +1,4 @@
-//sidebarmenu 
-import React, { Component, useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import "../assets/css/accounts/css/nucleo-icons.css";
 import "../assets/css/accounts/css/nucleo-svg.css";
 import "../assets/css/accounts/css/material-dashboard.css";
@@ -9,11 +8,8 @@ import UserProfilePage from "../pages/account/UserProfilePage";
 import UserCMS from "../pages/account/UserCMS";
 import Dashboard from "../pages/account/Dashboard";
 import LessonEditor from '../pages/Lessons/LessonEditor';
-//import MultiStepForm from "../pages/account/MultiStepForm";
 import { useNavigate } from "react-router-dom";
 import clsLogo from "../assets/css/accounts/img/clslogo.webp";
-//import axios from "axios";
-import { useLesson } from "../context/FlowContext";
 import BookView from "../pages/account/ChapterLessonView";
 import ViewDictionary from "../pages/account/ViewDictionary";
 import UploadDictionary from "../pages/Lessons/UploadDictionary";
@@ -21,98 +17,8 @@ import UploadDictionary from "../pages/Lessons/UploadDictionary";
 
 const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
   const navigate = useNavigate();
-  const [chapters, setChapters] = useState<string[]>([]);
-  const [selectedChapter, setSelectedChapter] = useState<string>("");
-  const { setChaptername } = useLesson();
-  //const [config, setConfig] = useState<any>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
- 
-
-  //Fetaure to get all chapters name in sidebar menu
-  // useEffect(() => {
-  //   const fetchChapters = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost/user/get-all-lessons");
-  //       console.log("Fetched Chapters Name:", response.data);
-
-  //       if (response.data && Array.isArray(response.data.lessons)) {
-  //         const uniqueChapters = Array.from(new Set(response.data.lessons.map((lesson) => lesson.chaptername)));
-  //         setChapters(uniqueChapters);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching lessons:", error);
-  //     }
-  //   };
-
-  //   fetchChapters();
-  // }, []);
-
-  //Fetaure to get all lessons name in the main page
-  // useEffect(() => {
-  //   const fetchLessonsName = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost/user/get-all-lessons");
-  //       console.log("Fetched Lessons Name:", response.data);
-
-  //       if (response.data && Array.isArray(response.data.lessons)) {
-  //         const uniqueLessons = Array.from(new Set(response.data.lessons.map((lesson) => lesson.lessonname)));
-  //         setLessonname(uniqueLessons);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching lessons:", error);
-  //     }
-  //   };
-
-  //   fetchLessonsName();
-  // }, []);
-
-  /*const handleToggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };*/
-
- /*const handleChapterClick = (chaptername: string) => {
-    console.log("Selected Chapter:", chaptername);
-    setSelectedChapter(chaptername);
-    setChaptername(chaptername); // Use the correct chaptername directly
-  };*/
-
-//   const handleChapterClick = (chaptername: string) => {
-//     console.log("Selected Chapter:", chaptername);
-//     setSelectedChapter(chaptername);
-//     setChaptername(chaptername); // ✅ Ensure the global context updates
-// };
-
-//   useEffect(() => {
-//     if (selectedChapter) {
-//       console.log(`Current selected chapter: ${selectedChapter}`);
-//      // handleChapterClick
-//     }
-//   }, [selectedChapter]);
-
-  /*useEffect(() => {
-    const fetchLessons = async () => {
-      try {
-        const response = await axios.get("http://localhost/user/get-all-lessons");
-        console.log("Fetched Lessons:", response.data);
-  
-        if (response.data && Array.isArray(response.data.lessons)) {
-          const uniqueChapters = Array.from(new Set(response.data.lessons.map((lesson) => lesson.chaptername)));
-          setChapters(uniqueChapters);
-  
-          // Automatically set the first chapter
-          if (uniqueChapters.length > 0) {
-            setSelectedChapter(uniqueChapters[0]); // 🔹 Auto-select first chapter
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching lessons:", error);
-      }
-    };
-  
-    fetchLessons();
-  }, []);*/
-  
-    const [imageUrl, setImageUrl] = useState("/assets/images/bruce-mars.jpg");
+  const [imageUrl, setImageUrl] = useState("/assets/images/bruce-mars.jpg");
   
 
     const userLessonConfig = [
@@ -120,36 +26,17 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         title: "Profile",
         icon: "/assets/images/team-3.jpg",
         items: [
-          { title: "My Profile", link: "../../pages/pages/profile/overview.html", icon: '', component: UserProfilePage, step: "UserPanel" },
-          { title: "Settings", link: "../../pages/pages/account/settings.html", icon: '', component: UserSettings, step: "UserPanel" },
-         // { title: "CMS", link: "../../pages/pages/account/settings.html", icon: '', component: UserCMS, step: "UserPanel" },
-          { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: '', component: null, step: "Logout" },
+          { title: "My Profile", link: "../../pages/pages/profile/overview.html", icon: 'face', component: UserProfilePage, step: "UserPanel" },
+          { title: "Settings", link: "../../pages/pages/account/settings.html", icon: 'settings', component: UserSettings, step: "UserPanel" },
+          { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: 'logout', component: null, step: "Logout" },
         ],
       },
-      // {
-      //   title: "Activity",
-      //   icon: "browse_activity",
-      //   items: [
-      //     { title: "Go to Lesson", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel" },
-      //   ],
-      // },
-      // {
-      //   title: "All Chapters",
-      //   icon: "browse_activity",
-      //   items: chapters.map((chaptername) => ({
-      //     title: chaptername,
-      //     link: "../../pages/dashboards/analytics.html",
-      //     component: MultiStepForm,
-      //     step: "LessonPanel",
-      //    // onClick: () => setSelectedChapter(chapter.chaptername),
-      //   })),
-      // },
       {
         title: "Activity",
         icon: "browse_activity",
         items: [
-          { title: "All Chapters", link: "../../pages/dashboards/analytics.html", icon: '', component: BookView, step: "LessonPanel"  },
-          { title: "Dictionary", link: "../../pages/dashboards/analytics.html", icon: '', component: ViewDictionary, step: "LessonPanel"  },
+          { title: "All Chapters", link: "../../pages/dashboards/analytics.html", icon: 'book', component: BookView, step: "LessonPanel"  },
+          { title: "Dictionary", link: "../../pages/dashboards/analytics.html", icon: 'dictionary', component: ViewDictionary, step: "LessonPanel"  },
           //{ title: "Chapter 3", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel"  },
         ],
       },
@@ -161,9 +48,8 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         icon: "/assets/images/team-3.jpg",
         items: [
           // { title: "My Profile", link: "../../pages/pages/profile/overview.html", component: UserProfilePage, icon: '', step: "AdminPanel" },
-          { title: "Settings", link: "../../pages/pages/account/settings.html", component: UserSettings, icon: '', step: "AdminPanel"  },
-          { title: "CMS", link: "../../pages/pages/account/settings.html", component: UserCMS, icon: '', step: "AdminPanel"  },
-          { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: '', component: null, step: "Logout"  },
+          { title: "Settings", link: "../../pages/pages/account/settings.html", component: UserSettings, icon: 'settings', step: "AdminPanel"  },
+          { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: 'logout', component: null, step: "Logout"  },
         ],
       },
       {
@@ -173,6 +59,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
           { title: "Dashboard", link: "../../pages/dashboards/analytics.html", icon: "dashboard", component: Dashboard, step: "AdminPanel" },
           { title: "Add Lessons", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: LessonEditor, step: "AdminPanel" },
           { title: "Update Dictionary", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: UploadDictionary, step: "AdminPanel" },
+          { title: "CMS", link: "../../pages/pages/account/settings.html", icon: "settings", component: UserCMS, step: "AdminPanel"  },
         ],
       },
     ];
@@ -182,24 +69,23 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         title: "Profile",
         icon: "/assets/images/team-3.jpg",
         items: [
-          { title: "My Profile", link: "../../pages/pages/profile/overview.html" , icon: '', component: UserProfilePage, step: "UserPanel" },
-          { title: "Settings", link: "../../pages/pages/account/settings.html", icon: '', component: UserSettings, step: "UserPanel" },
+          { title: "My Profile", link: "../../pages/pages/profile/overview.html" , icon: 'face', component: UserProfilePage, step: "UserPanel" },
+          { title: "Settings", link: "../../pages/pages/account/settings.html", icon: 'settings', component: UserSettings, step: "UserPanel" },
           //{ title: "CMS", link: "../../pages/pages/account/settings.html", icon: '', component: UserCMS, step: "UserPanel" },
-          { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: '', component: null, step: "Logout" },
+          { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: 'logout', component: null, step: "Logout" },
         ],
       },
       {
         title: "Activity",
         icon: "browse_activity",
         items: [
-          { title: "Go to Chapters", link: "../../pages/dashboards/analytics.html", icon: '', component: BookView, step: "LessonPanel" },
-          { title: "Dictionary", link: "../../pages/dashboards/analytics.html", icon: '', component: ViewDictionary, step: "LessonPanel" },
+          { title: "Go to Chapters", link: "../../pages/dashboards/analytics.html", icon: 'Book', component: BookView, step: "LessonPanel" },
+          { title: "Dictionary", link: "../../pages/dashboards/analytics.html", icon: 'dictionary', component: ViewDictionary, step: "LessonPanel" },
         ],
       },
     ];
 
     const handleSidebarClick = (step: string) => {
-    
       localStorage.setItem("Step", step);
       if (step === "Logout") {
         localStorage.clear();
@@ -269,11 +155,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
             setImageUrl(`http://localhost/uploads/${data.imageid}`); // Assuming the response contains the image URL
             localStorage.setItem("Step", data.role);
           }
-         
-
         }
-       
-
       }
 
       fetchData();

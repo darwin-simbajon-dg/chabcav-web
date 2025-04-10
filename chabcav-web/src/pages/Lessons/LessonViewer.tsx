@@ -90,7 +90,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({ selectedChapter }) => {
   const speakText = (text: string) => {
     const synth = window.speechSynthesis;
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
+    utterance.lang = "es-spanish"; // Set the language to Spanish
     synth.speak(utterance);
   };
 

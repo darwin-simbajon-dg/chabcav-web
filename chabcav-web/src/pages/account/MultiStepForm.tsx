@@ -1,14 +1,9 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useLesson } from "../../context/FlowContext";
 import SpinnerModal from "../../components/SpinnerModal";
-import CompletedChapterButton from "../Lessons/CompletedChapters";
 
-const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newChapter: string) => void }> = ({
-  selectedChapter,
-  onChapterChange,
-}) => {
+const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newChapter: string) => void }> = ({}) => {
   const [lessons, setLessons] = useState<{ lessonid: string; lessonname: string; lessoncontent: string }[]>([]);
   const [currentLesson, setCurrentLesson] = useState(0);
   const [isBottomReached, setIsBottomReached] = useState(false);
@@ -19,7 +14,6 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
   const [isCardVisible, setIsCardVisible] = useState(true);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
- // const [chapterCompleted, setChapterCompleted] = useState(false);
 
   useEffect(() => {
     console.log("Current chaptername in MultiStepForm:", chaptername);
@@ -58,26 +52,6 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
     setIsBottomReached(false);
   }, [chaptername]);  // Runs when the chapter changes
 
-  // useEffect(() => {
-  //   const handleUsersProgress = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost/user/users-progress", {
-  //         params: { chaptername: chaptername, },
-  //       });
-  //       console.log("User's Progress:", response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching user's progress:", error);
-  //     }
-  //   }
-  // }, []);
-
-  // function completeChapter() {
-  //   if () {
-  //     setChapterCompleted(true);
-  //   }
-   
-  // }
-
   useEffect(() => {
     document.addEventListener("mouseup", handleTextSelection);
     return () => {
@@ -110,45 +84,6 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
     }
   };
 
-  // const handleTextSelection = () => {
-  //   const selection = window.getSelection();
-  //   if (selection && selection.toString().trim() !== "") {
-  //     const selectedText = selection.toString().trim();
-  //     setHighlightedWord(selectedText);
-
-  //     const range = selection.getRangeAt(0);
-  //     const rect = range.getBoundingClientRect();
-
-  //     setButtonPosition({
-  //       top: rect.top + window.scrollY - 10,
-  //       left: rect.left + window.scrollX + rect.width + 5,
-  //     });
-  //   } else {
-  //     setHighlightedWord(null);
-  //     setButtonPosition(null);
-  //   }
-  // };
-
-  /*const handleTextSelection = () => {
-    const selection = window.getSelection();
-    if (selection && selection.rangeCount > 0 && selection.toString().trim() !== "") {
-      const selectedText = selection.toString().trim();
-      setHighlightedWord(selectedText);
-
-      const range = selection.getRangeAt(0);
-      const rect = range.getBoundingClientRect();
-
-      //Position the button DIRECTLY ON TOP of the highlighted word
-      setButtonPosition({
-        top: rect.bottom + window.scrollY - 60, // Place the button just below the highlighted text
-        left: rect.left + window.scrollX, // Align with the start of the highlighted text
-      });
-    } else {
-      setHighlightedWord(null);
-      setButtonPosition(null);
-    }
-  };*/
-
   const speakText = (text: string) => {
     const synth = window.speechSynthesis;
     const utterance = new SpeechSynthesisUtterance(text);
@@ -156,13 +91,6 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
     utterance.lang = availableLanguages.find((lang) => synth.getVoices().some((voice) => voice.lang === lang)) || "en-US";
     synth.speak(utterance);
   };
-
-  /*const speakText = (text: string) => {
-    const synth = window.speechSynthesis;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "es-MX";
-    synth.speak(utterance);
-  };*/
 
   useEffect(() => {
     const contentElement = contentRef.current;
@@ -205,43 +133,10 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
     }
   };
 
-// function handleCahpterCompleted(string usersname, string chaptername) {
-  
-// }
-
-  // const moveToNextChapter = async () => {
-  //   try {
-  //     const response = await axios.get("http://localhost/user/get-all-lessons");
-  //     if (response.data && Array.isArray(response.data.lessons)) {
-  //       const uniqueChapters = Array.from(new Set(response.data.lessons.map((lesson) => lesson.chaptername)));
-  //       const currentIndex = uniqueChapters.indexOf(chaptername);
-
-  //       if (currentIndex !== -1 && currentIndex < uniqueChapters.length - 1) {
-  //         const nextChapter = uniqueChapters[currentIndex + 1];
-  //         setChaptername(nextChapter);
-  //         onChapterChange(nextChapter); // 🔹 Notify SidebarNav
-  //       } else {
-  //         alert("You have completed all chapters!");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching chapters:", error);
-  //   }
-  // };
-
-  // const handlePreviousLesson = () => {
-  //   setCurrentLesson((prev) => Math.max(prev - 1, 0));
-  //   setIsBottomReached(true);
-  // };
-
   const handleCloseCard = () => {
     setIsCardVisible(false);
   };
 
-  /* if (lessons.length === 0) {
-     return <p>No lessons available for this chapter.</p>;
-   }*/
-  // Function to handle mouse movement
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
       if (event.clientX <= 10) {
@@ -257,15 +152,6 @@ const MultiStepForm: React.FC<{ selectedChapter: string; onChapterChange: (newCh
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
-
-  ///Resize handler
-  //  const [screenHeight, setScreenHeight] = useState(window.innerHeight);
-
-  // useEffect(() => {
-  //   const handleResize = () => setScreenHeight(window.innerHeight);
-  //   window.addEventListener("resize", handleResize);
-  //    return () => window.removeEventListener("resize", handleResize);
-  //  }, []);
 
   return (
 

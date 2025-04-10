@@ -1,4 +1,3 @@
-// lesson editor
 import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -15,9 +14,6 @@ const LessonPane: React.FC = () => {
   const [lessons, setLessons] = useState<{ lessonid: string; lessonname: string; lessoncontent: string }[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
-  const [selectedWord, setSelectedWord] = useState<string | null>(null);
- // const [uploadedAudioUrl, setUploadedAudioUrl] = useState<string | null>(null);
-
 
   const fetchLessonsFromAPI = async () => {
     try {
@@ -33,27 +29,15 @@ const LessonPane: React.FC = () => {
   const toolbarOptions = [
     [{ header: [1, 2, 3, false] }], // Headers
     ["bold", "italic", "underline", "strike"], // Text styles
-    [{ align: [] }], // ✅ Add text alignment (Left, Center, Right, Justify)
+    [{ align: [] }], //Add text alignment (Left, Center, Right, Justify)
     [{ list: "ordered" }, { list: "bullet" }], // Lists
     ["link", "blockquote", "code-block"], // Links & block styles
     [{ color: [] }, { background: [] }], // Text & background color
     ["clean"], // Remove formatting
   ];
-
-  
-  // ✅ Insert Audio Next to Selected Word
-  /*const insertAudioForWord = (word: string | null, audioUrl: string) => {
-    if (!word) return;
-    const audioTag = `<span>${word} 
-      <audio controls style="height:20px; vertical-align: middle;">
-        <source src="${audioUrl}" type="audio/mp3">
-      </audio></span>`;
-
-    setContent((prevContent) => prevContent.replace(word, audioTag));
-  };*/
   
   const modules = {
-    toolbar: toolbarOptions, // ✅ Enable custom toolbar
+    toolbar: toolbarOptions, //Enable custom toolbar
   };
 
   useEffect(() => {
@@ -66,41 +50,6 @@ const LessonPane: React.FC = () => {
     const selectedLessonData = lessons.find((lesson) => lesson.lessonid === lessonId);
     setContent(selectedLessonData ? selectedLessonData.lessoncontent : "");
   };
-
-    // ✅ Handle Audio File Upload
-   /* const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (file && (file.type === "audio/mp3" || file.type === "audio/wav")) {
-        const audioUrl = URL.createObjectURL(file); // ✅ Create temporary audio URL
-        setUploadedAudioUrl(audioUrl);
-        insertAudioForWord(selectedWord, audioUrl); // ✅ Insert into Quill
-      } else {
-        alert("Please upload a valid .mp3 or .wav file.");
-      }
-    };*/
-
-/*  const saveContent = async () => {
-    if (!selectedLesson) {
-      alert("Please select a lesson to save the content.");
-      return;
-    }
-    try {
-      await axios.post("http://localhost/admin/update-lesson", {
-        lessonId: selectedLesson,
-        lessonName: lessons.find((lesson) => lesson.lessonid === selectedLesson)?.lessonname || "",
-        lessonContent: content,
-      });
-      alert("Content updated successfully!");
-      setLessons((prevLessons) =>
-        prevLessons.map((lesson) =>
-          lesson.lessonid === selectedLesson ? { ...lesson, lessoncontent: content } : lesson
-        )
-      );
-    } catch (error) {
-      console.error("Error updating content:", error);
-      alert("Failed to update content.");
-    }
-  };*/
 
   const saveContent = async () => {
     if (!selectedLesson) {
@@ -150,88 +99,6 @@ const LessonPane: React.FC = () => {
       alert("Failed to save lesson and chapter.");
     }
   };
-
- /* function handleSelection(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
-    const selection = window.getSelection();
-    if (selection && selection.toString().trim()) {
-      setSelectedWord(selection.toString().trim());
-      alert(`Selected word: ${selection.toString().trim()}`);
-    } else {
-      alert("Please select a word first.");
-    }
-  }*/
-
-    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (!file || !(file.type === "audio/mp3" || file.type === "audio/wav")) {
-        alert("Please upload a valid .mp3 or .wav file.");
-        return;
-      }
-    
-      if (!selectedWord) {
-        alert("Please select a word first.");
-        return;
-      }
-    
-      // Define the path where the audio will be stored
-      const audioFileName = `${selectedWord}.mp3`; // Ensure consistency
-      const audioPath = `/AudioRecordings/${audioFileName}`; // Relative path
-    
-      // Simulate saving the file (in actual implementation, send it to the backend)
-      setUploadedAudioUrl(audioPath);
-    
-      // Insert the audio tag
-      insertAudioForWord(selectedWord, audioPath);
-    };
-
-    function handleSelection(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
-      const selection = window.getSelection();
-      if (selection && selection.toString().trim()) {
-        setSelectedWord(selection.toString().trim());
-        console.log("Selected Word:", selection.toString().trim()); // ✅ Check in console
-        alert(`Selected word: ${selection.toString().trim()}`);
-      } else {
-        alert("Please select a word first.");
-      }
-    }    
-    
-
-/*const handleSelection = () => {
-  const selection = window.getSelection()?.toString().trim();
-  if (!selection) {
-    alert("Please select a word first.");
-    return;
-  }
-
-  setSelectedWord(selection);
-
-  // Check if an audio file already exists
-  const existingAudioPath = `/AudioRecordings/${selection}.mp3`;
-  fetch(existingAudioPath)
-    .then(response => {
-      if (response.ok) {
-        setUploadedAudioUrl(existingAudioPath);
-        insertAudioForWord(selection, existingAudioPath);
-      }
-    })
-    .catch(() => console.log("No pre-existing audio for this word."));
-};*/
-
-const insertAudioForWord = (word: string | null, audioUrl: string) => {
-  if (!word) return;
-  const audioTag = `<span>${word} 
-    <audio controls style="height:20px; vertical-align: middle;">
-      <source src="${audioUrl}" type="audio/mp3">
-    </audio></span>`;
-
-  setContent((prevContent) => {
-    const updatedContent = prevContent.replace(word, audioTag);
-    console.log("Updated Content:", updatedContent); // ✅ Check if content is updated
-    return updatedContent;
-  });
-};
-  
-
   return (
     <div className="container-fluid py-4">
       <div className="col-12 col-lg-8 m-auto text-center">
@@ -279,12 +146,12 @@ const insertAudioForWord = (word: string | null, audioUrl: string) => {
             <Form>
               <Form.Group className="mb-3">
                 <Form.Label>Select Lesson</Form.Label>
-                <Form.Control as="select" value={selectedLesson} onChange={handleLessonChange} className="text-center">
+                <select value={selectedLesson} onChange={handleLessonChange} className="form-control text-center">
                   <option value="">-- Select a Lesson --</option>
                   {lessons.map((lesson) => (
                     <option key={lesson.lessonid} value={lesson.lessonid}>{lesson.lessonname}</option>
                   ))}
-                </Form.Control>
+                </select>
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Lesson Content</Form.Label>
