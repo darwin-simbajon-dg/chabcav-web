@@ -25,7 +25,7 @@ const UserCMS: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false); // State to control spinner
 
   async function fetchCMS(){
-    const response = await fetch("http://localhost/api/cms", {
+    const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -39,23 +39,23 @@ const UserCMS: React.FC = () => {
 
       const data = await response.json();
       console.log(data);
-      setBannerImage(`http://localhost/uploads/${data.banner}`);
-      setMidContentImage(`http://localhost/uploads/${data.midcontentimage}`);
-      setCard1Image(`http://localhost/uploads/${data.card1}`);
-      setCard2Image(`http://localhost/uploads/${data.card2}`);
-      setCard3Image(`http://localhost/uploads/${data.card3}`);
-      setCard4Image(`http://localhost/uploads/${data.card4}`);
-      setCard5Image(`http://localhost/uploads/${data.card5}`);
-      setCard6Image(`http://localhost/uploads/${data.card6}`);
-      setCard7Image(`http://localhost/uploads/${data.card7}`);
-      setCard8Image(`http://localhost/uploads/${data.card8}`);
+      setBannerImage(`https://chabcav-api-development.up.railway.app/uploads/${data.banner}`);
+      setMidContentImage(`https://chabcav-api-development.up.railway.app/uploads/${data.midcontentimage}`);
+      setCard1Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card1}`);
+      setCard2Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card2}`);
+      setCard3Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card3}`);
+      setCard4Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card4}`);
+      setCard5Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card5}`);
+      setCard6Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card6}`);
+      setCard7Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card7}`);
+      setCard8Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card8}`);
       setContent(data.content);
       setHeadline(data.headline);
 }  
 
 async function handleContentChanges() {
     try {
-        const response = await fetch("http://localhost/api/cms/update-contents", {
+        const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms/update-contents", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -101,7 +101,7 @@ async function handleCMSChanges(e: React.FormEvent) {
     try {
         if (imageDataList.length) {
             console.warn("No images to upload. Skipping the request.");
-            const response = await fetch("http://localhost/api/cms/upload", {
+            const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms/upload", {
               method: "POST",
               headers: {
               // "Authorization": `Bearer ${localStorage.getItem("authToken")}`,

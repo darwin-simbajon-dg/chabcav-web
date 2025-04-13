@@ -52,7 +52,7 @@ const ChangePassword: React.FC = () => {
         }
          
       
-      const response = await fetch("http://localhost/user/update-password", {
+      const response = await fetch("https://chabcav-api-development.up.railway.app/user/update-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

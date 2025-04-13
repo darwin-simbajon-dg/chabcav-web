@@ -35,7 +35,7 @@ const UploadDictionary: React.FC = () => {
       setMessage(null);
       setError(null);
 
-      await axios.post("http://localhost/admin/upload-file-dictionary", formData, {
+      await axios.post("https://chabcav-api-development.up.railway.app/admin/upload-file-dictionary", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

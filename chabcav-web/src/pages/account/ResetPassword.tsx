@@ -57,7 +57,7 @@ const ResetPassword: React.FC = () => {
 
 //     const role = 'User';
 
-//     const response = await fetch('http://localhost:80/user/register', {
+//     const response = await fetch('https://chabcav-api-development.up.railway.app:80/user/register', {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ const handleOTPVerification = async (e:React.FormEvent) => {
   setIsLoading(true);
   setCurrentPassword(newPassword);
 
-   const response = await fetch("http://localhost/user/reset-password", {
+   const response = await fetch("https://chabcav-api-development.up.railway.app/user/reset-password", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -156,7 +156,7 @@ const handleOTPVerification = async (e:React.FormEvent) => {
             return;
           }
           setIsLoading(true);
-          const response = await fetch("http://localhost/user/send-otp", {
+          const response = await fetch("https://chabcav-api-development.up.railway.app/user/send-otp", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json"

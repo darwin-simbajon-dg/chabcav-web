@@ -67,8 +67,8 @@ const Dictionary: React.FC = () => {
   // Fetch latest dictionary content on load
   const fetchLatestHtml = async () => {
     try {
-      const htmlRes = await axios.get("http://localhost/api/dictionary/html/latest");
-      const textRes = await axios.get("http://localhost/api/dictionary/text/latest");
+      const htmlRes = await axios.get("https://chabcav-api-development.up.railway.app/api/dictionary/html/latest");
+      const textRes = await axios.get("https://chabcav-api-development.up.railway.app/api/dictionary/text/latest");
 
       const html = htmlRes.data.html;
       const extractedText = textRes.data.text;

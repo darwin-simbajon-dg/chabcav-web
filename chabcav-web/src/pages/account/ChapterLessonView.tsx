@@ -22,7 +22,7 @@ const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 useEffect(() => {
     const fetchLessons = async () => {
       try {
-        const response = await axios.get("http://localhost/user/get-all-lessons");
+        const response = await axios.get("https://chabcav-api-development.up.railway.app/user/get-all-lessons");
         console.log("API Response:", response.data); 
 
         let lessonsArray = [];

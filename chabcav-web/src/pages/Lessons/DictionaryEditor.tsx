@@ -18,7 +18,7 @@ const DictionaryEditor: React.FC<DictionaryEditorProps> = ({ onUpdateSuccess }) 
   useEffect(() => {
     const fetchHtml = async () => {
       try {
-        const res = await axios.get("http://localhost/api/dictionary/html/latest");
+        const res = await axios.get("https://chabcav-api-development.up.railway.app/api/dictionary/html/latest");
         setHtmlContent(res.data.html || "");
       } catch (err) {
         console.error(err);
@@ -39,7 +39,7 @@ const DictionaryEditor: React.FC<DictionaryEditorProps> = ({ onUpdateSuccess }) 
     try {
       const updatedHtml = editorRef.current?.innerHTML || "";
 
-      const res = await axios.post("http://localhost/admin/update-dictionary-html", {
+      const res = await axios.post("https://chabcav-api-development.up.railway.app/admin/update-dictionary-html", {
         updatedHtml,
       });
 
