@@ -1,44 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import "../assets/css/accounts/css/nucleo-icons.css";
 import "../assets/css/accounts/css/nucleo-svg.css";
 import "../assets/css/accounts/css/material-dashboard.css";
 import NavigationProperties from "../models/NavigationProperties";
 import UserSettings from "../pages/account/components/UserSettings";
 import UserProfilePage from "../pages/account/UserProfilePage";
+import UserCMS from "../pages/account/UserCMS";
 import Dashboard from "../pages/account/Dashboard";
 import LessonEditor from '../pages/Lessons/LessonEditor';
-import MultiStepForm from "../pages/account/MultiStepForm";
 import { useNavigate } from "react-router-dom";
 import clsLogo from "../assets/css/accounts/img/clslogo.webp";
+import BookView from "../pages/account/ChapterLessonView";
+import ViewDictionary from "../pages/account/ViewDictionary";
+import UploadDictionary from "../pages/Lessons/UploadDictionary";
 
 
 const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [imageUrl, setImageUrl] = useState("/assets/images/bruce-mars.jpg");
+  
 
     const userLessonConfig = [
       {
         title: "Profile",
         icon: "/assets/images/team-3.jpg",
         items: [
-          { title: "My Profile", link: "../../pages/pages/profile/overview.html", icon: '', component: UserProfilePage, step: "UserPanel" },
-          { title: "Settings", link: "../../pages/pages/account/settings.html", icon: '', component: UserSettings, step: "UserPanel" },
-          { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: '', component: null, step: "Logout" },
+          { title: "My Profile", link: "../../pages/pages/profile/overview.html", icon: 'face', component: UserProfilePage, step: "UserPanel" },
+          { title: "Settings", link: "../../pages/pages/account/settings.html", icon: 'settings', component: UserSettings, step: "UserPanel" },
+          { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: 'logout', component: null, step: "Logout" },
         ],
       },
-      // {
-      //   title: "Activity",
-      //   icon: "browse_activity",
-      //   items: [
-      //     { title: "Go to Lesson", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel" },
-      //   ],
-      // },
       {
-        title: "Chapters",
+        title: "Activity",
         icon: "browse_activity",
         items: [
-          { title: "Chapter 1", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel"  },
-          { title: "Chapter 2", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel"  },
-          { title: "Chapter 3", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel"  },
+          { title: "All Chapters", link: "../../pages/dashboards/analytics.html", icon: 'book', component: BookView, step: "LessonPanel"  },
+          { title: "Dictionary", link: "../../pages/dashboards/analytics.html", icon: 'dictionary', component: ViewDictionary, step: "LessonPanel"  },
+          //{ title: "Chapter 3", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel"  },
         ],
       },
     ];
@@ -48,9 +47,9 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         title: "Profile",
         icon: "/assets/images/team-3.jpg",
         items: [
-          { title: "My Profile", link: "../../pages/pages/profile/overview.html", component: UserProfilePage, icon: '', step: "AdminPanel" },
-          { title: "Settings", link: "../../pages/pages/account/settings.html", component: UserSettings, icon: '', step: "AdminPanel"  },
-          { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: '', component: null, step: "Logout"  },
+          // { title: "My Profile", link: "../../pages/pages/profile/overview.html", component: UserProfilePage, icon: '', step: "AdminPanel" },
+          { title: "Settings", link: "../../pages/pages/account/settings.html", component: UserSettings, icon: 'settings', step: "AdminPanel"  },
+          { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: 'logout', component: null, step: "Logout"  },
         ],
       },
       {
@@ -58,7 +57,9 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         icon: "admin_panel_settings",
         items: [
           { title: "Dashboard", link: "../../pages/dashboards/analytics.html", icon: "dashboard", component: Dashboard, step: "AdminPanel" },
-          { title: "Lessons", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: LessonEditor, step: "AdminPanel" },
+          { title: "Add Lessons", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: LessonEditor, step: "AdminPanel" },
+          { title: "Update Dictionary", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: UploadDictionary, step: "AdminPanel" },
+          { title: "CMS", link: "../../pages/pages/account/settings.html", icon: "settings", component: UserCMS, step: "AdminPanel"  },
         ],
       },
     ];
@@ -68,30 +69,47 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         title: "Profile",
         icon: "/assets/images/team-3.jpg",
         items: [
-          { title: "My Profile", link: "../../pages/pages/profile/overview.html" , icon: '', component: UserProfilePage, step: "UserPanel" },
-          { title: "Settings", link: "../../pages/pages/account/settings.html", icon: '', component: UserSettings, step: "UserPanel" },
-          { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: '', component: null, step: "Logout" },
+          { title: "My Profile", link: "../../pages/pages/profile/overview.html" , icon: 'face', component: UserProfilePage, step: "UserPanel" },
+          { title: "Settings", link: "../../pages/pages/account/settings.html", icon: 'settings', component: UserSettings, step: "UserPanel" },
+          //{ title: "CMS", link: "../../pages/pages/account/settings.html", icon: '', component: UserCMS, step: "UserPanel" },
+          { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: 'logout', component: null, step: "Logout" },
         ],
       },
       {
         title: "Activity",
         icon: "browse_activity",
         items: [
-          { title: "Go to Lesson", link: "../../pages/dashboards/analytics.html", icon: '', component: MultiStepForm, step: "LessonPanel" },
+          { title: "Go to Chapters", link: "../../pages/dashboards/analytics.html", icon: 'Book', component: BookView, step: "LessonPanel" },
+          { title: "Dictionary", link: "../../pages/dashboards/analytics.html", icon: 'dictionary', component: ViewDictionary, step: "LessonPanel" },
         ],
       },
     ];
 
     const handleSidebarClick = (step: string) => {
       localStorage.setItem("Step", step);
-  
+      if (step === "Logout") {
+        localStorage.clear();
+        navigate("/");
+      } else {
+       // setChaptername(selectedChapter);
+        updateSidebarConfig(step);
+      }
+    };
+
+    /*const handleSidebarClick = (step: string, chapterName?: string) => {
+      if (chapterName) {
+        console.log("Navigating to Chapter:", chapterName); // Debugging
+        setSelectedChapter(chapterName); // ✅ Updates state
+      }
+    
       if (step === "Logout") {
         localStorage.clear();
         navigate("/");
       } else {
         updateSidebarConfig(step);
       }
-    };
+    };*/
+    
 
     const [sidebarConfig, setSideBarConfig] = useState(adminConfig);
 
@@ -103,14 +121,51 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
       } else if (step === "LessonPanel") {
         setSideBarConfig(userLessonConfig);
       }
+
+      
     };
   
     useEffect(() => {
+
+      async function fetchData() {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          throw new Error("No auth token found");
+        }
+        const claims = JSON.parse(atob(token.split('.')[1]));
+        const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
+  
+        if(userId !== undefined){
+          const response = await fetch(`http://localhost/profile/${userId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+            }
+          });
+    
+          if (!response.ok) {
+            throw new Error("Failed to fetch profile data");
+          }
+    
+
+          const data = await response.json();
+          
+          if(!data) {
+            setImageUrl(`http://localhost/uploads/${data.imageid}`); // Assuming the response contains the image URL
+            localStorage.setItem("Step", data.role);
+          }
+        }
+      }
+
+      fetchData();
+
       const step = localStorage.getItem("Step");
       if (step) {
         updateSidebarConfig(step);
       }
-    }, [sidebarConfig]);
+    }, []);
+
 
     // const [sidebarConfig, setSideBarConfig] = useState(adminConfig);
 
@@ -157,9 +212,27 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
     //   }, []);
 
   return (
-    <aside className="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start bg-white my-2">
+   
+    <aside className={`sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start bg-white my-2 ${
+      isCollapsed ? "collapsed" : ""
+    }`}
+    onMouseEnter={() => setIsCollapsed(false)}
+    onMouseLeave={() => setIsCollapsed(true)}
+    style={{
+      width: isCollapsed ? "0" : "250px",
+          transition: "width 0.3s ease",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          position: "fixed",
+          height: "100vh",
+          zIndex: 1000,
+          flexDirection: "column",
+          alignItems: isCollapsed ? "center" : "flex-start", // Center when collapsed
+    }}
+    >
       {/* Sidenav Header */}
-      <div className="sidenav-header">
+      <div className="sidenav-header d-flex align-items-center" style={{ width: "80%" }}> 
+        
         <i
           className="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
           aria-hidden="true"
@@ -178,13 +251,14 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
             height="26"
             alt="main_logo"
           />
-          <span className="ms-1 text-sm text-dark">CLS</span>
+         {!isCollapsed && <span className="ms-1 text-sm text-dark">CLS</span>}
         </a>
+  
       </div>
       <hr className="horizontal dark mt-0 mb-2" />
 
       {/* Dynamic Sidebar Menu */}
-      <div className="collapse navbar-collapse w-auto h-auto" id="sidenav-collapse-main">
+      <div className="collapse navbar-collapse w-auto h-auto" id="sidenav-collapse-main" style={{ width: "100%", textAlign: "center", padding: 0 }}>
         <ul className="navbar-nav">
           {sidebarConfig.map((section, index) => (
             <li key={index} className="nav-item mb-2 mt-0">
@@ -197,7 +271,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
                 aria-expanded="false"
               >
                 {section.icon.startsWith("/") ? (
-                  <img src={section.icon} className="avatar" alt={section.title} />
+                  <img src={imageUrl} className="avatar" alt={section.title} />
                 ) : (
                   <i className={`material-symbols-rounded opacity-5`}>{section.icon}</i>
                 )}
@@ -206,20 +280,27 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
               <div className="collapse" id={`section-${index}`}>
                 <ul className="nav">
                   {section.items.map((item, subIndex) => (
-                    <li key={subIndex} className="nav-item" onClick={() => {onNavigate(item.component); handleSidebarClick(item.step)}}>
+                    <li key={subIndex} className="nav-item" onClick={() => {onNavigate(item.component); /*handleChapterClick(item.title);*/ handleSidebarClick(item.step)}}>
                       <a className="nav-link text-dark" href="#">
                         <i className={`material-symbols-rounded opacity-5`}>{item.icon}</i>
                         <span className="sidenav-normal ms-3 ps-1">{item.title}</span>
                       </a>
                     </li>
+                    
                   ))}
+                  
                 </ul>
+                
               </div>
             </li>
+            
           ))}
         </ul>
       </div>
+      
+      
     </aside>
+
   );
 };
 

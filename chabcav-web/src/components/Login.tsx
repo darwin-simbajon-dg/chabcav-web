@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import Toast from "./Toast";
 import SpinnerModal from "./SpinnerModal";
 import { useToast } from "../context/ToastContext";
+
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -13,36 +13,54 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
 
+  
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      // const response = await fetch("http://localhost/user/login", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json"
-      //   },
-      //   body: JSON.stringify({email, password})
-      // });
+      const response = await fetch("http://localhost/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({email, password})
+      });
 
-      // if(!response.ok){
-      //   const errorData = await response.json();
-      //   throw new Error(errorData.message || "Authentication Failed");
+      if(!response.ok){
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Authentication Failed");
+      }
+
+      const result = await response.json();
+      const token = result;
+      const claims = JSON.parse(atob(token.split('.')[1]));
+      const role = claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+      // localStorage.setItem("role", role);
+      // console.log(claims);
+
+      if(role === "Admin"){
+        localStorage.setItem("Step", "AdminPanel");
+      }
+
+      if(role === "User"){
+        localStorage.setItem("Step", "UserPanel");
+      }
+
+
+
+      localStorage.setItem("authToken", result);
+      localStorage.setItem("role",result.role);
+      navigate("/account");
+
+      // if(email === 'darwin@yahoo.com' && password === 'spiders21'){
+      //   localStorage.setItem("Step", "UserPanel")
+      //   navigate("/account");
       // }
 
-      // const result = await response.json();
-
-      // localStorage.setItem("authToken", result);
-
-      if(email === 'darwin@yahoo.com' && password === 'spiders21'){
-        localStorage.setItem("Step", "UserPanel")
-        navigate("/account");
-      }
-
-      if(email === 'admin@yahoo.com' && password == "1234"){
-        navigate("/account");
-        localStorage.setItem("Step", "AdminPanel")
-      }
+      // if(email === 'admin@yahoo.com' && password == "1234"){
+      //   navigate("/account");
+      //   localStorage.setItem("Step", "AdminPanel")
+      // }
         
 
     } catch (err) {
@@ -58,7 +76,7 @@ const Login: React.FC = () => {
     return (   
     <>
     <SpinnerModal show={isLoading} />
-    <div className="col-xl-4 col-lg-5 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
+    <div  className="col-xl-4 col-xl-4-adj col-lg-5 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-4">
     <div className="card card-plain">
       <div className="card-header text-center">
         <h4 className="font-weight-bolder">Sign In</h4>
@@ -110,9 +128,15 @@ const Login: React.FC = () => {
       </div>
       <div className="card-footer text-center pt-0 px-lg-2 px-1">
         <p className="mb-4 text-sm mx-auto" style= {{color: "white"}}>
-          Don't have an account?
+          Don't have an account? &nbsp;
           <a href="/register" className="text-primary text-gradient font-weight-bold">
-            Sign up
+             Sign up
+          </a>
+        </p>
+
+        <p className="mb-4 text-sm mx-auto" style= {{color: "white"}}>
+          <a href="/enter-emailAddress" className="text-primary text-gradient font-weight-bold">
+             Forgot Password?
           </a>
         </p>
       </div>

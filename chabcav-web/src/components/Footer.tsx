@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
         <div className="row">
           {/* Logo Section */}
           <div className="col-md-3 mb-4 ms-auto">
-            <div>
+            {/* <div>
               <a href="https://www.creative-tim.com/product/material-kit-pro">
                 <img
                   src="../assets/img/logo-ct-dark.png"
@@ -15,14 +15,14 @@ const Footer: React.FC = () => {
                   alt="main_logo"
                 />
               </a>
-              <h6 className="font-weight-bolder mb-4">Material Kit 3 PRO</h6>
-            </div>
+              { <h6 className="font-weight-bolder mb-4">Material Kit 3 PRO</h6> }
+            </div> */}
             <div>
               <ul className="d-flex flex-row ms-n3 nav">
                 <li className="nav-item">
                   <a
                     className="nav-link pe-1"
-                    href="https://www.facebook.com/CreativeTim/"
+                    href="https://www.facebook.com"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -32,14 +32,14 @@ const Footer: React.FC = () => {
                 <li className="nav-item">
                   <a
                     className="nav-link pe-1"
-                    href="https://twitter.com/creativetim"
+                    href="https://twitter.com"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     <i className="fab fa-twitter text-lg opacity-8"></i>
                   </a>
                 </li>
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <a
                     className="nav-link pe-1"
                     href="https://dribbble.com/creativetim"
@@ -48,8 +48,8 @@ const Footer: React.FC = () => {
                   >
                     <i className="fab fa-dribbble text-lg opacity-8"></i>
                   </a>
-                </li>
-                <li className="nav-item">
+                </li> */}
+                {/* <li className="nav-item">
                   <a
                     className="nav-link pe-1"
                     href="https://github.com/creativetimofficial"
@@ -68,7 +68,7 @@ const Footer: React.FC = () => {
                   >
                     <i className="fab fa-youtube text-lg opacity-8"></i>
                   </a>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>
@@ -76,9 +76,9 @@ const Footer: React.FC = () => {
           {/* Company Section */}
           <div className="col-md-2 col-sm-6 col-6 mb-4">
             <div>
-              <h6 className="text-sm">Company</h6>
+              {/* <h6 className="text-sm">Company</h6> */}
               <ul className="flex-column ms-n3 nav">
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <a
                     className="nav-link"
                     href="https://www.creative-tim.com/presentation"
@@ -117,7 +117,7 @@ const Footer: React.FC = () => {
                   >
                     Blog
                   </a>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>
@@ -125,9 +125,9 @@ const Footer: React.FC = () => {
           {/* Resources Section */}
           <div className="col-md-2 col-sm-6 col-6 mb-4">
             <div>
-              <h6 className="text-sm">Resources</h6>
+              {/* <h6 className="text-sm">Resources</h6> */}
               <ul className="flex-column ms-n3 nav">
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <a
                     className="nav-link"
                     href="https://iradesign.io/"
@@ -156,7 +156,7 @@ const Footer: React.FC = () => {
                   >
                     Affiliate Program
                   </a>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>
@@ -164,9 +164,9 @@ const Footer: React.FC = () => {
           {/* Help & Support Section */}
           <div className="col-md-2 col-sm-6 col-6 mb-4">
             <div>
-              <h6 className="text-sm">Help & Support</h6>
+              {/* <h6 className="text-sm">Help & Support</h6> */}
               <ul className="flex-column ms-n3 nav">
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <a
                     className="nav-link"
                     href="https://www.creative-tim.com/contact-us"
@@ -205,7 +205,7 @@ const Footer: React.FC = () => {
                   >
                     Sponsorships
                   </a>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>
@@ -213,9 +213,9 @@ const Footer: React.FC = () => {
           {/* Legal Section */}
           <div className="col-md-2 col-sm-6 col-6 mb-4 me-auto">
             <div>
-              <h6 className="text-sm">Legal</h6>
+              {/* <h6 className="text-sm">Legal</h6> */}
               <ul className="flex-column ms-n3 nav">
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <a
                     className="nav-link"
                     href="https://www.creative-tim.com/knowledge-center/terms-of-service/"
@@ -244,7 +244,7 @@ const Footer: React.FC = () => {
                   >
                     Licenses (EULA)
                   </a>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>
@@ -254,14 +254,14 @@ const Footer: React.FC = () => {
             <div className="text-center">
               <p className="text-dark my-4 text-sm font-weight-normal">
                 All rights reserved. Copyright ©{" "}
-                {new Date().getFullYear()} Material Kit by{" "}
-                <a
+                {/* {new Date().getFullYear()} Material Kit by{" "} */}
+                {/* <a
                   href="https://www.creative-tim.com"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Creative Tim
-                </a>
+                </a> */}
                 .
               </p>
             </div>

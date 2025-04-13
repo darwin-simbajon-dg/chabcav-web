@@ -9,81 +9,77 @@ import '../assets/styles.css'
 
 import Footer from '../components/Footer';
 import Prefooter from '../components/PreFooter';
-import FeaturesSection from '../components/FeatureSection';
 import TestimonialSection from '../components/TestimonialSection';
-import SecondFeatureSection from '../components/SecondFeatureSection';
 import FeatureCards from '../components/FeatureCards';
 import Header from '../components/Header';
-// import Login from '../components/Login';
-// import Header from '../components/Header';
-// import Content from '../components/Content';
-// import PageData from '../models/PageData';
+import { useEffect } from 'react';
+import React from 'react';
+
 
 
 const Main = () => {
-    // const [data, setData] = useState<PageData | null>(null);
-    // const [error, setError] = useState<string | null>(null);
+const [bannerImage, setBannerImage] = React.useState<string>("");
+const [midContentImage, setMidContentImage] = React.useState<string>("");
+const [content, setContent] = React.useState<string>("");
+const [headline, setHeadline] = React.useState<string>("");
+const [cardUrls, setCardUrls] = React.useState<string[]>([]);
+useEffect(() => {
 
-    // useEffect(() => {
+  async function fetchCMS(){
+    const response = await fetch("http://localhost/api/cms", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+        }
+      });
 
-    //     const fetchData = async() => {
-    
-    //       try {        
-    //         // const apiBaseUrl = 'https://chabcav-api-development.up.railway.app'; //process.env.VITE_APP_API_BASE_URL;
-    
-    //         const apiBaseUrl = 'http://localhost';
+      if (!response.ok) {
+        throw new Error("Failed to fetch profile data");
+      }
 
-    //         // console.log(process.env);
-    //         // console.log(process.env.meta);
-    //         console.log(`${apiBaseUrl}/cms/configurations`);
-    
-    //         const response = await fetch(`${apiBaseUrl}/cms/configurations`);
-    //         if(!response.ok){
-    //           throw new Error(`HTTP error! status: ${response.json()}`);
-    //         }
-    //         else{
-    //           const result: PageData = await response.json();
-    //           setData(result);
-    //         }
-    //       } catch (error) {
-    //         setError(error instanceof Error ? error.message: 'Unknown error');
-    //       }
-    //     }
-    
-    //     fetchData();
-    
-    //   }, []);
-    
-    //   if(error) {
-    //     return <div>Error: [error]</div>
-    //   }
-    
-    //   if(!data){
-    //     return <div>Loading...</div>
-    //   }
+      const data = await response.json();
+      console.log(data);
+      setBannerImage(`http://localhost/uploads/${data.banner}`);
+      setMidContentImage(`http://localhost/uploads/${data.midcontentimage}`);
+      setContent(data.content);
+      setHeadline(data.headline);
+      const links = [
+        `http://localhost/uploads/${data.card1}`, 
+        `http://localhost/uploads/${data.card2}`, 
+        `http://localhost/uploads/${data.card3}`, 
+        `http://localhost/uploads/${data.card4}`, 
+        `http://localhost/uploads/${data.card5}`, 
+        `http://localhost/uploads/${data.card6}`, 
+        `http://localhost/uploads/${data.card7}`, 
+        `http://localhost/uploads/${data.card8}`];
+      
+      setCardUrls(links);
+
+
+     
+
+     
+}  
+
+fetchCMS();
+
+}, [])
 
     return (
       <div className="coworking bg-gray-100">
-      {/* Navbar Placeholder */}
-      {/* Add your Navbar component here */}
-
-      {/* Header Section */}
-     
-      <Header />
-      {/* Card Section */}
-      <div className="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-4">
-        {/* Features Section */}
-        <FeaturesSection />
-        <TestimonialSection />
-        <SecondFeatureSection />
-        <FeatureCards />
-        {/* Add other sections like Testimonials, Footer here */}
-        <Prefooter />
-      </div>
-
-      {/* Footer Section */}
-      <Footer />
-    </div>
+          
+            <Header backgroundImageUrl={bannerImage} />
+            <div className="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-4">
+            {/* Features Section */}
+            {/* <FeaturesSection /> */}
+            <TestimonialSection contentImageUrl={midContentImage} content={content} headline={headline}/>
+            {/* <SecondFeatureSection /> */}
+            <FeatureCards urls={cardUrls} />
+            <Prefooter />
+            </div>
+            <Footer />
+          </div>
     )
 }
 

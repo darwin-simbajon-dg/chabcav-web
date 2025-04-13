@@ -1,10 +1,75 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const UserProfilePage: React.FC = () => {
+  const [information, setInformation] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [location, setLocation] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);  const [imageUrl, setImageUrl] = useState("/assets/images/bruce-mars.jpg");
 
+
+
+  useEffect(() => {
+    async function fetchData() {
+
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("No auth token found");
+      }
+      const claims = JSON.parse(atob(token.split('.')[1]));
+      const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
+
+      const response = await fetch(`http://localhost/profile/${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch profile data");
+      }
+
+      const data = await response.json();
+      setInformation(data.information);
+      setFullName(data.fullname);
+      setEmail(data.email);
+      setLocation(data.location);
+      setPhoneNumber(data.phonenumber);
+      setImageUrl(`http://localhost/uploads/${data.imageid}`); // Assuming the response contains the image URL
+    }
+
+    fetchData();
+  }, []);
+
+  // Function to handle mouse movement
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      if (event.clientX <= 10) {
+        setIsSidebarCollapsed(false); // Expand if mouse is at the leftmost 10px
+      } else if (event.clientX > 260) {
+        setIsSidebarCollapsed(true); // Collapse if mouse moves far from the sidebar
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
 
   return (
-    <div className="container-fluid" style={{ paddingLeft: '250px' }}>
+    <div
+      className="container-fluid"
+      style={{
+        transition: "margin 0.3s ease-in-out",
+        marginLeft: isSidebarCollapsed ? "0" : "250px",
+        width: isSidebarCollapsed ? "100%" : "calc(100% - 250px)",
+      }}
+    >
       {/* Page Header */}
       <div
         className="page-header min-height-300 border-radius-xl mt-4"
@@ -23,7 +88,7 @@ const UserProfilePage: React.FC = () => {
           <div className="col-auto">
             <div className="avatar avatar-xl position-relative">
               <img
-                src="../../assets/img/bruce-mars.jpg"
+                src={imageUrl}
                 alt="profile_image"
                 className="w-100 border-radius-lg shadow-sm"
               />
@@ -31,58 +96,14 @@ const UserProfilePage: React.FC = () => {
           </div>
           <div className="col-auto my-auto">
             <div className="h-100">
-              <h5 className="mb-1">Richard Davis</h5>
-              <p className="mb-0 font-weight-normal text-sm">CEO / Co-Founder</p>
+              <h5 className="mb-1">{fullName}</h5>
+              {/* <p className="mb-0 font-weight-normal text-sm">CEO / Co-Founder</p> */}
             </div>
           </div>
-          {/* <div className="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
-            <div className="nav-wrapper position-relative end-0">
-              <ul className="nav nav-pills nav-fill p-1" role="tablist">
-                <li className="nav-item">
-                  <a
-                    className="nav-link mb-0 px-0 py-1 active"
-                    data-bs-toggle="tab"
-                    href="#app"
-                    role="tab"
-                    aria-selected="true"
-                  >
-                    <i className="material-symbols-rounded text-lg position-relative">home</i>
-                    <span className="ms-1">App</span>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a
-                    className="nav-link mb-0 px-0 py-1"
-                    data-bs-toggle="tab"
-                    href="#messages"
-                    role="tab"
-                    aria-selected="false"
-                  >
-                    <i className="material-symbols-rounded text-lg position-relative">email</i>
-                    <span className="ms-1">Messages</span>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a
-                    className="nav-link mb-0 px-0 py-1"
-                    data-bs-toggle="tab"
-                    href="#settings"
-                    role="tab"
-                    aria-selected="false"
-                  >
-                    <i className="material-symbols-rounded text-lg position-relative">settings</i>
-                    <span className="ms-1">Settings</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div> */}
         </div>
 
         {/* Sections */}
         <div className="row">
-          
-
           <div className="col-md-6 col-xl-4">
             {/* Profile Information */}
             <div className="card card-plain h-100">
@@ -93,32 +114,25 @@ const UserProfilePage: React.FC = () => {
                   </div>
                   <div className="col-md-4 text-end">
                     <a href="#edit-profile">
-                      <i
-                        className="fas fa-user-edit text-secondary text-sm"
-                        title="Edit Profile"
-                      ></i>
+                      <i className="fas fa-user-edit text-secondary text-sm" title="Edit Profile"></i>
                     </a>
                   </div>
                 </div>
               </div>
               <div className="card-body p-3">
-                <p className="text-sm">
-                  Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer is no. If two
-                  equally difficult paths, choose the one more painful in the short term (pain
-                  avoidance is creating an illusion of equality).
-                </p>
+                <p className="text-sm">{information}</p>
                 <ul className="list-group">
                   <li className="list-group-item border-0 ps-0 pt-0 text-sm">
-                    <strong className="text-dark">Full Name:</strong> Alec M. Thompson
+                    <strong className="text-dark">Full Name:</strong> {fullName}
                   </li>
                   <li className="list-group-item border-0 ps-0 text-sm">
-                    <strong className="text-dark">Mobile:</strong> (44) 123 1234 123
+                    <strong className="text-dark">Mobile:</strong> {phoneNumber}
                   </li>
                   <li className="list-group-item border-0 ps-0 text-sm">
-                    <strong className="text-dark">Email:</strong> alecthompson@mail.com
+                    <strong className="text-dark">Email:</strong> {email}
                   </li>
                   <li className="list-group-item border-0 ps-0 text-sm">
-                    <strong className="text-dark">Location:</strong> USA
+                    <strong className="text-dark">Location:</strong> {location}
                   </li>
                 </ul>
               </div>

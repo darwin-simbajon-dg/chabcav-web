@@ -35,3 +35,23 @@ body {
 .userProfile{
   padding-left: 250px !important;
 }
+
+
+@media (min-width: 1200px) {
+  body .col-xl-4-adj {
+    margin-right: 9rem !important;
+    position: absolute;
+    top: 4%;
+    right: -9%;
+    max-width: 280px !important;
+  }
+}
+
+@media (min-width: 1920px) {
+  body .col-xl-4-adj {
+    margin-right: 0 !important;
+    max-width: 300px !important;
+    top: 10%;
+    right: 1%;
+  }
+}

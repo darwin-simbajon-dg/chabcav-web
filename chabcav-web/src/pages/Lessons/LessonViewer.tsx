@@ -1,91 +1,64 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { useLesson } from "../../context/FlowContext";
 
+interface LessonViewerProps {
+  selectedChapter: string;
+}
 
-const LessonViewer: React.FC = () => {
-  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
+const LessonViewer: React.FC<LessonViewerProps> = ({ selectedChapter }) => {
+  const [lessons, setLessons] = useState<
+    { lessonid: string; lessonname: string; lessoncontent: string; chaptername: string }[]
+  >([]);
+  const { chaptername } = useLesson(); 
   const contentRef = useRef<HTMLDivElement | null>(null);
+  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
 
-const lessons = [
-    {
-      id: 1,
-      title: "Lesson 1: Introduction to React",
-      content: `
-        <h1>Welcome to React</h1>
-        <p>React is a JavaScript library for building user interfaces.</p>
-        <p>It allows you to create reusable components and manage state effectively.</p>
-      `,
-    },
-    {
-      id: 2,
-      title: "Lesson 2: JSX Basics",
-      content: `
-        <h1>Understanding JSX</h1>
-        <p>JSX is a syntax extension for JavaScript that allows you to write HTML-like code within React components.</p>
-      `,
-    },
-    {
-      id: 3,
-      title: "Lesson 3: Components and Props",
-      content: `
-        <h1>Components in React</h1>
-        <p>Components are the building blocks of any React application.</p>
-      `,
-    },
-  ];
-  
+  useEffect(() => {
+    if (!chaptername) return; // Prevent empty requests
 
-  const currentLesson = lessons[currentLessonIndex];
+    const fetchLessons = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost/user/get-lessons-by-chapter?chapterName=${selectedChapter}`
+        );
+        console.log("Fetched Lessons for:", chaptername, response.data);
+        if (response.data && Array.isArray(response.data.lessons)) {
+          setLessons(response.data.lessons);
+        } else {
+          setLessons([]); // No lessons found
+        }
+      } catch (error) {
+        console.error("Error fetching lessons:", error);
+      }
+    };
 
-  // Scroll to top when lesson changes
+    fetchLessons();
+  }, [chaptername]);
+
   useEffect(() => {
     if (contentRef.current) {
       contentRef.current.scrollTop = 0;
     }
   }, [currentLessonIndex]);
 
-  // Handle scroll detection
-  const handleScroll = () => {
-    if (contentRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
-      if (scrollTop + clientHeight >= scrollHeight) {
-        moveToNextLesson();
-      }
-    }
-  };
+  if (!selectedChapter) {
+    return <p>Please select a chapter.</p>;
+  }
 
-  // Navigate to next lesson
-  const moveToNextLesson = () => {
-    if (currentLessonIndex < lessons.length - 1) {
-      setCurrentLessonIndex((prevIndex) => prevIndex + 1);
-    } else {
-      alert("You have completed all lessons!");
-    }
-  };
+  if (lessons.length === 0) {
+    return <p>No lessons available for {selectedChapter}.</p>;
+  }
+  const currentLesson = lessons[currentLessonIndex];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      {/* Lesson Title */}
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh", left: "100%" }}>
       <div style={{ padding: "20px", background: "#f8f9fa", borderBottom: "1px solid #ddd" }}>
-        <h1>{currentLesson.title}</h1>
+        <h3>{currentLesson.chaptername}</h3>
+        <h2>{currentLesson.lessonname}</h2>
       </div>
-
-      {/* Lesson Content */}
-      <div
-        ref={contentRef}
-        onScroll={handleScroll}
-        style={{
-          flex: 1,
-          overflowY: "auto",
-          padding: "20px",
-          background: "#ffffff",
-          border: "1px solid #ddd",
-          margin: "10px",
-        }}
-        dangerouslySetInnerHTML={{ __html: currentLesson.content }}
-      />
-
-      {/* Navigation Buttons */}
-      <div style={{ padding: "20px", background: "#f8f9fa", borderTop: "1px solid #ddd", textAlign: "right" }}>
+      
+      <div style={{ padding: "10px", background: "#f8f9fa", borderTop: "1px solid #ddd", textAlign: "center" }}>
         <button
           onClick={() => setCurrentLessonIndex((prevIndex) => Math.max(0, prevIndex - 1))}
           disabled={currentLessonIndex === 0}
@@ -93,12 +66,9 @@ const lessons = [
         >
           Previous
         </button>
-        <button
-          onClick={moveToNextLesson}
-          disabled={currentLessonIndex === lessons.length - 1}
-        >
-          Next
-        </button>
+        {/* <button onClick={moveToNextLesson} disabled={!isNextEnabled}>
+          Next Lesson
+        </button> */}
       </div>
     </div>
   );
