@@ -16,7 +16,7 @@ const UpdateAccount: React.FC = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await fetch("http://localhost/user/account", {
+        const response = await fetch("https://chabcav-api-development.up.railway.app/user/account", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -47,7 +47,7 @@ const UpdateAccount: React.FC = () => {
 
     try {
       const token = localStorage.getItem("authToken");
-      const response = await fetch("http://localhost/user/account/update", {
+      const response = await fetch("https://chabcav-api-development.up.railway.app/user/account/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

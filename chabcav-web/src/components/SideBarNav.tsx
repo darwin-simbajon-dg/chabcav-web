@@ -136,7 +136,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
   
         if(userId !== undefined){
-          const response = await fetch(`http://localhost/profile/${userId}`, {
+          const response = await fetch(`https://chabcav-api-development.up.railway.app/profile/${userId}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -152,7 +152,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
           const data = await response.json();
           
           if(!data) {
-            setImageUrl(`http://localhost/uploads/${data.imageid}`); // Assuming the response contains the image URL
+            setImageUrl(`https://chabcav-api-development.up.railway.app/uploads/${data.imageid}`); // Assuming the response contains the image URL
             localStorage.setItem("Step", data.role);
           }
         }

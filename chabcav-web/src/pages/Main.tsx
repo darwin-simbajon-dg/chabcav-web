@@ -26,7 +26,7 @@ const [cardUrls, setCardUrls] = React.useState<string[]>([]);
 useEffect(() => {
 
   async function fetchCMS(){
-    const response = await fetch("http://localhost/api/cms", {
+    const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -40,19 +40,19 @@ useEffect(() => {
 
       const data = await response.json();
       console.log(data);
-      setBannerImage(`http://localhost/uploads/${data.banner}`);
-      setMidContentImage(`http://localhost/uploads/${data.midcontentimage}`);
+      setBannerImage(`https://chabcav-api-development.up.railway.app/uploads/${data.banner}`);
+      setMidContentImage(`https://chabcav-api-development.up.railway.app/uploads/${data.midcontentimage}`);
       setContent(data.content);
       setHeadline(data.headline);
       const links = [
-        `http://localhost/uploads/${data.card1}`, 
-        `http://localhost/uploads/${data.card2}`, 
-        `http://localhost/uploads/${data.card3}`, 
-        `http://localhost/uploads/${data.card4}`, 
-        `http://localhost/uploads/${data.card5}`, 
-        `http://localhost/uploads/${data.card6}`, 
-        `http://localhost/uploads/${data.card7}`, 
-        `http://localhost/uploads/${data.card8}`];
+        `https://chabcav-api-development.up.railway.app/uploads/${data.card1}`, 
+        `https://chabcav-api-development.up.railway.app/uploads/${data.card2}`, 
+        `https://chabcav-api-development.up.railway.app/uploads/${data.card3}`, 
+        `https://chabcav-api-development.up.railway.app/uploads/${data.card4}`, 
+        `https://chabcav-api-development.up.railway.app/uploads/${data.card5}`, 
+        `https://chabcav-api-development.up.railway.app/uploads/${data.card6}`, 
+        `https://chabcav-api-development.up.railway.app/uploads/${data.card7}`, 
+        `https://chabcav-api-development.up.railway.app/uploads/${data.card8}`];
       
       setCardUrls(links);
 

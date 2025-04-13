@@ -17,7 +17,7 @@ const LessonPane: React.FC = () => {
 
   const fetchLessonsFromAPI = async () => {
     try {
-      const response = await axios.get("http://localhost/user/get-all-lessons");
+      const response = await axios.get("https://chabcav-api-development.up.railway.app/user/get-all-lessons");
       if (response.data && Array.isArray(response.data.lessons)) {
         setLessons(response.data.lessons);
       }
@@ -62,7 +62,7 @@ const LessonPane: React.FC = () => {
     console.log("Final Content Before Save:", content); // ✅ Debug content before saving
   
     try {
-      await axios.post("http://localhost/admin/update-lesson", {
+      await axios.post("https://chabcav-api-development.up.railway.app/admin/update-lesson", {
         lessonId: selectedLesson,
         lessonName: lessons.find((lesson) => lesson.lessonid === selectedLesson)?.lessonname || "",
         lessonContent: content,
@@ -90,7 +90,7 @@ const LessonPane: React.FC = () => {
         chapter: { chaptername: newChapterTitle.trim() || "Default Chapter" },
         lesson: { lessonname: newLessonTitle.trim(), lessoncontent: newContent.trim() },
       };
-      await axios.post("http://localhost/admin/create-content", lessonPayload);
+      await axios.post("https://chabcav-api-development.up.railway.app/admin/create-content", lessonPayload);
       await fetchLessonsFromAPI();
       setNewContent("");
       setNewLessonTitle("");

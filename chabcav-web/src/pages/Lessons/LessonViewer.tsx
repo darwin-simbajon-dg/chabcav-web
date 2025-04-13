@@ -20,7 +20,7 @@ const LessonViewer: React.FC<LessonViewerProps> = ({ selectedChapter }) => {
     const fetchLessons = async () => {
       try {
         const response = await axios.get(
-          `http://localhost/user/get-lessons-by-chapter?chapterName=${selectedChapter}`
+          `https://chabcav-api-development.up.railway.app/user/get-lessons-by-chapter?chapterName=${selectedChapter}`
         );
         console.log("Fetched Lessons for:", chaptername, response.data);
         if (response.data && Array.isArray(response.data.lessons)) {

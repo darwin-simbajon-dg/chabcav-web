@@ -68,7 +68,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
 
     async function fetchDashboardData(){
-      const response = await fetch("http://localhost/dashboard", {
+      const response = await fetch("https://chabcav-api-development.up.railway.app/dashboard", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

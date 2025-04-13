@@ -23,7 +23,7 @@ const BasicInfo: React.FC = () => {
       const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
       const email = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"];
   
-      const response = await fetch(`http://localhost/profile/${userId}`, {
+      const response = await fetch(`https://chabcav-api-development.up.railway.app/profile/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +78,7 @@ const BasicInfo: React.FC = () => {
     data.userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
   
     try {
-      const response = await fetch("http://localhost/profile/update", {
+      const response = await fetch("https://chabcav-api-development.up.railway.app/profile/update", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"

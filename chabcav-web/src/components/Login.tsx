@@ -18,7 +18,7 @@ const Login: React.FC = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost/user/login", {
+      const response = await fetch("https://chabcav-api-development.up.railway.app/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

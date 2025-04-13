@@ -48,7 +48,7 @@ const Register: React.FC = () => {
 
     let response: Response | undefined;
     try {
-      response = await fetch('http://localhost:80/user/register', {
+      response = await fetch('https://chabcav-api-development.up.railway.app/user/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

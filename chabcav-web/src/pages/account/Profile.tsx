@@ -20,7 +20,7 @@ useEffect(() => {
     setUserId(userId);
 
     if(userId !== undefined){
-      const response = await fetch(`http://localhost/profile/${userId}`, {
+      const response = await fetch(`https://chabcav-api-development.up.railway.app/profile/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +38,7 @@ useEffect(() => {
       }
       setFullName(data.fullname);
       setLocation(data.location);
-      setImageUrl(`http://localhost/uploads/${data.imageid}`); // Assuming the response contains the image URL
+      setImageUrl(`https://chabcav-api-development.up.railway.app/uploads/${data.imageid}`); // Assuming the response contains the image URL
 
     }
    
@@ -84,7 +84,7 @@ return (
 
                         formData.append('userId', userId);
 
-                        const response = await fetch('http://localhost/upload', {
+                        const response = await fetch('https://chabcav-api-development.up.railway.app/upload', {
                           method: 'POST',
                           headers: {
                           "Authorization": `Bearer ${token}`
@@ -98,7 +98,7 @@ return (
                         }
 
                         const data = await response.json();
-                        setImageUrl(`http://localhost/uploads/${file.name}`); // Assuming the response contains the image URL
+                        setImageUrl(`https://chabcav-api-development.up.railway.app/uploads/${file.name}`); // Assuming the response contains the image URL
                         showToast("Image uploaded successfully");
                         console.log('Image uploaded successfully:', data);
                         // Optionally update the image source here

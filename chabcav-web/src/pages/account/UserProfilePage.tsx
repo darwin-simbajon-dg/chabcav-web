@@ -20,7 +20,7 @@ const UserProfilePage: React.FC = () => {
       const claims = JSON.parse(atob(token.split('.')[1]));
       const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
 
-      const response = await fetch(`http://localhost/profile/${userId}`, {
+      const response = await fetch(`https://chabcav-api-development.up.railway.app/profile/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +38,7 @@ const UserProfilePage: React.FC = () => {
       setEmail(data.email);
       setLocation(data.location);
       setPhoneNumber(data.phonenumber);
-      setImageUrl(`http://localhost/uploads/${data.imageid}`); // Assuming the response contains the image URL
+      setImageUrl(`https://chabcav-api-development.up.railway.app/uploads/${data.imageid}`); // Assuming the response contains the image URL
     }
 
     fetchData();
