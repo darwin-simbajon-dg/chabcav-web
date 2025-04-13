@@ -74,10 +74,10 @@ async function handleContentChanges() {
         const data = await response.json();
 
         if(data){
-          showToast("Content Changes Saved Successfully", "success");
+          showToast("Content Changes Saved Successfully");
         }
         else{
-          showToast("Content Changes Failed", "error");
+          showToast("Content Changes Failed");
         }
 
 
