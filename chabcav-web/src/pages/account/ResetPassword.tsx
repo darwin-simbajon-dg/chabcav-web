@@ -11,7 +11,7 @@ const ResetPassword: React.FC = () => {
   // const [open, setOpen] = useState(false);
 //   const [alertOpen, setAlertOpen] = useState(false);
   const [newPassword, setNewPassword] = useState("");
-    const [currentPassword, setCurrentPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const { showToast } = useToast();
     const [isLoading, setIsLoading] = useState(false);
@@ -94,7 +94,7 @@ const ResetPassword: React.FC = () => {
 const handleOTPVerification = async (e:React.FormEvent) => {
   e.preventDefault();
   setIsLoading(true);
-
+  setCurrentPassword(newPassword);
 
    const response = await fetch("http://localhost/user/reset-password", {
           method: "POST",

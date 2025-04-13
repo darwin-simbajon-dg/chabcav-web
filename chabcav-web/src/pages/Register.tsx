@@ -46,25 +46,29 @@ const Register: React.FC = () => {
 
     const role = 'User';
 
-    const response = await fetch('http://localhost:80/user/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, email, password, role }),
-    }).catch(() => {
-        setIsLoading(false);
-        setAlertMessage("Registration Failed");  
-        setAlertOpen(true);
-    });
+    let response: Response | undefined;
+    try {
+      response = await fetch('http://localhost:80/user/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, email, password, role }),
+      });
+    } catch {
+      setIsLoading(false);
+      setAlertMessage("Registration Failed");
+      setAlertOpen(true);
+      return;
+    }
 
-     if(!response.ok){
-        setIsLoading(false);
-        const errorData = await response.json();
-        setAlertMessage(errorData || "Registration Failed");  
-        setAlertOpen(true);
-        return;
-      }
+    if (!response.ok) {
+      setIsLoading(false);
+      const errorData = await response.json();
+      setAlertMessage(errorData || "Registration Failed");
+      setAlertOpen(true);
+      return;
+    }
       setIsLoading(false);
       setAlertMessage("Registration Successful you will be redirected to login page after closing this");
       setAlertOpen(true);

@@ -1,31 +1,132 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { Form, Button, ListGroup, Spinner, Alert } from "react-bootstrap";
+import { Form, Button, Spinner, Alert, Card } from "react-bootstrap";
 
 const Dictionary: React.FC = () => {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [originalHtml, setOriginalHtml] = useState<string | null>(null);
+  const [highlightedHtml, setHighlightedHtml] = useState<string | null>(null);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const [highlightedWord, setHighlightedWord] = useState<string | null>(null);
+  const [buttonPosition, setButtonPosition] = useState<{ top: number; left: number } | null>(null);
+
+    
+  useEffect(() => {
+     document.addEventListener("mouseup", handleTextSelection);
+     return () => {
+       document.removeEventListener("mouseup", handleTextSelection);
+     };
+   }, []);
+
+   const handleTextSelection = () => {
+    const selection = window.getSelection();
+  
+    if (selection && selection.toString().trim() !== "" && contentRef.current) {
+      const selectedText = selection.toString().trim();
+      setHighlightedWord(selectedText);
+  
+      const range = selection.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
+      const containerRect = contentRef.current.getBoundingClientRect();
+  
+      // Calculate position relative to the card-body container
+      const buttonTop = rect.top - containerRect.top + 200; // Add margin for better positioning
+      const buttonLeft = rect.right - containerRect.left + contentRef.current.scrollLeft - 5; // Adjust for overflow
+  
+      setButtonPosition({
+        top: buttonTop,
+        left: buttonLeft,
+      });
+    } else {
+      setHighlightedWord(null);
+      setButtonPosition(null);
+    }
+  };
+  
+  /*const speakText = (html: string) => {
+    if (!html) return; // Ensure non-empty string
+    const synth = window.speechSynthesis;
+    const plainText = new DOMParser().parseFromString(html, "text/html").body.textContent || "";
+    const utterance = new SpeechSynthesisUtterance(plainText);
+    utterance.lang = "es-ES"; // or fallback to "en-US"
+    synth.speak(utterance);
+  };*/
+
+  
+  const speakText = (text: string) => {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(text);
+    const availableLanguages = ["es-MX", "es-ES"];
+    utterance.lang = availableLanguages.find((lang) => synth.getVoices().some((voice) => voice.lang === lang)) || "en-US";
+    synth.speak(utterance);
+  };
+
+  // Fetch latest dictionary content on load
+  const fetchLatestHtml = async () => {
+    try {
+      const htmlRes = await axios.get("http://localhost/api/dictionary/html/latest");
+      const textRes = await axios.get("http://localhost/api/dictionary/text/latest");
+
+      const html = htmlRes.data.html;
+      const extractedText = textRes.data.text;
+
+      const htmlWithAnchors = injectAnchorsIntoHtml(html, extractedText);
+
+      setOriginalHtml(htmlWithAnchors);
+      //setHighlightedHtml(htmlWithAnchors); // Display with anchor support
+      setHighlightedHtml(addAnchorsToHtml(htmlWithAnchors));
+
+    } catch (err) {
+      console.error("Failed to fetch dictionary content:", err);
+    }
+  };
+
+  function injectAnchorsIntoHtml(html: string, text: string): string {
+    const lines = text.split('\n');
+
+    lines.forEach((line) => {
+      const match = line.trim().match(/^──────\s([A-Z])\s──────$/);
+      if (match) {
+        const letter = match[1];
+        const anchorId = `letter-${letter}`;
+
+        // Escape the line to be used in regex
+        const escapedLine = line.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(escapedLine);
+
+        // Inject anchor before that line in the HTML
+        html = html.replace(
+          regex,
+          `<a id="${anchorId}" style="display:block;height:0px;"></a>${line}`
+        );
+      }
+    });
+
+    return html;
+  }
+
+  useEffect(() => {
+    fetchLatestHtml();
+  }, []);
 
   const handleSearch = async () => {
-    if (!query.trim()) return;
+    if (!query.trim() || !originalHtml) return;
 
     setLoading(true);
     setError(null);
-    setResults([]);
 
     try {
-      const res = await axios.get("http://localhost/api/dictionary/search", {
-        params: { query },
-      });
-      if (res.data.length === 0) {
-        setError("❌ No results found. Please try another word.");
-      } else { 
-        setResults(res.data);
-      }
-      
+      const highlighted = highlightSearchTerm(originalHtml, query);
+      setHighlightedHtml(highlighted);
+
+      // Auto-scroll to first match
+      setTimeout(() => {
+        const el = document.getElementById("firstMatch");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 200);
     } catch (err) {
       setError("❌ Search failed. Please try again.");
       console.error(err);
@@ -34,63 +135,145 @@ const Dictionary: React.FC = () => {
     }
   };
 
+  const highlightSearchTerm = (html: string, term: string): string => {
+    if (!term.trim()) return html;
+    const escapedTerm = term.replace(/[-[\]/{}()*+?.\\^$|]/g, "\\$&");
+    const regex = new RegExp(`(${escapedTerm})`, "i"); // first match only
+    return html.replace(regex, `<a id="firstMatch"></a><mark>$1</mark>`);
+  };
+
   useEffect(() => {
-        const handleMouseMove = (event: MouseEvent) => {
-          if (event.clientX <= 10) {
-            setIsSidebarCollapsed(false); // Expand if mouse is at the leftmost 10px
-          } else if (event.clientX > 260) {
-            setIsSidebarCollapsed(true); // Collapse if mouse moves far from the sidebar
-          }
-        };
-    
-        window.addEventListener("mousemove", handleMouseMove);
-    
-        return () => {
-          window.removeEventListener("mousemove", handleMouseMove);
-        };
-      }, []);
+    const handleMouseMove = (event: MouseEvent) => {
+      if (event.clientX <= 10) {
+        setIsSidebarCollapsed(false);
+      } else if (event.clientX > 260) {
+        setIsSidebarCollapsed(true);
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+
+  const scrollToLetter = (letter: string) => {
+    const element = document.getElementById(`letter-${letter}`);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const addAnchorsToHtml = (html: string): string => {
+    return html.replace(
+      /<span[^>]*>[\s─-]*([A-Z])[\s─-]*<\/span>/g,
+      (match, letter) => `<div id="letter-${letter}">${match}</div>`
+    );
+  };
 
   return (
-    <div className="container-fluid" style={{
-      left: "100%",
-      alignItems: "center",
-      transition: "margin 0.3s ease-in-out",
-      marginLeft: isSidebarCollapsed ? "0" : "50px",
-      width: isSidebarCollapsed ? "100%" : "calc(100% - 50px)",
-    }}>
-    <div className="card p-4 shadow-sm mb-4"> 
-      <h3 className="fw-bold text-secondary mb-3">📚 Search Dictionary</h3>
+    
+           
+      <div
+        className="container-fluid"
+        style={{
+          left: "100%",
+          alignItems: "center",
+          transition: "margin 0.3s ease-in-out",
+          marginLeft: isSidebarCollapsed ? "0" : "50px",
+          width: isSidebarCollapsed ? "100%" : "calc(100% - 50px)",
+        }}
+      >
 
-      <Form.Group className="mb-3">
-        <Form.Control
-          type="text"
-          placeholder="Enter word or phrase..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-        />
-      </Form.Group>
+        <div className="card p-4 shadow-sm mb-4">
+          <h3 className="fw-bold text-secondary mb-3">📚 Search Dictionary</h3>
 
-      <Button variant="primary" onClick={handleSearch} disabled={loading}>
-        {loading ? <Spinner size="sm" animation="border" /> : "Search"}
-      </Button>
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="text"
+              placeholder="Enter word or phrase..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            />
+          </Form.Group>
 
-      {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
+          <Button variant="primary" onClick={handleSearch} disabled={loading}>
+            {loading ? <Spinner size="sm" animation="border" /> : "Search"}
+          </Button>
 
-      {results.length > 0 && (
-         <ListGroup className="mt-4">
-         {results.map((item, idx) => (
-           <ListGroup.Item key={idx}>
-             <strong>{item.fileName}</strong> <br />
-             <small className="text-muted">Uploaded: {new Date(item.uploadedAt).toLocaleString()}</small>
-             <div dangerouslySetInnerHTML={{ __html: item.matchSnippet }} className="mt-2" />
-           </ListGroup.Item>
-         ))}
-       </ListGroup>
-       
-      )}
-    </div>
-  </div>  
+          {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
+
+
+          {/* Alphabetical Index */}
+          <div className="mb-3 d-flex flex-wrap gap-2">
+            {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((letter) => (
+              <Button
+                key={letter}
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  const el = document.getElementById(`letter-${letter}`);
+                  if (el) {
+                    scrollToLetter(letter);
+                  }
+                }}
+              >
+                <strong>{letter.toUpperCase()}</strong>
+              </Button>
+            ))}
+          </div>
+
+
+          {highlightedHtml && (
+            <Card className="mt-4 p-3 shadow-sm">
+              <h5 className="fw-bold mb-3 text-primary">📄 DICCIONARIO CHABACANO DEL CIUDAD DE CAVITE  </h5>
+              <div
+              ref={contentRef}
+                style={{
+                  border: "1px solid #ccc",
+                  padding: "10px",
+                  maxHeight: "500px",
+                  overflowY: "auto",
+                  backgroundColor: "#fff",
+                  scrollBehavior: "smooth",
+                }}
+                dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+              />
+            </Card>
+          )}
+
+            {highlightedWord && buttonPosition && (
+            <button
+              onClick={() => speakText(highlightedWord)}
+              style={{
+                position: "fixed",
+                top: `${buttonPosition.top}px`,
+                left: `${buttonPosition.left}px`,
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                padding: "5px 10px",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "14px",
+                boxShadow: "0px 2px 5px rgba(0,0,0,0.2)",
+                transition: "transform 0.1s ease-in-out",
+                width: "auto", // Fixes too wide button
+                minWidth: "30px", // Prevents shrinking too much
+                display: "inline-flex", // Keeps content compact
+                alignItems: "center", // Centers content
+                justifyContent: "center", // Centers icon
+
+              }}
+            >
+              🗣️
+            </button>
+          )}
+  
+        </div>
+      </div>
+
+    
   );
 };
 

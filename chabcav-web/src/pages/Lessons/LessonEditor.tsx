@@ -29,11 +29,14 @@ const LessonPane: React.FC = () => {
   const toolbarOptions = [
     [{ header: [1, 2, 3, false] }], // Headers
     ["bold", "italic", "underline", "strike"], // Text styles
-    [{ align: [] }], //Add text alignment (Left, Center, Right, Justify)
+    [{ align: [] }], // Text alignment (Left, Center, Right, Justify)
     [{ list: "ordered" }, { list: "bullet" }], // Lists
     ["link", "blockquote", "code-block"], // Links & block styles
     [{ color: [] }, { background: [] }], // Text & background color
+    [{ font: [] }], // Font style
+    [{ size: ["small", "medium", "large", "huge"] }], // Font size
     ["clean"], // Remove formatting
+    ["table"], 
   ];
   
   const modules = {
@@ -101,7 +104,7 @@ const LessonPane: React.FC = () => {
   };
   return (
     <div className="container-fluid py-4">
-      <div className="col-12 col-lg-8 m-auto text-center">
+      <div className="card p-4 shadow-sm mb-4 col-12 col-lg-8 m-auto">
         <div className="d-flex justify-content-center mb-4 gap-3">
           <Button 
             variant="primary" 

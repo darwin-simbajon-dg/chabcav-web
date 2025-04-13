@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 
 const ChangePassword: React.FC = () => {
-  const [userId, setUserId] = React.useState("");
   const [newPassword, setNewPassword] = React.useState("");
   const [currentPassword, setCurrentPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
@@ -19,6 +18,10 @@ const ChangePassword: React.FC = () => {
     
     try {
       const token = localStorage.getItem("authToken");
+      if (!token) {
+        showToast("Authentication token is missing. Please log in again.");
+        return;
+      }
       const claims = JSON.parse(atob(token.split('.')[1]));
       const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
 
