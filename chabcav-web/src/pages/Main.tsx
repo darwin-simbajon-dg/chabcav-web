@@ -69,7 +69,7 @@ fetchCMS();
 async function fetchCMS() {
   // Static image paths (assuming these are inside the `public` folder)
   setBannerImage("/banner.png");
-  setMidContentImage("/midcontent.png");
+  setMidContentImage("/midcontent.jpg");
 
   // Static text content
   setContent("Welcome to the Chabacano language as spoken in the City of Cavite. The city once hosted a Spanish fort thus providing constant interaction with the Spaniards who lived there. The inhabitants of the place have to learn the foreign tongue and eventually mix and blend it with their language and the result is the delightful mixture of Spanish and Tagalog - Chabacano");

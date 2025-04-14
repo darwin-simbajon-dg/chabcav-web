@@ -57,15 +57,15 @@ const UserCMS: React.FC = () => {
   async function fetchCMS() {
   
     setBannerImage("/banner.png");
-    setMidContentImage("/midcontent.png"); 
-    setCard1Image("/card1.png");
-    setCard2Image("/card2.png");
-    setCard3Image("/card3.png");
-    setCard4Image("/card4.png");
-    setCard5Image("/card5.png");
-    setCard6Image("/card6.png");
-    setCard7Image("/card7.png");
-    setCard8Image("/card1.png");
+    setMidContentImage("/midcontent.jpg"); 
+    setCard1Image("/card1.jpg");
+    setCard2Image("/card2.jpg");
+    setCard3Image("/card3.jpg");
+    setCard4Image("/card4.jpg");
+    setCard5Image("/card5.jpg");
+    setCard6Image("/card6.jpg");
+    setCard7Image("/card7.jpg");
+    setCard8Image("/card1.jpg");
 
     // Sample static text content
     setContent("Welcome to the Chabacano language as spoken in the City of Cavite. The city once hosted a Spanish fort thus providing constant interaction with the Spaniards who lived there. The inhabitants of the place have to learn the foreign tongue and eventually mix and blend it with their language and the result is the delightful mixture of Spanish and Tagalog - Chabacano");
