@@ -124,7 +124,7 @@ const LessonPane: React.FC = () => {
 
         {showAddForm && (
           <div className="card p-4 mb-3 shadow-sm border-0 rounded text-center">
-            <h2 className="fw-bold text-primary">📘 Add New Lesson</h2>
+            <h2 className="fw-bold text-primary">📘 Add New Chapter</h2>
             <Form>
               <Form.Group className="mb-3">
                 <Form.Label>Chapter Name</Form.Label>

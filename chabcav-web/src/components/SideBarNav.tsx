@@ -47,6 +47,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         title: "Profile",
         icon: "/assets/images/team-3.jpg",
         items: [
+          { title: "Dashboard", link: "../../pages/dashboards/analytics.html", icon: "dashboard", component: Dashboard, step: "AdminPanel" },
           // { title: "My Profile", link: "../../pages/pages/profile/overview.html", component: UserProfilePage, icon: '', step: "AdminPanel" },
           { title: "Settings", link: "../../pages/pages/account/settings.html", component: UserSettings, icon: 'settings', step: "AdminPanel"  },
           { title: "Logout", link: "../../pages/authentication/signin/basic.html", icon: 'logout', component: null, step: "Logout"  },
@@ -56,8 +57,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         title: "Administration",
         icon: "admin_panel_settings",
         items: [
-          { title: "Dashboard", link: "../../pages/dashboards/analytics.html", icon: "dashboard", component: Dashboard, step: "AdminPanel" },
-          { title: "Add Lessons", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: LessonEditor, step: "AdminPanel" },
+          { title: "Chapters Management", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: LessonEditor, step: "AdminPanel" },
           { title: "Update Dictionary", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: UploadDictionary, step: "AdminPanel" },
           { title: "CMS", link: "../../pages/pages/account/settings.html", icon: "settings", component: UserCMS, step: "AdminPanel"  },
         ],
@@ -79,7 +79,7 @@ const SidebarNav: React.FC<NavigationProperties> = ({onNavigate}) => {
         title: "Activity",
         icon: "browse_activity",
         items: [
-          { title: "Go to Chapters", link: "../../pages/dashboards/analytics.html", icon: 'Book', component: BookView, step: "LessonPanel" },
+          { title: "Learn Chabacano", link: "../../pages/dashboards/analytics.html", icon: 'Book', component: BookView, step: "LessonPanel" },
           { title: "Dictionary", link: "../../pages/dashboards/analytics.html", icon: 'dictionary', component: ViewDictionary, step: "LessonPanel" },
         ],
       },

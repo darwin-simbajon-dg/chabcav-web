@@ -60,7 +60,7 @@ const Dictionary: React.FC = () => {
     const synth = window.speechSynthesis;
     const utterance = new SpeechSynthesisUtterance(text);
     const availableLanguages = ["es-MX", "es-ES"];
-    utterance.lang = availableLanguages.find((lang) => synth.getVoices().some((voice) => voice.lang === lang)) || "en-US";
+    utterance.lang = availableLanguages.find((lang) => synth.getVoices().some((voice) => voice.lang === lang)) || "es-ES";
     synth.speak(utterance);
   };
 

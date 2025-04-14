@@ -132,7 +132,7 @@ return (
               </div>
               <div className="row mt-4">
       <div className="col-lg-6">
-        <div className="card h-100">
+        {/*<div className="card h-100">
           <div className="card-header pb-0 p-3">
             <h6 className="text-start">Student Progress</h6>
           </div>
@@ -205,7 +205,7 @@ return (
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
             </div>

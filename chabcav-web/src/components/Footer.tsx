@@ -252,20 +252,9 @@ const Footer: React.FC = () => {
           {/* Footer Bottom Section */}
           <div className="col-12">
             <div className="text-center">
-              <p className="text-dark my-4 text-sm font-weight-normal">
-                All rights reserved. Copyright ©{" "}
-                {/* {new Date().getFullYear()} Material Kit by{" "} */}
-                {/* <a
-                  href="https://www.creative-tim.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Creative Tim
-                </a> */}
-                .
-              </p>
+              
             </div>
-          </div>
+          </div> 
         </div>
       </div>
     </footer>
