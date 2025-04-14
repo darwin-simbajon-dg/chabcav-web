@@ -17,15 +17,16 @@ const Register: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccessfulRegistration, setIsSuccessfulRegistration] = useState(false);
   const navigate = useNavigate();
+  const [showTerms, setShowTerms] = useState(false);
   // const handleOpen = () => setOpen(true);
   // const handleClose = () => setOpen(false);
   const handleAlertClose = () => {
     setAlertOpen(false);
-    if(isSuccessfulRegistration){
+    if (isSuccessfulRegistration) {
       navigate("/");
     }
   }
-  const handleSubmit =  async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!termsAccepted) {
@@ -36,7 +37,7 @@ const Register: React.FC = () => {
     }
 
     if (password !== verifyPassword) {
- 
+
       setAlertMessage("Passwords do not match.");
       setAlertOpen(true);
       return;
@@ -69,11 +70,11 @@ const Register: React.FC = () => {
       setAlertOpen(true);
       return;
     }
-      setIsLoading(false);
-      setAlertMessage("Registration Successful you will be redirected to login page after closing this");
-      setAlertOpen(true);
-      setIsSuccessfulRegistration(true);
-      
+    setIsLoading(false);
+    setAlertMessage("Registration Successful you will be redirected to login page after closing this");
+    setAlertOpen(true);
+    setIsSuccessfulRegistration(true);
+
 
     console.log("User signed up with the following details:", {
       name,
@@ -86,7 +87,7 @@ const Register: React.FC = () => {
 
   return (
     <div className="sign-up-illustration">
-        <SpinnerModal show={isLoading} />
+      <SpinnerModal show={isLoading} />
       <section>
         <div className="page-header min-vh-100">
           <div className="container">
@@ -100,7 +101,7 @@ const Register: React.FC = () => {
                       "url('/src/assets/img/illustrations/illustration-signup.jpg')",
                     backgroundSize: "cover",
                   }}
-                  // loading="lazy"
+                // loading="lazy"
                 ></div>
               </div>
 
@@ -167,10 +168,72 @@ const Register: React.FC = () => {
                         />
                         <label className="form-check-label" htmlFor="flexCheckDefault">
                           I agree to the{" "}
-                          <a href="#" className="text-dark font-weight-bolder">
+                          <button
+                            type="button"
+                            className="text-dark font-weight-bolder underline"
+                            onClick={() => setShowTerms(true)}
+                          >
                             Terms and Conditions
-                          </a>
+                          </button>
                         </label>
+                        {showTerms && (
+                          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                            <div className="bg-white p-6 rounded-lg max-w-2xl max-h-[80vh] overflow-y-auto relative">
+                              <button
+                                className="absolute top-2 right-2 text-gray-500 hover:text-black"
+                                onClick={() => setShowTerms(false)}
+                              >
+                                ✖
+                              </button>
+                              <h2 className="text-xl font-bold mb-4">Terms and Conditions</h2>
+                              <p><strong>For "Chabacano E-Learning" Website</strong></p>
+                              <p>(Last Updated: April 1, 2025)</p>
+                              <ol className="list-decimal pl-5 space-y-2 mt-2 text-sm text-gray-700">
+                                <li>
+                                  <strong>Acceptance of Terms</strong><br />
+                                  By using this website, you agree to these terms. If you disagree, please exit the site.<br />
+                                  <em>(Chabacano: "Si ta usa usted este website, acepta usted con este terminos. Si no quiere, no debe continua.")</em>
+                                </li>
+                                <li>
+                                  <strong>User Responsibilities</strong><br />
+                                  • Provide accurate info (no fake accounts).<br />
+                                  • Do not share passwords or misuse content.<br />
+                                  <em>(Chabacano: "Dale informacion verdadero. No comparti contraseña o roba contenido.")</em>
+                                </li>
+                                <li>
+                                  <strong>Intellectual Property</strong><br />
+                                  • Do not copy, sell, or redistribute without permission.<br />
+                                  <em>(Chabacano: "Todo leccion y diseño pertenece con este sitio. No puede copia o vende.")</em>
+                                </li>
+                                <li>
+                                  <strong>Privacy Policy</strong><br />
+                                  • We collect email, name, and progress data to improve learning.<br />
+                                  • Data is never sold to third parties.<br />
+                                  <em>(Chabacano: "Guardamos tu email y nombre para ayuda tu aprendizaje. No vendemos informacion.")</em>
+                                </li>
+                                <li>
+                                  <strong>Limitations</strong><br />
+                                  • We’re not liable for:<br />
+                                  &nbsp;&nbsp;o Technical errors (e.g., server downtime).<br />
+                                  &nbsp;&nbsp;o Mistakes in lessons (report them!).<br />
+                                  &nbsp;&nbsp;o User misconduct (e.g., hacking attempts).<br />
+                                  <em>(Chabacano: "No kami responsable si hay problema técnico o error na leccion.")</em>
+                                </li>
+                                <li>
+                                  <strong>Changes to Terms</strong><br />
+                                  We may update these terms. Check this page periodically.<br />
+                                  <em>(Chabacano: "Puede kami cambia este terminos. Revisa de vez en cuando.")</em>
+                                </li>
+                                <li>
+                                  <strong>Contact</strong><br />
+                                  Email chabcavsuite@gmail.com for questions, clarifications, and concerns.<br />
+                                  <em>(Chabacano: "Si tiene pregunta, manda email: chabcavsuite@gmail.com.")</em>
+                                </li>
+                              </ol>
+                            </div>
+                          </div>
+                        )}
+
                       </div>
                       <div className="text-center">
                         <button
@@ -221,7 +284,7 @@ const Register: React.FC = () => {
       </Modal>
     </div>
   );
-    
+
 };
 
 export default Register;
