@@ -23,7 +23,7 @@ const [midContentImage, setMidContentImage] = React.useState<string>("");
 const [content, setContent] = React.useState<string>("");
 const [headline, setHeadline] = React.useState<string>("");
 const [cardUrls, setCardUrls] = React.useState<string[]>([]);
-useEffect(() => {
+/*useEffect(() => {
 
   async function fetchCMS(){
     const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms", {
@@ -64,7 +64,39 @@ useEffect(() => {
 
 fetchCMS();
 
-}, [])
+}, [])*/
+
+async function fetchCMS() {
+  // Static image paths (assuming these are inside the `public` folder)
+  setBannerImage("/banner.png");
+  setMidContentImage("/midcontent.png");
+
+  // Static text content
+  setContent("Welcome to the Chabacano language as spoken in the City of Cavite. The city once hosted a Spanish fort thus providing constant interaction with the Spaniards who lived there. The inhabitants of the place have to learn the foreign tongue and eventually mix and blend it with their language and the result is the delightful mixture of Spanish and Tagalog - Chabacano");
+  setHeadline("Chabacano de Ciudad de Caivte History");
+
+  // Static card images
+  const links = [
+    "/card1.jpg",
+    "/card2.jpg",
+    "/card3.jpg",
+    "/card4.jpg",
+    "/card5.jpg",
+    "/card6.jpg",
+    "/card7.jpg",
+    "/card1.jpg"
+  ];
+
+  setCardUrls(links);
+}
+
+// Then call it normally inside useEffect
+useEffect(() => {
+  fetchCMS();
+}, []);
+
+
+
 
     return (
       <div className="coworking bg-gray-100">
