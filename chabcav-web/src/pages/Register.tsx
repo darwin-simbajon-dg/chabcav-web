@@ -98,7 +98,7 @@ const Register: React.FC = () => {
                   className="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center"
                   style={{
                     backgroundImage:
-                      "url('/src/assets/img/illustrations/illustration-signup.jpg')",
+                      "/banner.png",
                     backgroundSize: "cover",
                   }}
                 // loading="lazy"
@@ -187,7 +187,6 @@ const Register: React.FC = () => {
                               </button>
                               <h2 className="text-xl font-bold mb-4">Terms and Conditions</h2>
                               <p><strong>For "Chabacano E-Learning" Website</strong></p>
-                              <p>(Last Updated: April 1, 2025)</p>
                               <ol className="list-decimal pl-5 space-y-2 mt-2 text-sm text-gray-700">
                                 <li>
                                   <strong>Acceptance of Terms</strong><br />
