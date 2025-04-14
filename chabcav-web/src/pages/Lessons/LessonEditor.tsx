@@ -111,14 +111,14 @@ const LessonPane: React.FC = () => {
             onClick={() => setShowAddForm(!showAddForm)} 
             className="px-4 py-2 fs-5 fw-bold shadow-lg rounded"
           >
-            {showAddForm ? "Cancel" : "Add Lesson"}
+            {showAddForm ? "Cancel" : "Add New Chapter"}
           </Button>
           <Button 
             variant="secondary" 
             onClick={() => setShowUpdateForm(!showUpdateForm)}
             className="px-4 py-2 fs-5 fw-bold shadow-lg rounded"
           >
-            {showUpdateForm ? "Cancel" : "Update Lesson"}
+            {showUpdateForm ? "Cancel" : "Update Lesson Content"}
           </Button>
         </div>
 
@@ -145,7 +145,7 @@ const LessonPane: React.FC = () => {
 
         {showUpdateForm && (
           <div className="card p-4 mb-3 shadow-sm border-0 rounded text-center">
-            <h2 className="fw-bold text-secondary">✏️ Update Lesson</h2>
+            <h2 className="fw-bold text-secondary">✏️ Update Lesson Content</h2>
             <Form>
               <Form.Group className="mb-3">
                 <Form.Label>Select Lesson</Form.Label>

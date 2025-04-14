@@ -2,29 +2,29 @@ import React, { useEffect, useState } from "react";
 import { useToast } from "../../context/ToastContext";
 import SpinnerModal from "../../components/SpinnerModal";
 
-interface ImageData{
-    id: string;
-    image: File;
+interface ImageData {
+  id: string;
+  image: File;
 }
 const UserCMS: React.FC = () => {
-  const[bannerImage, setBannerImage] = useState("");
-  const[card1Image, setCard1Image] = useState("");
-  const[card2Image, setCard2Image] = useState("");
-  const[card3Image, setCard3Image] = useState("");
-  const[card4Image, setCard4Image] = useState("");
-  const[card5Image, setCard5Image] = useState("");
-  const[card6Image, setCard6Image] = useState("");
-  const[card7Image, setCard7Image] = useState("");
-  const[card8Image, setCard8Image] = useState("");
-  const[midContentImage, setMidContentImage] = useState("");
-  const[content, setContent] = useState("");
-  const[headline, setHeadline] = useState("");
+  const [bannerImage, setBannerImage] = useState("");
+  const [card1Image, setCard1Image] = useState("");
+  const [card2Image, setCard2Image] = useState("");
+  const [card3Image, setCard3Image] = useState("");
+  const [card4Image, setCard4Image] = useState("");
+  const [card5Image, setCard5Image] = useState("");
+  const [card6Image, setCard6Image] = useState("");
+  const [card7Image, setCard7Image] = useState("");
+  const [card8Image, setCard8Image] = useState("");
+  const [midContentImage, setMidContentImage] = useState("");
+  const [content, setContent] = useState("");
+  const [headline, setHeadline] = useState("");
   const [imageDataList, setImageDataList] = useState<ImageData[]>([]);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const { showToast } = useToast();
   const [isLoading, setIsLoading] = useState(false); // State to control spinner
 
-  async function fetchCMS(){
+  /*async function fetchCMS(){
     const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms", {
         method: "GET",
         headers: {
@@ -51,161 +51,182 @@ const UserCMS: React.FC = () => {
       setCard8Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card8}`);
       setContent(data.content);
       setHeadline(data.headline);
-}  
+}  */
 
-async function handleContentChanges() {
+//static for mean time
+  async function fetchCMS() {
+  
+    setBannerImage("/banner.png");
+    setMidContentImage("/midcontent.png"); 
+    setCard1Image("/card1.png");
+    setCard2Image("/card2.png");
+    setCard3Image("/card3.png");
+    setCard4Image("/card4.png");
+    setCard5Image("/card5.png");
+    setCard6Image("/card6.png");
+    setCard7Image("/card7.png");
+    setCard8Image("/card1.png");
+
+    // Sample static text content
+    setContent("Welcome to the Chabacano language as spoken in the City of Cavite. The city once hosted a Spanish fort thus providing constant interaction with the Spaniards who lived there. The inhabitants of the place have to learn the foreign tongue and eventually mix and blend it with their language and the result is the delightful mixture of Spanish and Tagalog - Chabacano");
+    setHeadline("Chabacano de Ciudad de Caivte History");
+  }
+
+
+  async function handleContentChanges() {
     try {
-        const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms/update-contents", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("authToken")}`
-            },
-            body: JSON.stringify({
-              content: content,
-              headline: headline,
-            }),
-        });
+      const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms/update-contents", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+        },
+        body: JSON.stringify({
+          content: content,
+          headline: headline,
+        }),
+      });
 
-        if (!response.ok) {
-            throw new Error("Failed to fetch profile data");
-        }
+      if (!response.ok) {
+        throw new Error("Failed to fetch profile data");
+      }
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if(data){
-          showToast("Content Changes Saved Successfully");
-        }
-        else{
-          showToast("Content Changes Failed");
-        }
+      if (data) {
+        showToast("Content Changes Saved Successfully");
+      }
+      else {
+        showToast("Content Changes Failed");
+      }
 
 
-        console.log(data);
+      console.log(data);
     } catch (error) {
-        console.error("Error fetching content changes:", error);
+      console.error("Error fetching content changes:", error);
     }
-}
+  }
 
-async function handleCMSChanges(e: React.FormEvent) {
+  async function handleCMSChanges(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true); // Show spinner
     const formData = new FormData();
     imageDataList.forEach((imageData) => {
-        formData.append(imageData.id, imageData.image);
+      formData.append(imageData.id, imageData.image);
     });
 
     formData.forEach((value, key) => {
-        console.log(`${key}: ${value}`);
-      });
+      console.log(`${key}: ${value}`);
+    });
     try {
-        if (imageDataList.length) {
-            console.warn("No images to upload. Skipping the request.");
-            const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms/upload", {
-              method: "POST",
-              headers: {
-              // "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
-              },
-              body: formData,
-          });
-  
-          if (!response.ok) {
-              setIsLoading(false); // Hide spinner
-              throw new Error("Failed to submit image data");
-              
-          }
-          setIsLoading(false);
-          //const result = await response.json();
-          //console.log("Image data submitted successfully:", result);
+      if (imageDataList.length) {
+        console.warn("No images to upload. Skipping the request.");
+        const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms/upload", {
+          method: "POST",
+          headers: {
+            // "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
+          },
+          body: formData,
+        });
+
+        if (!response.ok) {
+          setIsLoading(false); // Hide spinner
+          throw new Error("Failed to submit image data");
+
         }
+        setIsLoading(false);
+        //const result = await response.json();
+        //console.log("Image data submitted successfully:", result);
+      }
 
-        await handleContentChanges();
-        await fetchCMS();
-        setIsLoading(false); // Hide spinner
+      await handleContentChanges();
+      await fetchCMS();
+      setIsLoading(false); // Hide spinner
 
-        
+
     } catch (error) {
-        console.error("Error submitting image data:", error);
+      console.error("Error submitting image data:", error);
     }
-    
-    
- }
+
+
+  }
 
   useEffect(() => {
-  
-    
+
+
     fetchCMS();
 
   }, []);
 
-   // Function to handle mouse movement
-      useEffect(() => {
-        const handleMouseMove = (event: MouseEvent) => {
-          if (event.clientX <= 10) {
-            setIsSidebarCollapsed(false); // Expand if mouse is at the leftmost 10px
-          } else if (event.clientX > 260) {
-            setIsSidebarCollapsed(true); // Collapse if mouse moves far from the sidebar
-          }
-        };
-    
-        window.addEventListener("mousemove", handleMouseMove);
-    
-        return () => {
-          window.removeEventListener("mousemove", handleMouseMove);
-        };
-      }, []);
+  // Function to handle mouse movement
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      if (event.clientX <= 10) {
+        setIsSidebarCollapsed(false); // Expand if mouse is at the leftmost 10px
+      } else if (event.clientX > 260) {
+        setIsSidebarCollapsed(true); // Collapse if mouse moves far from the sidebar
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
 
   return (
     <>
-    <SpinnerModal show={isLoading} />
-    <div className="card p-4 shadow-sm mb-4" style={{ paddingLeft: '250px', cursor: "pointer",  marginTop: "0px", 
+      <SpinnerModal show={isLoading} />
+      <div className="card p-4 shadow-sm mb-4" style={{
+        paddingLeft: '250px', cursor: "pointer", marginTop: "0px",
         transition: "margin 0.3s ease-in-out",
         marginLeft: isSidebarCollapsed ? "0" : "250px",
         width: isSidebarCollapsed ? "100%" : "calc(100% - 250px)"
-    }}>
+      }}>
         <div
-            className="page-header min-vh-75"
-            style={{
+          className="page-header min-vh-75"
+          style={{
             backgroundImage: `url(${bannerImage})`,
-            cursor: "pointer",        
-            }}
-            onClick={() => {
+            cursor: "pointer",
+          }}
+          onClick={() => {
             const input = document.getElementById("banner") as HTMLInputElement;
             input.click();
-              }}
+          }}
         >
           <span className="mask bg-gradient-dark opacity-5"></span>
           <div className="container">
             <div className="row">
               <div className="col-lg-6 col-md-7 d-flex justify-content-center text-md-start text-center flex-column mt-sm-0 mt-7">
-            <p className="lead pe-md-5 me-md-5 text-white opacity-8"></p>
+                <p className="lead pe-md-5 me-md-5 text-white opacity-8"></p>
               </div>
             </div>
           </div>
         </div>
-      {/* Page Header */}
-     
-      {/* Profile Card */}
-      <div className="card card-body mx-2 mx-md-2 mt-n6">
-       
-           <div className="col-10 mx-auto bg-gradient-dark border-radius-lg">
+        {/* Page Header */}
+
+        {/* Profile Card */}
+        <div className="card card-body mx-2 mx-md-2 mt-n6">
+
+          <div className="col-10 mx-auto bg-gradient-dark border-radius-lg">
             <div className="row py-5">
               {/* Image Section */}
-                <div className="col-xl-4 col-md-6 px-5 position-relative d-flex align-items-center">
+              <div className="col-xl-4 col-md-6 px-5 position-relative d-flex align-items-center">
                 <label>
                   <img
                     className="img border-radius-md w-100 position-relative z-index-2"
-                    style={{ maxWidth: "600px", height: "auto", marginTop: "auto", marginBottom: "auto" }}                   
+                    style={{ maxWidth: "600px", height: "auto", marginTop: "auto", marginBottom: "auto" }}
                     src={midContentImage}
                     loading="lazy"
                     alt="card image"
                     onClick={() => {
-                        const input = document.getElementById("midContent") as HTMLInputElement;
-                        input.click();
-                      }}
+                      const input = document.getElementById("midContent") as HTMLInputElement;
+                      input.click();
+                    }}
                   />
-                </label>                
-                </div>
+                </label>
+              </div>
 
               {/* Quote Section */}
               <div className="col-xl-4 col-md-5 z-index-2 position-relative px-md-3 px-5 my-md-auto mt-4">
@@ -218,12 +239,12 @@ async function handleCMSChanges(e: React.FormEvent) {
                   style={{ resize: "none" }}
                 />
                 <textarea
-                 className="text-lg text-white bg-transparent border-0 text-8xl w-100"  
-                 rows={10}
-                 defaultValue={content}
-                 onChange={(e) => setContent(e.target.value)}
-                //  defaultValue="Welcome to the Chabacano language as spoken in the City of Cavite. The city once hosted a Spanish fort thus providing constant interaction with the Spaniards who lived there. The inhabitants of the place have to learn the foreign tongue and eventually mix and blend it with their language and the result is the delightful mixture of Spanish and Tagalog – Chabacano "
-                 style={{ resize: "none" }}
+                  className="text-lg text-white bg-transparent border-0 text-8xl w-100"
+                  rows={10}
+                  defaultValue={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  //  defaultValue="Welcome to the Chabacano language as spoken in the City of Cavite. The city once hosted a Spanish fort thus providing constant interaction with the Spaniards who lived there. The inhabitants of the place have to learn the foreign tongue and eventually mix and blend it with their language and the result is the delightful mixture of Spanish and Tagalog – Chabacano "
+                  style={{ resize: "none" }}
                 >
                 </textarea>
                 <hr className="vertical start-100 ms-n5 d-xl-block d-none" />
@@ -232,458 +253,458 @@ async function handleCMSChanges(e: React.FormEvent) {
               <div className="col-1"></div>
             </div>
           </div>
-        {/* </div> */}
+          {/* </div> */}
 
-        {/* Sections */}
-        <div className="row">
-          
-          
+          {/* Sections */}
+          <div className="row">
 
-        <div className="row mt-5">
-          {/* Card 1 */}
-          <div className="col-lg-4 mb-lg-0 mb-4">
-            <div className="card"
-              onClick={() => {
-                const input = document.getElementById("fileInputCard1") as HTMLInputElement;
-                input.click();
-              }}>
 
-              <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
-                {/* <a className="d-block blur-shadow-image"> */}
+
+            <div className="row mt-5">
+              {/* Card 1 */}
+              <div className="col-lg-4 mb-lg-0 mb-4">
+                <div className="card"
+                  onClick={() => {
+                    const input = document.getElementById("fileInputCard1") as HTMLInputElement;
+                    input.click();
+                  }}>
+
+                  <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
+                    {/* <a className="d-block blur-shadow-image"> */}
                     <label htmlFor="card1FileInput">
-                  <img                   
-                    src={card1Image}
-                    alt="Campus 6"
-                    className="img-fluid shadow border-radius-lg"
-                    loading="lazy"
-                    style={{ cursor: "pointer" }}
-                  />               
-                  </label>
-                
-                {/* </a> */}
-              </div>
-              <div className="card-body">
-                Card 1
-              </div>
-            </div>
+                      <img
+                        src={card1Image}
+                        alt="Campus 6"
+                        className="img-fluid shadow border-radius-lg"
+                        loading="lazy"
+                        style={{ cursor: "pointer" }}
+                      />
+                    </label>
 
-            {/* Card 2 */}
-            <div className="card mt-5"
-             onClick={() => {
-                const input = document.getElementById("card4FileInput") as HTMLInputElement;
-                input.click();
-              }}>
-              <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
-                <a className="d-block blur-shadow-image">
-                  <img                   
-                    src={card2Image}
-                    alt="Virtual Office"
-                    className="img-fluid shadow border-radius-lg"
-                    loading="lazy"
-                  />
-                </a>
-              </div>
-              <div className="card-body">
-                Card 4
-              </div>
-            </div>
-          </div>
+                    {/* </a> */}
+                  </div>
+                  <div className="card-body">
+                    Card 1
+                  </div>
+                </div>
 
-          {/* Card 3 */}
-          <div className="col-lg-4 mb-lg-0 mb-4">
-            <div className="card"
-             onClick={() => {
-                const input = document.getElementById("card2FileInput") as HTMLInputElement;
-                input.click();
-              }}>
-              <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
-                <a className="d-block blur-shadow-image">
-                  <img 
-                    src={card3Image}
-                    alt="Cozy Spots"
-                    className="img-fluid shadow border-radius-lg"
-                    loading="lazy"
-                  />
-                </a>
+                {/* Card 2 */}
+                <div className="card mt-5"
+                  onClick={() => {
+                    const input = document.getElementById("card4FileInput") as HTMLInputElement;
+                    input.click();
+                  }}>
+                  <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
+                    <a className="d-block blur-shadow-image">
+                      <img
+                        src={card2Image}
+                        alt="Virtual Office"
+                        className="img-fluid shadow border-radius-lg"
+                        loading="lazy"
+                      />
+                    </a>
+                  </div>
+                  <div className="card-body">
+                    Card 4
+                  </div>
+                </div>
               </div>
-              <div className="card-body">
-              Card 2
-              </div>
-            </div>
 
-            {/* Card 4 */}
-            <div className="card mt-5"
-             onClick={() => {
-                const input = document.getElementById("card5FileInput") as HTMLInputElement;
-                input.click();
-              }}>
-              <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
-                <a className="d-block blur-shadow-image">
-                  <img                   
-                    src={card4Image}
-                    alt="Co-working Spaces"
-                    className="img-fluid shadow border-radius-lg"
-                    loading="lazy"
-                  />
-                </a>
-              </div>
-              <div className="card-body">
-              Card 5
-              </div>
-            </div>
-          </div>
+              {/* Card 3 */}
+              <div className="col-lg-4 mb-lg-0 mb-4">
+                <div className="card"
+                  onClick={() => {
+                    const input = document.getElementById("card2FileInput") as HTMLInputElement;
+                    input.click();
+                  }}>
+                  <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
+                    <a className="d-block blur-shadow-image">
+                      <img
+                        src={card3Image}
+                        alt="Cozy Spots"
+                        className="img-fluid shadow border-radius-lg"
+                        loading="lazy"
+                      />
+                    </a>
+                  </div>
+                  <div className="card-body">
+                    Card 2
+                  </div>
+                </div>
 
-          {/* Card 5 */}
-          <div className="col-lg-4">
-            <div className="card"
-             onClick={() => {
-                const input = document.getElementById("card3FileInput") as HTMLInputElement;
-                input.click();
-              }}>
-              <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
-                <a className="d-block blur-shadow-image">
-                  <img   
-                    src={card5Image}
-                    alt="Home Office"
-                    className="img-fluid shadow border-radius-lg"
-                    loading="lazy"
-                  />
-                </a>
+                {/* Card 4 */}
+                <div className="card mt-5"
+                  onClick={() => {
+                    const input = document.getElementById("card5FileInput") as HTMLInputElement;
+                    input.click();
+                  }}>
+                  <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
+                    <a className="d-block blur-shadow-image">
+                      <img
+                        src={card4Image}
+                        alt="Co-working Spaces"
+                        className="img-fluid shadow border-radius-lg"
+                        loading="lazy"
+                      />
+                    </a>
+                  </div>
+                  <div className="card-body">
+                    Card 5
+                  </div>
+                </div>
               </div>
-              <div className="card-body">
-              Card 3
-              </div>
-            </div>
 
-            {/* Card 6 */}
-            <div className="card mt-5"
-             onClick={() => {
-                const input = document.getElementById("card6FileInput") as HTMLInputElement;
-                input.click();
-              }}>
-              <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
-                <a className="d-block blur-shadow-image">
-                  <img                   
-                    src={card6Image}
-                    alt="Private Space"
-                    className="img-fluid shadow border-radius-lg"
-                    loading="lazy"
-                  />
-                </a>
-              </div>
-              <div className="card-body">
-              Card 6
-              </div>
-            </div>
-          </div>
-          {/* Card 5 */}
-          <div className="col-lg-4">
-            <div className="card"
-             onClick={() => {
-                const input = document.getElementById("card7FileInput") as HTMLInputElement;
-                input.click();
-              }}>
-              <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
-                <a className="d-block blur-shadow-image">
-                  <img                   
-                    src={card7Image}
-                    alt="Home Office"
-                    className="img-fluid shadow border-radius-lg"
-                    loading="lazy"
-                  />
-                </a>
-              </div>
-              <div className="card-body">
-              Card 7
-              </div>
-            </div>
+              {/* Card 5 */}
+              <div className="col-lg-4">
+                <div className="card"
+                  onClick={() => {
+                    const input = document.getElementById("card3FileInput") as HTMLInputElement;
+                    input.click();
+                  }}>
+                  <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
+                    <a className="d-block blur-shadow-image">
+                      <img
+                        src={card5Image}
+                        alt="Home Office"
+                        className="img-fluid shadow border-radius-lg"
+                        loading="lazy"
+                      />
+                    </a>
+                  </div>
+                  <div className="card-body">
+                    Card 3
+                  </div>
+                </div>
 
-            {/* Card 6 */}
-            
-          </div>
-            {/* Card 5 */}
-            <div className="col-lg-4">
-            <div className="card"
-             onClick={() => {
-                const input = document.getElementById("card8FileInput") as HTMLInputElement;
-                input.click();
-              }}>
-              <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
-                <a className="d-block blur-shadow-image">
-                  <img               
-                    src={card8Image}
-                    alt="Home Office"
-                    className="img-fluid shadow border-radius-lg"
-                    loading="lazy"
-                  />
-                </a>
+                {/* Card 6 */}
+                <div className="card mt-5"
+                  onClick={() => {
+                    const input = document.getElementById("card6FileInput") as HTMLInputElement;
+                    input.click();
+                  }}>
+                  <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
+                    <a className="d-block blur-shadow-image">
+                      <img
+                        src={card6Image}
+                        alt="Private Space"
+                        className="img-fluid shadow border-radius-lg"
+                        loading="lazy"
+                      />
+                    </a>
+                  </div>
+                  <div className="card-body">
+                    Card 6
+                  </div>
+                </div>
               </div>
-              <div className="card-body">
-              Card 8
+              {/* Card 5 */}
+              <div className="col-lg-4">
+                <div className="card"
+                  onClick={() => {
+                    const input = document.getElementById("card7FileInput") as HTMLInputElement;
+                    input.click();
+                  }}>
+                  <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
+                    <a className="d-block blur-shadow-image">
+                      <img
+                        src={card7Image}
+                        alt="Home Office"
+                        className="img-fluid shadow border-radius-lg"
+                        loading="lazy"
+                      />
+                    </a>
+                  </div>
+                  <div className="card-body">
+                    Card 7
+                  </div>
+                </div>
+
+                {/* Card 6 */}
+
               </div>
-            </div> 
+              {/* Card 5 */}
+              <div className="col-lg-4">
+                <div className="card"
+                  onClick={() => {
+                    const input = document.getElementById("card8FileInput") as HTMLInputElement;
+                    input.click();
+                  }}>
+                  <div className="card-header p-0 position-relative mt-2 mx-2 z-index-2">
+                    <a className="d-block blur-shadow-image">
+                      <img
+                        src={card8Image}
+                        alt="Home Office"
+                        className="img-fluid shadow border-radius-lg"
+                        loading="lazy"
+                      />
+                    </a>
+                  </div>
+                  <div className="card-body">
+                    Card 8
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        </div>
+        <button className="btn btn-outline-dark btn-sm mb-0" type="button" onClick={handleCMSChanges}>
+          Save
+        </button>
+        <input
+          type="file"
+          id="card1FileInput"
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const imgElement = document.querySelector(
+                  `label[for="fileInputCard1"] img`
+                ) as HTMLImageElement;
+                if (imgElement) {
+                  imgElement.src = reader.result as string;
+                }
+              };
+              reader.readAsDataURL(file);
+              setImageDataList((prevList) => [
+                ...prevList,
+                { id: "Card1", image: file },
+              ]);
+            }
+          }}
+        />
+        <input
+          type="file"
+          id="card2FileInput"
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const imgElement = document.querySelector(
+                  `label[for="fileInputCard2"] img`
+                ) as HTMLImageElement;
+                if (imgElement) {
+                  imgElement.src = reader.result as string;
+                }
+              };
+              reader.readAsDataURL(file);
+              setImageDataList((prevList) => [
+                ...prevList,
+                { id: "Card2", image: file },
+              ]);
+            }
+          }}
+        />
+        <input
+          type="file"
+          id="card3FileInput"
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const imgElement = document.querySelector(
+                  `label[for="fileInputCard3"] img`
+                ) as HTMLImageElement;
+                if (imgElement) {
+                  imgElement.src = reader.result as string;
+                }
+              };
+              reader.readAsDataURL(file);
+              setImageDataList((prevList) => [
+                ...prevList,
+                { id: "Card3", image: file },
+              ]);
+            }
+          }}
+        />
+        <input
+          type="file"
+          id="card4FileInput"
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const imgElement = document.querySelector(
+                  `label[for="fileInputCard4"] img`
+                ) as HTMLImageElement;
+                if (imgElement) {
+                  imgElement.src = reader.result as string;
+                }
+              };
+              reader.readAsDataURL(file);
+              setImageDataList((prevList) => [
+                ...prevList,
+                { id: "Card4", image: file },
+              ]);
+            }
+          }}
+        />
+        <input
+          type="file"
+          id="card5FileInput"
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const imgElement = document.querySelector(
+                  `label[for="fileInputCard5"] img`
+                ) as HTMLImageElement;
+                if (imgElement) {
+                  imgElement.src = reader.result as string;
+                }
+              };
+              reader.readAsDataURL(file);
+              setImageDataList((prevList) => [
+                ...prevList,
+                { id: "Card5", image: file },
+              ]);
+            }
+          }}
+        />
+        <input
+          type="file"
+          id="card6FileInput"
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const imgElement = document.querySelector(
+                  `label[for="fileInputCard6"] img`
+                ) as HTMLImageElement;
+                if (imgElement) {
+                  imgElement.src = reader.result as string;
+                }
+              };
+              reader.readAsDataURL(file);
+              setImageDataList((prevList) => [
+                ...prevList,
+                { id: "Card6", image: file },
+              ]);
+            }
+          }}
+        />
+        <input
+          type="file"
+          id="card7FileInput"
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const imgElement = document.querySelector(
+                  `label[for="fileInputCard7"] img`
+                ) as HTMLImageElement;
+                if (imgElement) {
+                  imgElement.src = reader.result as string;
+                }
+              };
+              reader.readAsDataURL(file);
+              setImageDataList((prevList) => [
+                ...prevList,
+                { id: "Card7", image: file },
+              ]);
+            }
+          }}
+        />
+        <input
+          type="file"
+          id="card8FileInput"
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const imgElement = document.querySelector(
+                  `label[for="fileInputCard8"] img`
+                ) as HTMLImageElement;
+                if (imgElement) {
+                  imgElement.src = reader.result as string;
+                }
+              };
+              reader.readAsDataURL(file);
+              setImageDataList((prevList) => [
+                ...prevList,
+                { id: "Card8", image: file },
+              ]);
+            }
+          }}
+        />
+
+        <input
+          type="file"
+          id="banner"
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const imgElement = document.querySelector(
+                  `label[for="banner"] img`
+                ) as HTMLImageElement;
+                if (imgElement) {
+                  imgElement.src = reader.result as string;
+                }
+              };
+              reader.readAsDataURL(file);
+              setImageDataList((prevList) => [
+                ...prevList,
+                { id: "banner", image: file },
+              ]);
+            }
+          }}
+        />
+
+        <input
+          type="file"
+          id="midContent"
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const imgElement = document.querySelector(
+                  `label[for="midContent"] img`
+                ) as HTMLImageElement;
+                if (imgElement) {
+                  imgElement.src = reader.result as string;
+                }
+              };
+              reader.readAsDataURL(file);
+              setImageDataList((prevList) => [
+                ...prevList,
+                { id: "midcontentimage", image: file },
+              ]);
+            }
+          }}
+        />
       </div>
-      <button className="btn btn-outline-dark btn-sm mb-0" type="button" onClick={handleCMSChanges}>
-                  Save
-                </button>
-      <input
-                type="file"
-                id="card1FileInput"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      const imgElement = document.querySelector(
-                        `label[for="fileInputCard1"] img`
-                      ) as HTMLImageElement;
-                      if (imgElement) {
-                        imgElement.src = reader.result as string;
-                      }
-                    };
-                    reader.readAsDataURL(file);
-                    setImageDataList((prevList) => [
-                        ...prevList,
-                        { id: "Card1", image: file },
-                      ]);
-                  }
-                }}
-              />
-                <input
-                type="file"
-                id="card2FileInput"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      const imgElement = document.querySelector(
-                        `label[for="fileInputCard2"] img`
-                      ) as HTMLImageElement;
-                      if (imgElement) {
-                        imgElement.src = reader.result as string;
-                      }
-                    };
-                    reader.readAsDataURL(file);
-                    setImageDataList((prevList) => [
-                        ...prevList,
-                        { id: "Card2", image: file },
-                      ]);
-                  }
-                }}
-              />
-                <input
-                type="file"
-                id="card3FileInput"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      const imgElement = document.querySelector(
-                        `label[for="fileInputCard3"] img`
-                      ) as HTMLImageElement;
-                      if (imgElement) {
-                        imgElement.src = reader.result as string;
-                      }
-                    };
-                    reader.readAsDataURL(file);
-                    setImageDataList((prevList) => [
-                        ...prevList,
-                        { id: "Card3", image: file },
-                      ]);
-                  }
-                }}
-              />
-                <input
-                type="file"
-                id="card4FileInput"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      const imgElement = document.querySelector(
-                        `label[for="fileInputCard4"] img`
-                      ) as HTMLImageElement;
-                      if (imgElement) {
-                        imgElement.src = reader.result as string;
-                      }
-                    };
-                    reader.readAsDataURL(file);
-                    setImageDataList((prevList) => [
-                        ...prevList,
-                        { id: "Card4", image: file },
-                      ]);
-                  }
-                }}
-              />
-                <input
-                type="file"
-                id="card5FileInput"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      const imgElement = document.querySelector(
-                        `label[for="fileInputCard5"] img`
-                      ) as HTMLImageElement;
-                      if (imgElement) {
-                        imgElement.src = reader.result as string;
-                      }
-                    };
-                    reader.readAsDataURL(file);
-                    setImageDataList((prevList) => [
-                        ...prevList,
-                        { id: "Card5", image: file },
-                      ]);
-                  }
-                }}
-              />
-                <input
-                type="file"
-                id="card6FileInput"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      const imgElement = document.querySelector(
-                        `label[for="fileInputCard6"] img`
-                      ) as HTMLImageElement;
-                      if (imgElement) {
-                        imgElement.src = reader.result as string;
-                      }
-                    };
-                    reader.readAsDataURL(file);
-                    setImageDataList((prevList) => [
-                        ...prevList,
-                        { id: "Card6", image: file },
-                      ]);
-                  }
-                }}
-              />
-                <input
-                type="file"
-                id="card7FileInput"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      const imgElement = document.querySelector(
-                        `label[for="fileInputCard7"] img`
-                      ) as HTMLImageElement;
-                      if (imgElement) {
-                        imgElement.src = reader.result as string;
-                      }
-                    };
-                    reader.readAsDataURL(file);
-                    setImageDataList((prevList) => [
-                        ...prevList,
-                        { id: "Card7", image: file },
-                      ]);
-                  }
-                }}
-              />
-                <input
-                type="file"
-                id="card8FileInput"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      const imgElement = document.querySelector(
-                        `label[for="fileInputCard8"] img`
-                      ) as HTMLImageElement;
-                      if (imgElement) {
-                        imgElement.src = reader.result as string;
-                      }
-                    };
-                    reader.readAsDataURL(file);
-                    setImageDataList((prevList) => [
-                        ...prevList,
-                        { id: "Card8", image: file },
-                      ]);
-                  }
-                }}
-              />
-
-                <input
-                type="file"
-                id="banner"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      const imgElement = document.querySelector(
-                        `label[for="banner"] img`
-                      ) as HTMLImageElement;
-                      if (imgElement) {
-                        imgElement.src = reader.result as string;
-                      }
-                    };
-                    reader.readAsDataURL(file);
-                    setImageDataList((prevList) => [
-                        ...prevList,
-                        { id: "banner", image: file },
-                      ]);
-                  }
-                }}
-              />
-
-                <input
-                type="file"
-                id="midContent"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      const imgElement = document.querySelector(
-                        `label[for="midContent"] img`
-                      ) as HTMLImageElement;
-                      if (imgElement) {
-                        imgElement.src = reader.result as string;
-                      }
-                    };
-                    reader.readAsDataURL(file);
-                    setImageDataList((prevList) => [
-                        ...prevList,
-                        { id: "midcontentimage", image: file },
-                      ]);
-                  }
-                }}
-              />
-    </div>
     </>
-    
+
   );
 };
 
