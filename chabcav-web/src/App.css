@@ -297,3 +297,17 @@
   margin-top: 20px;
 }
 
+/* Toast Container */
+.custom-toast-container {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 9999 !important;
+}
+
+.custom-toast-body {
+  margin: 0 auto;
+}
+
+

@@ -14,6 +14,7 @@ import FeatureCards from '../components/FeatureCards';
 import Header from '../components/Header';
 import { useEffect } from 'react';
 import React from 'react';
+import AboutUs from './AboutUs';
 
 
 
@@ -23,7 +24,8 @@ const [midContentImage, setMidContentImage] = React.useState<string>("");
 const [content, setContent] = React.useState<string>("");
 const [headline, setHeadline] = React.useState<string>("");
 const [cardUrls, setCardUrls] = React.useState<string[]>([]);
-/*useEffect(() => {
+
+useEffect(() => {
 
   async function fetchCMS(){
     const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms", {
@@ -40,19 +42,19 @@ const [cardUrls, setCardUrls] = React.useState<string[]>([]);
 
       const data = await response.json();
       console.log(data);
-      setBannerImage(`https://chabcav-api-development.up.railway.app/uploads/${data.banner}`);
-      setMidContentImage(`https://chabcav-api-development.up.railway.app/uploads/${data.midcontentimage}`);
+      setBannerImage(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.banner}?alt=media`);
+      setMidContentImage(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.midcontentimage}?alt=media`);
       setContent(data.content);
       setHeadline(data.headline);
       const links = [
-        `https://chabcav-api-development.up.railway.app/uploads/${data.card1}`, 
-        `https://chabcav-api-development.up.railway.app/uploads/${data.card2}`, 
-        `https://chabcav-api-development.up.railway.app/uploads/${data.card3}`, 
-        `https://chabcav-api-development.up.railway.app/uploads/${data.card4}`, 
-        `https://chabcav-api-development.up.railway.app/uploads/${data.card5}`, 
-        `https://chabcav-api-development.up.railway.app/uploads/${data.card6}`, 
-        `https://chabcav-api-development.up.railway.app/uploads/${data.card7}`, 
-        `https://chabcav-api-development.up.railway.app/uploads/${data.card8}`];
+        `https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card1}?alt=media`, 
+        `https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card2}?alt=media`, 
+        `https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card3}?alt=media`, 
+        `https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card4}?alt=media`, 
+        `https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card5}?alt=media`, 
+        `https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card6}?alt=media`, 
+        `https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card7}?alt=media`, 
+        `https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card8}?alt=media`];
       
       setCardUrls(links);
 
@@ -64,9 +66,11 @@ const [cardUrls, setCardUrls] = React.useState<string[]>([]);
 
 fetchCMS();
 
-}, [])*/
+}, [])
 
-async function fetchCMS() {
+//For Emergency if ifrebase storage is down or not working - up this function and comment the fetchCMS function above
+// This is a static version of the CMS data. You can replace this with your actual CMS data fetching logic.
+/*async function fetchCMS() {
   // Static image paths (assuming these are inside the `public` folder)
   setBannerImage("/banner.png");
   setMidContentImage("/midcontent.jpg");
@@ -93,7 +97,7 @@ async function fetchCMS() {
 // Then call it normally inside useEffect
 useEffect(() => {
   fetchCMS();
-}, []);
+}, []);*/
 
 
 
@@ -108,6 +112,7 @@ useEffect(() => {
             <TestimonialSection contentImageUrl={midContentImage} content={content} headline={headline}/>
             {/* <SecondFeatureSection /> */}
             <FeatureCards urls={cardUrls} />
+            <AboutUs />
             <Prefooter />
             </div>
             <Footer />

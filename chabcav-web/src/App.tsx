@@ -15,6 +15,8 @@ import UpdateAccount from './pages/UpdateAccount';
 import UserAccount from './pages/account/UserAccount';
 import ResetPassword from './pages/account/ResetPassword';
 import EnterEmailAddress from './pages/account/EnterEmailAddress';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
  
@@ -37,9 +39,26 @@ function App() {
           <Route path="/account/update" element={isLoggedIn ? <UpdateAccount /> : <Main />}/>
           <Route path="/reset-password" element={<ResetPassword/>}/>
           <Route path="/enter-emailAddress" element={<EnterEmailAddress/>}/>
-          
+        
           {/* <Route path="/user/lessons" element={isLoggedIn ? <View /> : <Main />} /> */}
       </Routes>
+      <ToastContainer
+        toastClassName="custom-toast"
+       // bodyClassName="custom-toast-body"
+        className="custom-toast-container"
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      
+  
+      />
     </Router>
   )
 }

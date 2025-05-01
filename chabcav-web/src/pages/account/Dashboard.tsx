@@ -1,37 +1,43 @@
 //import React, { useEffect } from "react";
 import React, { useEffect, useState } from "react";
 import {
-    Chart as ChartJS,
-    ChartData,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    LineElement,
-    PointElement,
-    Title,
-    Tooltip,
-    Legend,
-  } from "chart.js";
-import { Bar, Line } from "react-chartjs-2";
+  Chart as ChartJS,
+  //ChartData,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+} from "chart.js";
+
+import { Pie } from "react-chartjs-2";
 import 'jsvectormap'
 import 'jsvectormap/dist/maps/world.js'
 import JsVectorMap from 'jsvectormap';
+import SpinnerModal from "../../components/SpinnerModal";
+
+
 
 
 
 
 ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    LineElement,
-    PointElement,
-    Title,
-    Tooltip,
-    Legend
-  );
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  ArcElement,
+  Legend
+);
 
-  
+
 
 
 const Dashboard: React.FC = () => {
@@ -45,7 +51,7 @@ const Dashboard: React.FC = () => {
     name: string;
     coords: [number, number];
   }
-  
+
 
   const [userCountryData, setUserCountryData] = React.useState<CountryData[]>([]);
   const [barChartData, setBarChartData] = React.useState<number[]>([]);
@@ -55,60 +61,80 @@ const Dashboard: React.FC = () => {
   const [totalUsers, setTotalUsers] = React.useState<number>(0);
   const [countryCoordinates, setCountryCoordinates] = React.useState<CountryCoordinates[]>([]);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-        // Table data
-        // const countryData = [
-        //   { country: "United States", flag: "/src/assets/css/accounts/img/icons/flags/US.png", sales: 2500, value: "$230,900", bounce: "29.9%" },
-        //   { country: "Germany", flag: "/src/assets/css/accounts/img/icons/flags/DE.png", sales: 3900, value: "$440,000", bounce: "40.22%" },
-        //   { country: "Great Britain", flag: "/src/assets/css/accounts/img/icons/flags/GB.png", sales: 1400, value: "$190,700", bounce: "23.44%" },
-        //   { country: "Brazil", flag: "/src/assets/css/accounts/img/icons/flags/BR.png", sales: 562, value: "$143,960", bounce: "32.14%" },
-        // ];
-    
-    
+  const [isLoading, setIsLoading] = useState(true);
+  // Table data
+  // const countryData = [
+  //   { country: "United States", flag: "/src/assets/css/accounts/img/icons/flags/US.png", sales: 2500, value: "$230,900", bounce: "29.9%" },
+  //   { country: "Germany", flag: "/src/assets/css/accounts/img/icons/flags/DE.png", sales: 3900, value: "$440,000", bounce: "40.22%" },
+  //   { country: "Great Britain", flag: "/src/assets/css/accounts/img/icons/flags/GB.png", sales: 1400, value: "$190,700", bounce: "23.44%" },
+  //   { country: "Brazil", flag: "/src/assets/css/accounts/img/icons/flags/BR.png", sales: 562, value: "$143,960", bounce: "32.14%" },
+  // ];
+
+
   //Data and options for Bar Chart
   useEffect(() => {
 
-    async function fetchDashboardData(){
+    async function fetchDashboardData() {
       const response = await fetch("https://chabcav-api-development.up.railway.app/dashboard", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
-     })
+      })
 
-    const data = await response.json();
+      const data = await response.json();
 
-    const countryData: CountryData[] = data.result.countryData.map((item: any) => ({
-      country: item.country,
-      flag: item.flag,
-      noOfUsers: item.noOfUsers,
-    }));
+      const countryData: CountryData[] = data.countryData.map((item: any) => ({
+        country: item.country,
+        flag: item.flag,
+        noOfUsers: item.noOfUsers,
+      }));
 
-    const countryCoords: CountryCoordinates[] = data.result.mapCoordinates.map((item: any) => ({
-      name: item.country,
-      coords: [item.coords[0], item.coords[1]] as [number, number],
-    }));
+      const countryCoords: CountryCoordinates[] = data.mapCoordinates.map((item: any) => ({
+        name: item.country,
+        coords: [item.latitude, item.longtitude] as [number, number],
 
-    const noOfUsersInAWeek = data.result.noOfUsersInAWeek.map((item: any) => item);
-    const monthlyUserData = data.result.monthlyVisit.map((item: any) => item);
-    // const monthlyUserVisits = data.result.monthlyVisit.map((item: any) => item);
-    const monthlyCompletedLessonsData = data.result.noOfUsersThatCompletedPerMonth.map((item: any) => item);
-    const totalUsers = data.result.totalUsers;
+        //coords: [item.coords[0], item.coords[1]] as [number, number],
+      }));
 
-    setUserCountryData(countryData);
-    setBarChartData(noOfUsersInAWeek);
-    setMonthlyVisit(monthlyUserData);
-    setMonthlyCompletedLessons(monthlyCompletedLessonsData);
-    setMonthlyTotalVisit(data.result.noOfVisits);
-    setTotalUsers(totalUsers);
-    setCountryCoordinates(countryCoords);
-     console.log(data.result);
+      const noOfUsersInAWeek = data.noOfUsersInAWeek.map((item: any) => item);
+      const monthlyUserData = data.monthlyVisit.map((item: any) => item);
+      // const monthlyUserVisits = data.result.monthlyVisit.map((item: any) => item);
+      const monthlyCompletedLessonsData = data.noOfUsersThatCompletedPerMonth.map((item: any) => item);
+      const totalUsers = data.totalUsers;
 
+      setUserCountryData(countryData);
+      setBarChartData(noOfUsersInAWeek);
+      setMonthlyVisit(monthlyUserData);
+      setMonthlyCompletedLessons(monthlyCompletedLessonsData);
+      setMonthlyTotalVisit(data.noOfVisits);
+      setTotalUsers(totalUsers);
+      setCountryCoordinates(countryCoords);
+      console.log(data);
+
+      console.log("Country Coordinates: ", countryCoords);
 
 
     }
 
+
+    function loadingAnimation() {
+      let timer: NodeJS.Timeout;
+      if (isLoading) {
+        timer = setTimeout(() => {
+          
+          setIsLoading(false);
+          fetchDashboardData()
+
+        }, 1500);
+      }
+      return () => clearTimeout(timer); // Cleanup the timer on unmount or when loading changes
+    };
+
+   
     fetchDashboardData();
+    loadingAnimation();
 
     //  const map = new JsVectorMap({
     //    selector: '#world-map',
@@ -124,19 +150,19 @@ const Dashboard: React.FC = () => {
     //      { name: 'Russia', coords: [62.318222797104276, 89.81564777631716] },
     //      { name: 'China', coords: [22.320178999475512, 114.17161225541399] },
     //    ]
-      
-       
-    //  });
- 
-     // Clean up the map instance on unmount
-     return () => {
-      //  map.destroy();
-     };
-   }, []);
 
-   useEffect(() => {
+
+    //  });
+
+    // Clean up the map instance on unmount
+    return () => {
+      //  map.destroy();
+    };
+  }, []);
+
+  useEffect(() => {
     if (countryCoordinates.length === 0) return;
-  
+
     const map = new JsVectorMap({
       selector: "#world-map",
       map: "world",
@@ -144,14 +170,14 @@ const Dashboard: React.FC = () => {
       zoomButtons: true,
       markers: countryCoordinates
     });
-  
+
     return () => {
       map.destroy();
     };
   }, [countryCoordinates]);
- 
 
-  const barData: ChartData<"bar", number[], string> = {
+
+  /*const barData: ChartData<"bar", number[], string> = {
     labels: ["M", "T", "W", "T", "F", "S", "S"],
     datasets: [
       {
@@ -162,9 +188,9 @@ const Dashboard: React.FC = () => {
         barThickness: "flex",
       },
     ],
-  };
+  };*/
 
-  const barOptions = {
+ /*const barOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -182,10 +208,10 @@ const Dashboard: React.FC = () => {
         grid: { color: "#e5e5e5" },
       },
     },
-  };
+  };*/
 
   // Data and options for Line Chart
-  const lineData = {
+ /* const lineData = {
     labels: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
     datasets: [
       {
@@ -196,9 +222,9 @@ const Dashboard: React.FC = () => {
         pointBorderColor: "transparent",
       },
     ],
-  };
+  };*/
 
-  const monhtlyVisitlineData = {
+  /*const monhtlyVisitlineData = {
     labels: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
     datasets: [
       {
@@ -209,9 +235,9 @@ const Dashboard: React.FC = () => {
         pointBorderColor: "transparent",
       },
     ],
-  };
+  };*/
 
-  const lineOptions = {
+  /*const lineOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -247,43 +273,109 @@ const Dashboard: React.FC = () => {
         grid: { color: "#e5e5e5" },
       },
     },
+  };*/
+
+  const pieData1 = {
+    labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    datasets: [
+      {
+        label: "Website Visit",
+        data: barChartData, // assuming this is an array like [10, 20, 15, ...]
+        backgroundColor: [
+          "#43A047", "#66BB6A", "#81C784", "#A5D6A7", "#C8E6C9", "#E8F5E9", "#B2DFDB"
+        ],
+      },
+    ],
   };
 
-   // Function to handle mouse movement
-    useEffect(() => {
-      const handleMouseMove = (event: MouseEvent) => {
-        if (event.clientX <= 10) {
-          setIsSidebarCollapsed(false); // Expand if mouse is at the leftmost 10px
-        } else if (event.clientX > 260) {
-          setIsSidebarCollapsed(true); // Collapse if mouse moves far from the sidebar
-        }
-      };
-  
-      window.addEventListener("mousemove", handleMouseMove);
-  
-      return () => {
-        window.removeEventListener("mousemove", handleMouseMove);
-      };
-    }, []);
- 
+  const pieData2 = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    datasets: [
+      {
+        label: "Monthly Visit",
+        data: monthlyVisit, // assuming this is an array of 12 numbers
+        backgroundColor: [
+          "#43A047", "#388E3C", "#2E7D32", "#1B5E20", "#66BB6A", "#81C784",
+          "#A5D6A7", "#C8E6C9", "#E8F5E9", "#B2DFDB", "#4CAF50", "#66BB6A"
+        ],
+      },
+    ],
+  };
+
+  const pieData3 = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    datasets: [
+      {
+        label: "Completed Lessons",
+        data: monthlyCompletedLessons,
+        backgroundColor: [
+          "#FF7043", "#FF8A65", "#FFAB91", "#FBE9E7", "#FF5722", "#E64A19",
+          "#D84315", "#BF360C", "#FFCCBC", "#FF8A65", "#FF7043", "#D84315"
+        ],
+      },
+    ],
+  };
+
+
+  /*const pieOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "bottom" as "bottom", // Explicitly cast to the expected type
+      },
+      tooltip: {
+        callbacks: {
+          label: (context: any) => {
+            const label = context.label || '';
+            const value = context.raw || 0;
+            return `${label}: ${value}`;
+          },
+        },
+      },
+    },
+  };*/
+
+
+
+  // Function to handle mouse movement
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      if (event.clientX <= 10) {
+        setIsSidebarCollapsed(false); // Expand if mouse is at the leftmost 10px
+      } else if (event.clientX > 260) {
+        setIsSidebarCollapsed(true); // Collapse if mouse moves far from the sidebar
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
 
   return (
-    <div className="card p-4 shadow-sm mb-4" 
-    style={{paddingLeft: "250px", transition: "margin 0.3s ease-in-out",
-      marginLeft: isSidebarCollapsed ? "0" : "250px",
-      width: isSidebarCollapsed ? "100%" : "calc(100% - 250px)",}}>
+    <div className="card p-4 shadow-sm mb-4"
+      style={{
+        paddingLeft: "250px", transition: "margin 0.3s ease-in-out",
+        marginLeft: isSidebarCollapsed ? "0" : "250px",
+        width: isSidebarCollapsed ? "100%" : "calc(100% - 250px)",
+      }}>
+         <SpinnerModal show={isLoading} />
       {/* Page Header */}
       <div className="row">
         <div className="col-lg-12 position-relative z-index-2">
           <div className="row mb-4">
-          <div className="col-lg-5 ms-3 col-sm-8">
-            <h3 className="mb-0 h4 font-weight-bolder">Dashboard</h3>
-            <p className="mb-4">Administration visualization</p>
-          </div>
+            <div className="col-lg-5 ms-3 col-sm-8">
+              <h3 className="mb-0 h4 font-weight-bolder">Dashboard</h3>
+              <p className="mb-4">Administration visualization</p>
+            </div>
           </div>
 
           {/* Charts Section */}
-          <div className="row mb-4">
+          {/*<div className="row mb-4">
             {[
               {
                 title: "Website Visit",
@@ -331,102 +423,147 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div> */}
+
+          {/* Charts Section */}
+          <div className="row mb-4">
+            {[
+              {
+                title: "Website Visit",
+                description: "Traffic by Source",
+                chartId: "chart-pie-visit",
+                updateInfo: "just updated",
+                chart: <Pie data={pieData1}  />
+              },
+              {
+                title: "Monthly Visit",
+                description: "Sessions Distribution",
+                chartId: "chart-pie-month",
+                updateInfo: "just updated",
+                chart: <Pie data={pieData2} />
+              },
+              {
+                title: "Users That Completed Lessons",
+                description: "Monthly Completion",
+                chartId: "chart-pie-completed",
+                updateInfo: "just updated",
+                chart: <Pie data={pieData3} />
+              },
+            ].map((chart, index) => (
+              <div key={index} className="col-lg-4 col-md-6 mb-4">
+                <div className="card">
+                  <div className="card-body">
+                    <h6 className="mb-0">{chart.title}</h6>
+                    <p className="text-sm">{chart.description}</p>
+                    <div className="pe-2">
+                      <div className="chart">{chart.chart}</div>
+                    </div>
+                    <hr className="dark horizontal" />
+                    <div className="d-flex">
+                      <i className="material-symbols-rounded text-sm my-auto me-1">schedule</i>
+                      <p className="mb-0 text-sm">{chart.updateInfo}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
+
           {/* Stats Section */}
-            <div className="row justify-content">
+          <div className="row justify-content">
             {[{
               title: "Visits",
               value: monthlyTotalVisit,
               icon: "leaderboard",
               growth: ""
-              },
-              {
+            },
+            {
               title: "Total Users",
               value: totalUsers,
               icon: "leaderboard",
               growth: ""
-              },
+            },
             ].map((stat, index) => (
               <div
-              key={index}
-              className="col-lg-6 col-md-5 col-sm-12 mb-4"
+                key={index}
+                className="col-lg-6 col-md-5 col-sm-12 mb-4"
               >
-              <div className="card mb-2">
-                <div className="card-header p-2 ps-3">
-                <div className="d-flex justify-content-between">
-                  <div>
-                  <p className="text-sm mb-0 text-capitalize">{stat.title}</p>
-                  <h4 className="mb-0">{stat.value}</h4>
+                <div className="card mb-2">
+                  <div className="card-header p-2 ps-3">
+                    <div className="d-flex justify-content-between">
+                      <div>
+                        <p className="text-sm mb-0 text-capitalize">{stat.title}</p>
+                        <h4 className="mb-0">{stat.value}</h4>
+                      </div>
+                      <div className="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
+                        <i className="material-symbols-rounded opacity-10">{stat.icon}</i>
+                      </div>
+                    </div>
                   </div>
-                  <div className="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
-                  <i className="material-symbols-rounded opacity-10">{stat.icon}</i>
+                  <hr className="dark horizontal my-0" />
+                  <div className="card-footer p-2 ps-3">
+                    <p className="mb-0 text-sm">
+                      <span className="text-success font-weight-bolder">
+                        {stat.growth}
+                      </span>{" "}
+                      than last week
+                    </p>
                   </div>
                 </div>
-                </div>
-                <hr className="dark horizontal my-0" />
-                <div className="card-footer p-2 ps-3">
-                <p className="mb-0 text-sm">
-                  <span className="text-success font-weight-bolder">
-                  {stat.growth}
-                  </span>{" "}
-                  than last week
-                </p>
-                </div>
-              </div>
               </div>
             ))}
-            </div>
+          </div>
         </div>
       </div>
       <div className="mt-4">
-      <div className="card mb-4">
-        <div className="card-header pb-0">
-          <h6 className="mb-0">Users by Country</h6>
-          <p className="mb-2 text-sm">Users accessing the site by country.</p>
-        </div>
-        <div className="card-body p-3">
-          <div className="row">
-            {/* Table Section */}
-            <div className="col-lg-6 col-md-7">
-              <div className="table-responsive">
-                <table className="table align-items-center">
-                  <thead>
-                    <tr>
-                      <th>Country</th>
-                      <th>No. of Users</th>
-                      {/* <th>Value</th>
+        <div className="card mb-4">
+          <div className="card-header pb-0">
+            <h6 className="mb-0">Users by Country</h6>
+            <p className="mb-2 text-sm">Users accessing the site by country.</p>
+          </div>
+          <div className="card-body p-3">
+            <div className="row">
+              {/* Table Section */}
+              <div className="col-lg-6 col-md-7">
+                <div className="table-responsive">
+                  <table className="table align-items-center">
+                    <thead>
+                      <tr>
+                        <th>Country</th>
+                        <th>No. of Users</th>
+                        {/* <th>Value</th>
                       <th>Bounce</th> */}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {userCountryData.map((data, index) => (
-                      <tr key={index}>
-                        <td>
-                          <div className="d-flex align-items-center">
-                            <img src={data.flag} alt={`${data.country} flag`} style={{ width: "30px" }} />
-                            <span className="ms-3">{data.country}</span>
-                          </div>
-                        </td>
-                        <td>{data.noOfUsers}</td>
-                        {/* <td>{data.value}</td> */}
-                        {/* <td>{data.bounce}</td> */}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {userCountryData.map((data, index) => (
+                        <tr key={index}>
+                          <td>
+                            <div className="d-flex align-items-center">
+                              <img src={data.flag} alt={`${data.country} flag`} style={{ width: "30px" }} />
+                              <span className="ms-3">{data.country}</span>
+                            </div>
+                          </td>
+                          <td>{data.noOfUsers}</td>
+                          {/* <td>{data.value}</td> */}
+                          {/* <td>{data.bounce}</td> */}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
-            {/* Map Section */}
-            <div className="col-lg-6 col-md-5">
-              <div id="world-map" style={{ height: "400px", width: "100%" }}></div>
+              {/* Map Section */}
+              <div className="col-lg-6 col-md-5">
+                <div id="world-map" style={{ height: "400px", width: "100%" }}></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    </div>
-    
+
   );
 };
 

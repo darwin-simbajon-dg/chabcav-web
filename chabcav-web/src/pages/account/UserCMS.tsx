@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useToast } from "../../context/ToastContext";
 import SpinnerModal from "../../components/SpinnerModal";
 
 interface ImageData {
@@ -21,10 +20,10 @@ const UserCMS: React.FC = () => {
   const [headline, setHeadline] = useState("");
   const [imageDataList, setImageDataList] = useState<ImageData[]>([]);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const { showToast } = useToast();
+  
   const [isLoading, setIsLoading] = useState(false); // State to control spinner
 
-  /*async function fetchCMS(){
+  async function fetchCMS(){
     const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms", {
         method: "GET",
         headers: {
@@ -39,7 +38,7 @@ const UserCMS: React.FC = () => {
 
       const data = await response.json();
       console.log(data);
-      setBannerImage(`https://chabcav-api-development.up.railway.app/uploads/${data.banner}`);
+      /*setBannerImage(`https://chabcav-api-development.up.railway.app/uploads/${data.banner}`);
       setMidContentImage(`https://chabcav-api-development.up.railway.app/uploads/${data.midcontentimage}`);
       setCard1Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card1}`);
       setCard2Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card2}`);
@@ -48,34 +47,52 @@ const UserCMS: React.FC = () => {
       setCard5Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card5}`);
       setCard6Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card6}`);
       setCard7Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card7}`);
-      setCard8Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card8}`);
+      setCard8Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card8}`);*/
+
+
+      setBannerImage(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.banner}?alt=media`);
+      setMidContentImage(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.midcontentimage}?alt=media`);
+      setCard1Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card1}?alt=media`);
+      setCard2Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card2}?alt=media`);
+      setCard3Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card3}?alt=media`);
+      setCard4Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card4}?alt=media`);
+      setCard5Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card5}?alt=media`);
+      setCard6Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card6}?alt=media`);
+      setCard7Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card7}?alt=media`);
+      setCard8Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card8}?alt=media`);
+
       setContent(data.content);
       setHeadline(data.headline);
-}  */
-
-//static for mean time
-  async function fetchCMS() {
-  
-    setBannerImage("/banner.png");
-    setMidContentImage("/midcontent.jpg"); 
-    setCard1Image("/card1.jpg");
-    setCard2Image("/card2.jpg");
-    setCard3Image("/card3.jpg");
-    setCard4Image("/card4.jpg");
-    setCard5Image("/card5.jpg");
-    setCard6Image("/card6.jpg");
-    setCard7Image("/card7.jpg");
-    setCard8Image("/card1.jpg");
-
-    // Sample static text content
-    setContent("Welcome to the Chabacano language as spoken in the City of Cavite. The city once hosted a Spanish fort thus providing constant interaction with the Spaniards who lived there. The inhabitants of the place have to learn the foreign tongue and eventually mix and blend it with their language and the result is the delightful mixture of Spanish and Tagalog - Chabacano");
-    setHeadline("Chabacano de Ciudad de Caivte History");
-  }
-
+}  
 
   async function handleContentChanges() {
     try {
       const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms/update-contents", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+        },
+        body: JSON.stringify({
+          content: content,
+          headline: headline,
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to update CMS content");
+      }
+      
+      const text = await response.text();
+      
+      if (text) {
+        const data = JSON.parse(text);
+        console.log("Data:", data);
+      } else {
+        console.warn("No JSON content returned");
+      }
+      
+      /*const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms/update-contents", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,10 +115,10 @@ const UserCMS: React.FC = () => {
       }
       else {
         showToast("Content Changes Failed");
-      }
+      }*/
 
 
-      console.log(data);
+      //console.log(data);
     } catch (error) {
       console.error("Error fetching content changes:", error);
     }
@@ -119,7 +136,26 @@ const UserCMS: React.FC = () => {
       console.log(`${key}: ${value}`);
     });
     try {
-      if (imageDataList.length) {
+      if (!imageDataList.length) {
+        console.warn("No images to upload. Skipping the request.");
+      } else {
+        const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms/upload", {
+          method: "POST",
+          headers: {
+            // You can optionally re-enable this:
+            // "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
+          },
+          body: formData,
+        });
+      
+        if (!response.ok) {
+          setIsLoading(false);
+          throw new Error("Failed to submit image data");
+        }
+        setIsLoading(false);
+      }
+      
+      /*if (imageDataList.length) {
         console.warn("No images to upload. Skipping the request.");
         const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms/upload", {
           method: "POST",
@@ -137,7 +173,7 @@ const UserCMS: React.FC = () => {
         setIsLoading(false);
         //const result = await response.json();
         //console.log("Image data submitted successfully:", result);
-      }
+      }*/
 
       await handleContentChanges();
       await fetchCMS();

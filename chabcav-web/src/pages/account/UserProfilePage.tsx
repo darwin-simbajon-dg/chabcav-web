@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import UserProgress from "../UsersProgress";
+import { Card, CardContent } from "@mui/material";
 
 const UserProfilePage: React.FC = () => {
   const [information, setInformation] = useState("");
@@ -6,7 +8,8 @@ const UserProfilePage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [location, setLocation] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);  const [imageUrl, setImageUrl] = useState("/assets/images/bruce-mars.jpg");
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
 
 
 
@@ -38,7 +41,9 @@ const UserProfilePage: React.FC = () => {
       setEmail(data.email);
       setLocation(data.location);
       setPhoneNumber(data.phonenumber);
-      setImageUrl(`https://chabcav-api-development.up.railway.app/uploads/${data.imageid}`); // Assuming the response contains the image URL
+      setImageUrl(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.imageid}?alt=media`)
+      //setImageUrl('https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.imageid}?alt=media'); // Assuming the response contains the image URL
+      //setImageUrl(`https://chabcav-api-development.up.railway.app/uploads/${data.imageid}`); // Assuming the response contains the image URL
     }
 
     fetchData();
@@ -103,44 +108,61 @@ const UserProfilePage: React.FC = () => {
         </div>
 
         {/* Sections */}
-        <div className="row">
-          <div className="col-md-6 col-xl-4">
-            {/* Profile Information */}
-            <div className="card card-plain h-100">
-              <div className="card-header pb-0 p-3">
-                <div className="row">
-                  <div className="col-md-8 d-flex align-items-center">
-                    <h6 className="mb-0">Profile Information</h6>
-                  </div>
-                  <div className="col-md-4 text-end">
-                    <a href="#edit-profile">
-                      <i className="fas fa-user-edit text-secondary text-sm" title="Edit Profile"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div className="card-body p-3">
-                <p className="text-sm">{information}</p>
-                <ul className="list-group">
-                  <li className="list-group-item border-0 ps-0 pt-0 text-sm">
-                    <strong className="text-dark">Full Name:</strong> {fullName}
-                  </li>
-                  <li className="list-group-item border-0 ps-0 text-sm">
-                    <strong className="text-dark">Mobile:</strong> {phoneNumber}
-                  </li>
-                  <li className="list-group-item border-0 ps-0 text-sm">
-                    <strong className="text-dark">Email:</strong> {email}
-                  </li>
-                  <li className="list-group-item border-0 ps-0 text-sm">
-                    <strong className="text-dark">Location:</strong> {location}
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+        <div className="w-full flex justify-center">
+  <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6">
+    
+    {/* Profile Information Card */}
+    <Card>
+      <CardContent className="p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h6 className="text-lg font-semibold">Profile Information</h6>
+          {/* <a href="#edit-profile">
+            <i className="fas fa-user-edit text-secondary text-sm" title="Edit Profile"></i>
+          </a> */}
         </div>
+        <p className="text-sm">{information}</p>
+        <ul className="list-group mt-4 space-y-1">
+          <li><strong>Full Name:</strong> {fullName}</li>
+          <li><strong>Mobile:</strong> {phoneNumber}</li>
+          <li><strong>Email:</strong> {email}</li>
+          <li><strong>Location:</strong> {location}</li>
+        </ul>
+      </CardContent>
+    </Card>
+
+    {/* User Progress Card */}
+    <Card className="w-full flex justify-center items-center">
+      <CardContent className="p-6 flex flex-col items-center">
+        <h2 className="text-lg font-semibold">User Progress</h2>
+        <UserProgress />
+      </CardContent>
+    </Card>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       </div>
     </div>
+
+
+
+
   );
 };
 

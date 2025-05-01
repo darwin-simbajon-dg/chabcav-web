@@ -98,7 +98,7 @@ const Register: React.FC = () => {
                   className="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center"
                   style={{
                     backgroundImage:
-                      "/banner.png",
+                      "url('/src/assets/img/illustrations/illustration-signup.jpg')",
                     backgroundSize: "cover",
                   }}
                 // loading="lazy"

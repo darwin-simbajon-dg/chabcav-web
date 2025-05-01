@@ -5,7 +5,7 @@ const Profile : React.FC = () => {
 const[fullName, setFullName] = React.useState("")
 const[location, setLocation] = React.useState("")
 const[userId, setUserId] = React.useState("")
-const[imagUrl, setImageUrl] = React.useState("/assets/images/bruce-mars.jpg")
+const[imagUrl, setImageUrl] = React.useState("")
 const { showToast } = useToast();
 
 useEffect(() => {
@@ -20,7 +20,7 @@ useEffect(() => {
     setUserId(userId);
 
     if(userId !== undefined){
-      const response = await fetch(`https://chabcav-api-development.up.railway.app/profile/${userId}`, {
+      const response =    await fetch(`https://chabcav-api-development.up.railway.app/profile/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +38,8 @@ useEffect(() => {
       }
       setFullName(data.fullname);
       setLocation(data.location);
-      setImageUrl(`https://chabcav-api-development.up.railway.app/uploads/${data.imageid}`); // Assuming the response contains the image URL
+      setImageUrl(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.imageid}?alt=media`)
+      //setImageUrl(`https://chabcav-api-development.up.railway.app/uploads/${data.imageid}`); // Assuming the response contains the image URL
 
     }
    
