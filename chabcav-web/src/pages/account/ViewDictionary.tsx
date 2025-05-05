@@ -211,51 +211,58 @@ const Dictionary: React.FC = () => {
   
 
 //Injecting audio buttons into the HTML
-  function injectAudioButtons(html: string): string {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
+function injectAudioButtons(html: string): string {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
 
-    const rows = doc.querySelectorAll("tr");
+  const rows = doc.querySelectorAll("tr");
 
-    rows.forEach((row) => {
-      const cells = row.querySelectorAll("td");
+  rows.forEach((row) => {
+    const cells = row.querySelectorAll("td");
 
-      // Assuming the columns are: Word | Pronunciation | English | Tagalog | Audio
-      if (cells.length >= 5) {
-        const pronunciationCell = cells[1];
-        const audioCell = cells[2];
+    if (cells.length >= 5) {
+      const pronunciationCell = cells[1];
+      const audioCell = cells[2];
 
-        const pronunciationText = (pronunciationCell.textContent || "").trim();
+      const pronunciationText = (pronunciationCell.textContent || "").trim();
 
-        if (/^\/[^\/]+\/$/.test(pronunciationText)) {
-          const button = document.createElement("button");
-          button.textContent = "🔊";
-          button.setAttribute("data-pronunciation", pronunciationText);
-          button.setAttribute("class", "audio-btn");
-          button.style.cssText = `
-                  background: none;
-                  border: none;
-                  font-size: 1.3em;
-                  padding: 0;
-                  margin: 0;
-                  margin-right: 100px;
-                  margin-left: 0px;
-                  cursor: pointer;
-                  line-height: 1;
-                  display: inline-block;
-                  vertical-align: middle;
-                  transform: translateY(-1px);
-                `;
+      if (/^\/[^\/]+\/$/.test(pronunciationText)) {
+        const button = document.createElement("button");
+        button.textContent = "🔊";
+        button.setAttribute("data-pronunciation", pronunciationText);
+        button.setAttribute("class", "audio-btn");
+        button.style.cssText = `
+          background: none;
+          border: none;
+          font-size: 1.3em;
+          padding: 0;
+          margin: 0;
+          margin-right: 100px;
+          margin-left: 0px;
+          cursor: pointer;
+          line-height: 1;
+          display: inline-block;
+          vertical-align: middle;
+          transform: translateY(-1px);
+        `;
 
-          // Clear and append button to the audio cell
-          audioCell.innerHTML = "";
-          audioCell.appendChild(button);
-        }
+        // Add click event listener to speak the text
+        button.addEventListener("click", () => {
+          const utterance = new SpeechSynthesisUtterance(pronunciationText);
+          utterance.lang = "es-ES"; // Spanish (Spain)
+          speechSynthesis.speak(utterance);
+        });
+        
+
+        // Clear and append button to the audio cell
+        audioCell.innerHTML = "";
+        audioCell.appendChild(button);
       }
-    });
+    }
+  });
 
-    return doc.body.innerHTML;
-  }
+  return doc.body.innerHTML;
+}
 
 
 

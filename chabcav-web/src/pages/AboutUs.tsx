@@ -17,25 +17,7 @@ const AboutUs: React.FC = () => {
         </ul>
       </section>
 
-      {/* Developers Section */}
-      <section>
-        <h2 className="text-3xl font-bold mb-4">Developers</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          {[
-            { name: "Micah Joshua F. Paragua", img: "" },
-            { name: "Eugene D. Sta. Maria", img: "" },
-            { name: "Ivy Gale R. Rivera", img: "" },
-          ].map((dev, index) => (
-            <div key={index} className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center text-center">
-              <div className="w-32 h-32 bg-gray-300 rounded-full mb-4 overflow-hidden">
-                {/* Placeholder image */}
-                <img src={dev.img} alt={dev.name} className="object-cover w-full h-full" />
-              </div>
-              <h3 className="text-xl font-semibold">{dev.name}</h3>
-            </div>
-          ))}
-        </div>
-      </section>
+     
     </div>
   );
 };

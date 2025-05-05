@@ -138,7 +138,7 @@ const LessonPane: React.FC = () => {
                 <Form.Label>Lesson Content</Form.Label>
                 <ReactQuill value={newContent} onChange={setNewContent} placeholder="Enter lesson content..." modules={modules}/>
               </Form.Group>
-              <Button variant="success" className="w-100 py-2" onClick={saveLessonAndChapter}>Save</Button>
+              <Button variant="success" className="w-100 py-2" onClick={saveLessonAndChapter}>Save Content</Button>
             </Form>
           </div>
         )}
@@ -160,7 +160,7 @@ const LessonPane: React.FC = () => {
                 <Form.Label>Lesson Content</Form.Label>
                 <ReactQuill value={content} onChange={setContent} modules={modules}/>
               </Form.Group>
-              <Button variant="success" className="w-100 py-2" onClick={saveContent}>Save</Button>
+              <Button variant="success" className="w-100 py-2" onClick={saveContent}>Save Content</Button>
             </Form>
           </div>
         )}

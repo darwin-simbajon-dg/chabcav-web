@@ -12,7 +12,6 @@ const UserProfilePage: React.FC = () => {
   const [imageUrl, setImageUrl] = useState("");
 
 
-
   useEffect(() => {
     async function fetchData() {
 

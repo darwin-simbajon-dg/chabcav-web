@@ -158,6 +158,65 @@ const Register: React.FC = () => {
                           required
                         />
                       </div>
+
+
+
+                      
+                      {/* Password validation indicator */}
+                      <div style={{ marginTop: '10px' }}>
+                        <div style={{ height: '4px', backgroundColor: '#eee', width: '100%' }}>
+                          <div
+                            style={{
+                              height: '4px',
+                              backgroundColor:
+                                password.length >= 8 &&
+                                  /\d/.test(password) &&
+                                  /[a-z]/.test(password) &&
+                                  /[A-Z]/.test(password) &&
+                                  /[^A-Za-z0-9]/.test(password)
+                                  ? 'green'
+                                  : 'orange',
+                              width:
+                                password.length >= 8 &&
+                                  /\d/.test(password) &&
+                                  /[a-z]/.test(password) &&
+                                  /[A-Z]/.test(password) &&
+                                  /[^A-Za-z0-9]/.test(password)
+                                  ? '100%'
+                                  : '50%',
+                            }}
+                          />
+                        </div>
+
+                        <div style={{ marginTop: '10px' }}>
+                          <p style={{ marginBottom: '5px' }}>Password must contain:</p>
+                          <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
+                            <li style={{ color: password.length >= 8 ? 'green' : 'red' }}>
+                              {password.length >= 8 ? '✓' : '✗'} At least 8 characters
+                            </li>
+                            <li style={{ color: /\d/.test(password) ? 'green' : 'red' }}>
+                              {/\d/.test(password) ? '✓' : '✗'} At least 1 number
+                            </li>
+                            <li style={{ color: /[a-z]/.test(password) ? 'green' : 'red' }}>
+                              {/[a-z]/.test(password) ? '✓' : '✗'} At least 1 lowercase letter
+                            </li>
+                            <li style={{ color: /[A-Z]/.test(password) ? 'green' : 'red' }}>
+                              {/[A-Z]/.test(password) ? '✓' : '✗'} At least 1 uppercase letter
+                            </li>
+                            <li style={{ color: /[^A-Za-z0-9]/.test(password) ? 'green' : 'red' }}>
+                              {/[^A-Za-z0-9]/.test(password) ? '✓' : '✗'} At least 1 special character
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+
+
+
+
+
+
+
                       <div className="form-check form-check-info text-start ps-0">
                         <input
                           className="form-check-input"

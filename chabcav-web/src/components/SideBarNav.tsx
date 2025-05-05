@@ -62,10 +62,10 @@ const SidebarNav: React.FC<NavigationProperties> = ({ onNavigate }) => {
       icon: "admin_panel_settings",
       items: [
         { title: "Dashboard", link: "../../pages/dashboards/analytics.html", icon: "dashboard", component: Dashboard, step: "AdminPanel" },
-        { title: "Chapters Management", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: LessonEditor, step: "AdminPanel" },
-        { title: "Update Dictionary", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: UploadDictionary, step: "AdminPanel" },
         { title: "CMS", link: "../../pages/pages/account/settings.html", icon: "settings", component: UserCMS, step: "AdminPanel" },
         { title: "Users Management", link: "../../pages/pages/account/settings.html", icon: "settings", component: AdminUserManagement, step: "AdminPanel" },
+        { title: "Chapters Management", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: LessonEditor, step: "AdminPanel" },
+        { title: "Update Dictionary", link: "../../pages/dashboards/analytics.html", icon: "cast_for_education", component: UploadDictionary, step: "AdminPanel" },
       ],
     },
 

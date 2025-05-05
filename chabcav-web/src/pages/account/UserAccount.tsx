@@ -12,8 +12,10 @@ import { useState } from "react";
 
 // Role detection based on 'userPanel' in localStorage
 const isUser = () => {
-  return localStorage.getItem("Step") !== null;
+  const step = localStorage.getItem("Step");
+  return step === "UserPanel";
 };
+
 
 const UserAccount: React.FC = () => {
   const [CurrentComponent, setCurrentComponent] = useState<React.FC | null>(() => {

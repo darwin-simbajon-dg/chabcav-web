@@ -484,7 +484,7 @@ const UserCMS: React.FC = () => {
           </div>
         </div>
         <button className="btn btn-outline-dark btn-sm mb-0" type="button" onClick={handleCMSChanges}>
-          Save
+        Save Content
         </button>
         <input
           type="file"
