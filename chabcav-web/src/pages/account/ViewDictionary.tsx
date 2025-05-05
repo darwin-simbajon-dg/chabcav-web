@@ -297,15 +297,16 @@ function injectAudioButtons(html: string): string {
       const pronunciationCell = cells[1];
       const audioCell = cells[2];
 
-      const pronunciationText = (pronunciationCell.textContent || "").trim();
-
+      const span = pronunciationCell.querySelector("span");
+      const pronunciationText = span && span.textContent ? span.textContent.trim() : "";
+      
       if (/^\/[^\/]+\/$/.test(pronunciationText)) {
         const cleanedText = pronunciationText.replace(/\//g, "");
         const button = document.createElement("button");
         button.textContent = "🔊";
         button.setAttribute("data-pronunciation", cleanedText);
         button.setAttribute("class", "audio-btn");
-
+      
         button.style.cssText = `
           background: none;
           border: none;
@@ -317,18 +318,21 @@ function injectAudioButtons(html: string): string {
           align-items: center;
           justify-content: center;
         `;
-
+      
         button.addEventListener("click", () => {
           const utterance = new SpeechSynthesisUtterance(cleanedText);
           utterance.lang = "es-ES"; // adjust as needed
           speechSynthesis.speak(utterance);
         });
-
+        console.log("Extracted pronunciation:", pronunciationText);
+      
         audioCell.innerHTML = "";
         audioCell.appendChild(button);
       }
+      
     }
   });
+
 
   return doc.body.innerHTML;
 }

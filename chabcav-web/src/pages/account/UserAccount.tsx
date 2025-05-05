@@ -13,7 +13,7 @@ import { useState } from "react";
 // Role detection based on 'userPanel' in localStorage
 const isUser = () => {
   const step = localStorage.getItem("Step");
-  return step === "UserPanel";
+  return step === "UserPanel" || step === "LessonPanel";
 };
 
 
