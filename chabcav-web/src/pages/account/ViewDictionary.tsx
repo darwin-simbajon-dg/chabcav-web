@@ -272,16 +272,39 @@ useEffect(() => {
   const observer = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
       if (mutation.type === "childList") {
-        console.log("DOM updated, you can run post-processing here if needed");
-        // e.g., re-attach event listeners or do extra tweaks
+        console.log("DOM updated, attaching global click handler");
+
+        // Remove any old listener to avoid duplicates
+        container.removeEventListener("click", handleButtonClick);
+
+        // Attach new event listener
+        container.addEventListener("click", handleButtonClick);
       }
     }
   });
 
   observer.observe(container, { childList: true, subtree: true });
 
-  return () => observer.disconnect();
+  return () => {
+    observer.disconnect();
+    container.removeEventListener("click", handleButtonClick);
+  };
 }, []);
+
+function handleButtonClick(e: Event) {
+  const target = e.target as HTMLElement;
+  if (target.classList.contains("audio-btn")) {
+    const pronunciation = target.getAttribute("data-pronunciation");
+    if (pronunciation) {
+      const utterance = new SpeechSynthesisUtterance(pronunciation);
+      utterance.lang = "es-ES";
+      speechSynthesis.speak(utterance);
+    }
+  }
+}
+
+
+
 
 
 function injectAudioButtons(html: string): string {
@@ -319,12 +342,12 @@ function injectAudioButtons(html: string): string {
           justify-content: center;
         `;
       
-        button.addEventListener("click", () => {
+        /*button.addEventListener("click", () => {
           const utterance = new SpeechSynthesisUtterance(cleanedText);
           utterance.lang = "es-ES"; // adjust as needed
           speechSynthesis.speak(utterance);
         });
-        console.log("Extracted pronunciation:", pronunciationText);
+        console.log("Extracted pronunciation:", pronunciationText);*/
       
         audioCell.innerHTML = "";
         audioCell.appendChild(button);
