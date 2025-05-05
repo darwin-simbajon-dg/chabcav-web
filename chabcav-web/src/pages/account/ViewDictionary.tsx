@@ -266,42 +266,24 @@ const Dictionary: React.FC = () => {
 
 useEffect(() => {
   const container = document.getElementById("dictionary-container");
-
   if (!container) return;
 
-  const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-      if (mutation.type === "childList") {
-        console.log("DOM updated, attaching global click handler");
-
-        // Remove any old listener to avoid duplicates
-        container.removeEventListener("click", handleButtonClick);
-
-        // Attach new event listener
-        container.addEventListener("click", handleButtonClick);
+  const handleButtonClick = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains("audio-btn")) {
+      const pronunciation = target.getAttribute("data-pronunciation");
+      if (pronunciation) {
+        const utterance = new SpeechSynthesisUtterance(pronunciation);
+        utterance.lang = "es-ES";
+        speechSynthesis.speak(utterance);
       }
     }
-  });
-
-  observer.observe(container, { childList: true, subtree: true });
-
-  return () => {
-    observer.disconnect();
-    container.removeEventListener("click", handleButtonClick);
   };
+
+  container.addEventListener("click", handleButtonClick);
+  return () => container.removeEventListener("click", handleButtonClick);
 }, []);
 
-function handleButtonClick(e: Event) {
-  const target = e.target as HTMLElement;
-  if (target.classList.contains("audio-btn")) {
-    const pronunciation = target.getAttribute("data-pronunciation");
-    if (pronunciation) {
-      const utterance = new SpeechSynthesisUtterance(pronunciation);
-      utterance.lang = "es-ES";
-      speechSynthesis.speak(utterance);
-    }
-  }
-}
 
 
 
