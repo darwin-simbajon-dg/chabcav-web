@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useRef} from "react";
 import axios from "axios";
 import { Form, Button, Spinner, Alert, Card } from "react-bootstrap";
 import SpinnerModal from "../../components/SpinnerModal";
@@ -10,7 +10,7 @@ const Dictionary: React.FC = () => {
   const [originalHtml, setOriginalHtml] = useState<string | null>(null);
   const [highlightedHtml, setHighlightedHtml] = useState<string | null>(null);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  //const contentRef = useRef<HTMLDivElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
   //const [highlightedWord, setHighlightedWord] = useState<string | null>(null);
  //const [buttonPosition, setButtonPosition] = useState<{ top: number; left: number } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -299,13 +299,13 @@ function injectAudioButtons(html: string): string {
           justify-content: center;
         `;
       
-        button.addEventListener("click", () => {
+        /*button.addEventListener("click", () => {
           const synth = window.speechSynthesis;
           const utterance = new SpeechSynthesisUtterance(cleanedText);
           const availableLanguages = ["es-MX", "es-ES"];
           utterance.lang = availableLanguages.find((lang) => synth.getVoices().some((voice) => voice.lang === lang)) || "es-ES";
           synth.speak(utterance);
-        });
+        });*/
       
       
         audioCell.innerHTML = "";
@@ -316,6 +316,33 @@ function injectAudioButtons(html: string): string {
   });
   return doc.body.innerHTML;
 }
+
+const speakText = (text: string) => {
+  const synth = window.speechSynthesis;
+  const utterance = new SpeechSynthesisUtterance(text);
+  const availableLanguages = ["es-MX", "es-ES"];
+  utterance.lang = availableLanguages.find((lang) => synth.getVoices().some((voice) => voice.lang === lang)) || "es-ES";
+  synth.speak(utterance);
+};
+
+useEffect(() => {
+  const handleAudioClick = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains("audio-btn")) {
+      const text = target.getAttribute("data-pronunciation");
+      if (text) {
+        speakText(text);
+      }
+    }
+  };
+
+  const container = contentRef.current;
+  container?.addEventListener("click", handleAudioClick);
+
+  return () => {
+    container?.removeEventListener("click", handleAudioClick);
+  };
+}, []);
 
 
 /*useEffect(() => {
@@ -409,7 +436,7 @@ function injectAudioButtons(html: string): string {
           <Card className="mt-4 p-3 shadow-sm">
             <h5 className="fw-bold mb-3 text-primary">📄 DICCIONARIO CHABACANO DEL CIUDAD DE CAVITE  </h5>
             <div
-             
+             ref={contentRef}
               style={{
                 border: "1px solid #ccc",
                 padding: "10px",
