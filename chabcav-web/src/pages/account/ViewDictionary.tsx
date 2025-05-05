@@ -268,14 +268,23 @@ useEffect(() => {
   const container = document.getElementById("dictionary-container");
   if (!container) return;
 
+  const synth = window.speechSynthesis;
+  const availableLanguages = ["es-ES", "en-US"]; // adjust this list as needed
+
   const handleButtonClick = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target.classList.contains("audio-btn")) {
       const pronunciation = target.getAttribute("data-pronunciation");
       if (pronunciation) {
         const utterance = new SpeechSynthesisUtterance(pronunciation);
-        utterance.lang = "es-ES";
-        speechSynthesis.speak(utterance);
+
+        // Dynamically set language if available, fallback to "es-ES"
+        utterance.lang =
+          availableLanguages.find((lang) =>
+            synth.getVoices().some((voice) => voice.lang === lang)
+          ) || "es-ES";
+
+        synth.speak(utterance);
       }
     }
   };
@@ -283,6 +292,7 @@ useEffect(() => {
   container.addEventListener("click", handleButtonClick);
   return () => container.removeEventListener("click", handleButtonClick);
 }, []);
+
 
 
 
