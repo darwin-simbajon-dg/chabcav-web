@@ -264,41 +264,6 @@ const Dictionary: React.FC = () => {
   return doc.body.innerHTML;
 }*/
 
-useEffect(() => {
-  const container = document.getElementById("dictionary-container");
-  if (!container) return;
-
-  const synth = window.speechSynthesis;
-  const availableLanguages = ["es-ES", "en-US"]; // adjust this list as needed
-
-  const handleButtonClick = (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-    if (target.classList.contains("audio-btn")) {
-      const pronunciation = target.getAttribute("data-pronunciation");
-      if (pronunciation) {
-        const utterance = new SpeechSynthesisUtterance(pronunciation);
-
-        // Dynamically set language if available, fallback to "es-ES"
-        utterance.lang =
-          availableLanguages.find((lang) =>
-            synth.getVoices().some((voice) => voice.lang === lang)
-          ) || "es-ES";
-
-        synth.speak(utterance);
-      }
-    }
-  };
-
-  container.addEventListener("click", handleButtonClick);
-  return () => container.removeEventListener("click", handleButtonClick);
-}, []);
-
-
-
-
-
-
-
 function injectAudioButtons(html: string): string {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
@@ -334,12 +299,14 @@ function injectAudioButtons(html: string): string {
           justify-content: center;
         `;
       
-        /*button.addEventListener("click", () => {
+        button.addEventListener("click", () => {
+          const synth = window.speechSynthesis;
           const utterance = new SpeechSynthesisUtterance(cleanedText);
-          utterance.lang = "es-ES"; // adjust as needed
-          speechSynthesis.speak(utterance);
+          const availableLanguages = ["es-MX", "es-ES"];
+          utterance.lang = availableLanguages.find((lang) => synth.getVoices().some((voice) => voice.lang === lang)) || "es-ES";
+          synth.speak(utterance);
         });
-        console.log("Extracted pronunciation:", pronunciationText);*/
+      
       
         audioCell.innerHTML = "";
         audioCell.appendChild(button);
@@ -347,12 +314,38 @@ function injectAudioButtons(html: string): string {
       
     }
   });
-
-
   return doc.body.innerHTML;
 }
 
 
+useEffect(() => {
+  const container = document.getElementById("dictionary-container");
+  if (!container) return;
+
+  const synth = window.speechSynthesis;
+  const availableLanguages = ["es-ES", "en-US"]; // adjust this list as needed
+
+  const handleButtonClick = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains("audio-btn")) {
+      const pronunciation = target.getAttribute("data-pronunciation");
+      if (pronunciation) {
+        const utterance = new SpeechSynthesisUtterance(pronunciation);
+
+        // Dynamically set language if available, fallback to "es-ES"
+        utterance.lang =
+          availableLanguages.find((lang) =>
+            synth.getVoices().some((voice) => voice.lang === lang)
+          ) || "es-ES";
+
+        synth.speak(utterance);
+      }
+    }
+  };
+
+  container.addEventListener("click", handleButtonClick);
+  return () => container.removeEventListener("click", handleButtonClick);
+}, []);
 
 
 
