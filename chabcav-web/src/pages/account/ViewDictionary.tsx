@@ -211,7 +211,7 @@ const Dictionary: React.FC = () => {
   
 
 //Injecting audio buttons into the HTML
-function injectAudioButtons(html: string): string {
+/*function injectAudioButtons(html: string): string {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
 
@@ -262,7 +262,57 @@ function injectAudioButtons(html: string): string {
   });
 
   return doc.body.innerHTML;
+}*/
+
+function injectAudioButtons(html: string): string {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  const rows = doc.querySelectorAll("tr");
+
+  rows.forEach((row) => {
+    const cells = row.querySelectorAll("td");
+
+    if (cells.length >= 5) {
+      const pronunciationCell = cells[1];
+      const audioCell = cells[2];
+
+      const pronunciationText = (pronunciationCell.textContent || "").trim();
+
+      if (/^\/[^\/]+\/$/.test(pronunciationText)) {
+        const cleanedText = pronunciationText.replace(/\//g, "");
+        const button = document.createElement("button");
+        button.textContent = "🔊";
+        button.setAttribute("data-pronunciation", cleanedText);
+        button.setAttribute("class", "audio-btn");
+
+        button.style.cssText = `
+          background: none;
+          border: none;
+          font-size: 1.1em;
+          padding: 2px 4px;
+          margin: 0 auto;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        `;
+
+        button.addEventListener("click", () => {
+          const utterance = new SpeechSynthesisUtterance(cleanedText);
+          utterance.lang = "es-ES"; // adjust as needed
+          speechSynthesis.speak(utterance);
+        });
+
+        audioCell.innerHTML = "";
+        audioCell.appendChild(button);
+      }
+    }
+  });
+
+  return doc.body.innerHTML;
 }
+
 
 
 
