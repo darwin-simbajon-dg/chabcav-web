@@ -318,7 +318,7 @@ function injectAudioButtons(html: string): string {
 }
 
 
-useEffect(() => {
+/*useEffect(() => {
   const container = document.getElementById("dictionary-container");
   if (!container) return;
 
@@ -345,7 +345,7 @@ useEffect(() => {
 
   container.addEventListener("click", handleButtonClick);
   return () => container.removeEventListener("click", handleButtonClick);
-}, []);
+}, []);*/
 
 
 
