@@ -264,6 +264,26 @@ const Dictionary: React.FC = () => {
   return doc.body.innerHTML;
 }*/
 
+useEffect(() => {
+  const container = document.getElementById("dictionary-container");
+
+  if (!container) return;
+
+  const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (mutation.type === "childList") {
+        console.log("DOM updated, you can run post-processing here if needed");
+        // e.g., re-attach event listeners or do extra tweaks
+      }
+    }
+  });
+
+  observer.observe(container, { childList: true, subtree: true });
+
+  return () => observer.disconnect();
+}, []);
+
+
 function injectAudioButtons(html: string): string {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
@@ -386,6 +406,7 @@ function injectAudioButtons(html: string): string {
                 backgroundColor: "#fff",
                 scrollBehavior: "smooth",
               }}
+               id="dictionary-container"
               dangerouslySetInnerHTML={{ __html: highlightedHtml }}
             />
           </Card>
