@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Form, Button, Spinner, Alert, Card } from "react-bootstrap";
 import SpinnerModal from "../../components/SpinnerModal";
@@ -12,16 +12,16 @@ const Dictionary: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const contentRef = useRef<HTMLDivElement | null>(null);
   //const [highlightedWord, setHighlightedWord] = useState<string | null>(null);
- //const [buttonPosition, setButtonPosition] = useState<{ top: number; left: number } | null>(null);
+  //const [buttonPosition, setButtonPosition] = useState<{ top: number; left: number } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
 
- /* useEffect(() => {
-    document.addEventListener("mouseup", handleTextSelection);
-    return () => {
-      document.removeEventListener("mouseup", handleTextSelection);
-    };
-  }, []);*/
+  /* useEffect(() => {
+     document.addEventListener("mouseup", handleTextSelection);
+     return () => {
+       document.removeEventListener("mouseup", handleTextSelection);
+     };
+   }, []);*/
 
   /*const handleTextSelection = () => {
     const selection = window.getSelection();
@@ -180,114 +180,114 @@ const Dictionary: React.FC = () => {
     }
   };
 
- /* const addAnchorsToHtml = (html: string): string => {
-    return html.replace(
-      /<span[^>]*>[\s─-]*([A-Z])[\s─-]*<\/span>/g,
-      (match, letter) => {
-        // Wrap the letter in a div and apply centering styles
-        return `
-          <div id="letter-${letter}" style="text-align: center; display: inline-block; width: 100%;">
-            ${match}
-          </div>`;
-      }
-    );
-  };*/
+  /* const addAnchorsToHtml = (html: string): string => {
+     return html.replace(
+       /<span[^>]*>[\s─-]*([A-Z])[\s─-]*<\/span>/g,
+       (match, letter) => {
+         // Wrap the letter in a div and apply centering styles
+         return `
+           <div id="letter-${letter}" style="text-align: center; display: inline-block; width: 100%;">
+             ${match}
+           </div>`;
+       }
+     );
+   };*/
 
 
   const addAnchorsToHtml = (html: string): string => {
     return `
       <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
         ${html.replace(
-          /<span[^>]*>[\s─-]*([A-Z])[\s─-]*<\/span>/g,
-          (match, letter) => {
-            return `<div id="letter-${letter}" >${match}</div>`;
-          }
-        )}
+      /<span[^>]*>[\s─-]*([A-Z])[\s─-]*<\/span>/g,
+      (match, letter) => {
+        return `<div id="letter-${letter}" >${match}</div>`;
+      }
+    )}
       </div>
     `;
   };
+
+
+
+
+  //Injecting audio buttons into the HTML
+  /*function injectAudioButtons(html: string): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
   
+    const rows = doc.querySelectorAll("tr");
   
+    rows.forEach((row) => {
+      const cells = row.querySelectorAll("td");
   
-
-//Injecting audio buttons into the HTML
-/*function injectAudioButtons(html: string): string {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
-
-  const rows = doc.querySelectorAll("tr");
-
-  rows.forEach((row) => {
-    const cells = row.querySelectorAll("td");
-
-    if (cells.length >= 5) {
-      const pronunciationCell = cells[1];
-      const audioCell = cells[2];
-
-      const pronunciationText = (pronunciationCell.textContent || "").trim();
-
-      if (/^\/[^\/]+\/$/.test(pronunciationText)) {
-        const button = document.createElement("button");
-        button.textContent = "🔊";
-        button.setAttribute("data-pronunciation", pronunciationText);
-        button.setAttribute("class", "audio-btn");
-        button.style.cssText = `
-          background: none;
-          border: none;
-          font-size: 1.3em;
-          padding: 0;
-          margin: 0;
-          margin-right: 100px;
-          margin-left: 0px;
-          cursor: pointer;
-          line-height: 1;
-          display: inline-block;
-          vertical-align: middle;
-          transform: translateY(-1px);
-        `;
-
-        // Add click event listener to speak the text
-        button.addEventListener("click", () => {
-          const utterance = new SpeechSynthesisUtterance(pronunciationText);
-          utterance.lang = "es-ES"; // Spanish (Spain)
-          speechSynthesis.speak(utterance);
-        });
-        
-
-        // Clear and append button to the audio cell
-        audioCell.innerHTML = "";
-        audioCell.appendChild(button);
+      if (cells.length >= 5) {
+        const pronunciationCell = cells[1];
+        const audioCell = cells[2];
+  
+        const pronunciationText = (pronunciationCell.textContent || "").trim();
+  
+        if (/^\/[^\/]+\/$/.test(pronunciationText)) {
+          const button = document.createElement("button");
+          button.textContent = "🔊";
+          button.setAttribute("data-pronunciation", pronunciationText);
+          button.setAttribute("class", "audio-btn");
+          button.style.cssText = `
+            background: none;
+            border: none;
+            font-size: 1.3em;
+            padding: 0;
+            margin: 0;
+            margin-right: 100px;
+            margin-left: 0px;
+            cursor: pointer;
+            line-height: 1;
+            display: inline-block;
+            vertical-align: middle;
+            transform: translateY(-1px);
+          `;
+  
+          // Add click event listener to speak the text
+          button.addEventListener("click", () => {
+            const utterance = new SpeechSynthesisUtterance(pronunciationText);
+            utterance.lang = "es-ES"; // Spanish (Spain)
+            speechSynthesis.speak(utterance);
+          });
+          
+  
+          // Clear and append button to the audio cell
+          audioCell.innerHTML = "";
+          audioCell.appendChild(button);
+        }
       }
-    }
-  });
+    });
+  
+    return doc.body.innerHTML;
+  }*/
 
-  return doc.body.innerHTML;
-}*/
+  function injectAudioButtons(html: string): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
 
-function injectAudioButtons(html: string): string {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
+    const rows = doc.querySelectorAll("tr");
 
-  const rows = doc.querySelectorAll("tr");
+    rows.forEach((row) => {
+      const cells = row.querySelectorAll("td");
 
-  rows.forEach((row) => {
-    const cells = row.querySelectorAll("td");
+      if (cells.length >= 5) {
+        const pronunciationCell = cells[1];
+        const audioCell = cells[2];
 
-    if (cells.length >= 5) {
-      const pronunciationCell = cells[1];
-      const audioCell = cells[2];
+        const span = pronunciationCell.querySelector("span");
+        const pronunciationText = span && span.textContent ? span.textContent.trim() : "";
 
-      const span = pronunciationCell.querySelector("span");
-      const pronunciationText = span && span.textContent ? span.textContent.trim() : "";
-      
-      if (/^\/[^\/]+\/$/.test(pronunciationText)) {
-        const cleanedText = pronunciationText.replace(/\//g, "");
-        const button = document.createElement("button");
-        button.textContent = "🔊";
-        button.setAttribute("data-pronunciation", cleanedText);
-        button.setAttribute("class", "audio-btn");
-      
-        button.style.cssText = `
+        if (/^\/[^\/]+\/$/.test(pronunciationText)) {
+          const cleanedText = pronunciationText.replace(/\//g, "");
+          const button = document.createElement("button");
+          button.textContent = "🔊";
+          button.setAttribute("data-pronunciation", cleanedText);
+          button.setAttribute("class", "audio-btn");
+
+          button.style.cssText = `
           background: none;
           border: none;
           font-size: 1.1em;
@@ -298,81 +298,101 @@ function injectAudioButtons(html: string): string {
           align-items: center;
           justify-content: center;
         `;
-      
-        /*button.addEventListener("click", () => {
-          const synth = window.speechSynthesis;
-          const utterance = new SpeechSynthesisUtterance(cleanedText);
-          const availableLanguages = ["es-MX", "es-ES"];
-          utterance.lang = availableLanguages.find((lang) => synth.getVoices().some((voice) => voice.lang === lang)) || "es-ES";
+
+          /*button.addEventListener("click", () => {
+            const synth = window.speechSynthesis;
+            const utterance = new SpeechSynthesisUtterance(cleanedText);
+            const availableLanguages = ["es-MX", "es-ES"];
+            utterance.lang = availableLanguages.find((lang) => synth.getVoices().some((voice) => voice.lang === lang)) || "es-ES";
+            synth.speak(utterance);
+          });*/
+
+
+          audioCell.innerHTML = "";
+          audioCell.appendChild(button);
+        }
+
+      }
+    });
+    return doc.body.innerHTML;
+  }
+
+  const speakText = (text: string) => {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(text);
+    const availableLanguages = ["es-MX", "es-ES"];
+    utterance.lang = availableLanguages.find((lang) => synth.getVoices().some((voice) => voice.lang === lang)) || "es-ES";
+    synth.speak(utterance);
+  };
+
+ /* useEffect(() => {
+    const handleAudioClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains("audio-btn")) {
+        const text = target.getAttribute("data-pronunciation");
+        if (text) {
+          speakText(text);
+        }
+      }
+    };
+
+    const container = contentRef.current;
+    container?.addEventListener("click", handleAudioClick);
+
+    return () => {
+      container?.removeEventListener("click", handleAudioClick);
+    };
+  }, []);*/
+
+
+  useEffect(() => {
+    const container = contentRef.current;
+    if (!container) return;
+  
+    const handleAudioClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains("audio-btn")) {
+        const text = target.getAttribute("data-pronunciation");
+        if (text) {
+          speakText(text);
+        }
+      }
+    };
+  
+    container.addEventListener("click", handleAudioClick);
+    return () => container.removeEventListener("click", handleAudioClick);
+  }, [highlightedHtml]);
+  
+
+
+  /*useEffect(() => {
+    const container = document.getElementById("dictionary-container");
+    if (!container) return;
+  
+    const synth = window.speechSynthesis;
+    const availableLanguages = ["es-ES", "en-US"]; // adjust this list as needed
+  
+    const handleButtonClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains("audio-btn")) {
+        const pronunciation = target.getAttribute("data-pronunciation");
+        if (pronunciation) {
+          const utterance = new SpeechSynthesisUtterance(pronunciation);
+  
+          // Dynamically set language if available, fallback to "es-ES"
+          utterance.lang =
+            availableLanguages.find((lang) =>
+              synth.getVoices().some((voice) => voice.lang === lang)
+            ) || "es-ES";
+  
           synth.speak(utterance);
-        });*/
-      
-      
-        audioCell.innerHTML = "";
-        audioCell.appendChild(button);
+        }
       }
-      
-    }
-  });
-  return doc.body.innerHTML;
-}
-
-const speakText = (text: string) => {
-  const synth = window.speechSynthesis;
-  const utterance = new SpeechSynthesisUtterance(text);
-  const availableLanguages = ["es-MX", "es-ES"];
-  utterance.lang = availableLanguages.find((lang) => synth.getVoices().some((voice) => voice.lang === lang)) || "es-ES";
-  synth.speak(utterance);
-};
-
-useEffect(() => {
-  const handleAudioClick = (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-    if (target.classList.contains("audio-btn")) {
-      const text = target.getAttribute("data-pronunciation");
-      if (text) {
-        speakText(text);
-      }
-    }
-  };
-
-  const container = contentRef.current;
-  container?.addEventListener("click", handleAudioClick);
-
-  return () => {
-    container?.removeEventListener("click", handleAudioClick);
-  };
-}, []);
-
-
-/*useEffect(() => {
-  const container = document.getElementById("dictionary-container");
-  if (!container) return;
-
-  const synth = window.speechSynthesis;
-  const availableLanguages = ["es-ES", "en-US"]; // adjust this list as needed
-
-  const handleButtonClick = (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-    if (target.classList.contains("audio-btn")) {
-      const pronunciation = target.getAttribute("data-pronunciation");
-      if (pronunciation) {
-        const utterance = new SpeechSynthesisUtterance(pronunciation);
-
-        // Dynamically set language if available, fallback to "es-ES"
-        utterance.lang =
-          availableLanguages.find((lang) =>
-            synth.getVoices().some((voice) => voice.lang === lang)
-          ) || "es-ES";
-
-        synth.speak(utterance);
-      }
-    }
-  };
-
-  container.addEventListener("click", handleButtonClick);
-  return () => container.removeEventListener("click", handleButtonClick);
-}, []);*/
+    };
+  
+    container.addEventListener("click", handleButtonClick);
+    return () => container.removeEventListener("click", handleButtonClick);
+  }, []);*/
 
 
 
@@ -430,7 +450,7 @@ useEffect(() => {
           ))}
         </div>
 
-{/* Dictionary Content put this back if you want speak text {/*ref={contentRef}*/}
+        {/* Dictionary Content put this back if you want speak text {/*ref={contentRef}*/}
 
         {highlightedHtml && (
           <Card className="mt-4 p-3 shadow-sm">
@@ -445,13 +465,13 @@ useEffect(() => {
                 scrollBehavior: "smooth",
               }}
               ref={contentRef}
-               id="dictionary-container"
+              id="dictionary-container"
               dangerouslySetInnerHTML={{ __html: highlightedHtml }}
             />
           </Card>
         )}
-{/*Un comment this if you want to use speak text*/}
-       {/*} {highlightedWord && buttonPosition && (
+        {/*Un comment this if you want to use speak text*/}
+        {/*} {highlightedWord && buttonPosition && (
           <button
             onClick={() => speakText(highlightedWord)}
             style={{
