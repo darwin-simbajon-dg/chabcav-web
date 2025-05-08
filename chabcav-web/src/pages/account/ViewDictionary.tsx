@@ -436,7 +436,6 @@ useEffect(() => {
           <Card className="mt-4 p-3 shadow-sm">
             <h5 className="fw-bold mb-3 text-primary">📄 DICCIONARIO CHABACANO DEL CIUDAD DE CAVITE  </h5>
             <div
-             ref={contentRef}
               style={{
                 border: "1px solid #ccc",
                 padding: "10px",
@@ -445,6 +444,7 @@ useEffect(() => {
                 backgroundColor: "#fff",
                 scrollBehavior: "smooth",
               }}
+              ref={contentRef}
                id="dictionary-container"
               dangerouslySetInnerHTML={{ __html: highlightedHtml }}
             />
