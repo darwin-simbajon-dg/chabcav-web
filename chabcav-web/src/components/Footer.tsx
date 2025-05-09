@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
             </div> */}
             <div>
               <ul className="d-flex flex-row ms-n3 nav">
-                <li className="nav-item">
+               {/* <li className="nav-item">
                   <a
                     className="nav-link pe-1"
                     href="https://www.facebook.com"
@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
                   >
                     <i className="fab fa-twitter text-lg opacity-8"></i>
                   </a>
-                </li>
+                </li> */}
                 {/* <li className="nav-item">
                   <a
                     className="nav-link pe-1"
