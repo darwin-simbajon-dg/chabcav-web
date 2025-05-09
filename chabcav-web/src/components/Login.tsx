@@ -87,22 +87,24 @@ const Login: React.FC = () => {
           <div className="input-group input-group-outline mb-3">
             <label className="form-label">Email</label>
             <input type="email" className="form-control" 
-            style={{ backgroundColor: 'white' }}
+            
                 id="email"
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required />
+                required 
+                style={{ backgroundColor: 'white' }}/>
           </div>
           <div className="input-group input-group-outline mb-3">
             <label className="form-label">Password</label>
             <input type="password" className="form-control" 
-            style={{ backgroundColor: 'white' }}
+            
                 id="password"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required />
+                required 
+                style={{ backgroundColor: 'white' }}/>
           </div>
           <div className="form-check form-switch d-flex align-items-center mb-3">
             <input
