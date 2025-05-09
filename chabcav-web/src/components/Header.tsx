@@ -27,10 +27,9 @@ const Header: React.FC<HeaderProps> = ({backgroundImageUrl}) => {
           <div className="container">
             <div className="row">
               <div className="col-lg-6 col-md-7 d-flex justify-content-center text-md-start text-center flex-column mt-sm-0 mt-7">
-                <h1 className="text-white">Chabano Learning System</h1> 
+                <h1 className="text-white">Learn Chabacano de Cavite</h1> 
                 <p className="lead pe-md-5 me-md-5 text-white opacity-8">
-                   The time is now for it be okay to be great. People in this world shun
-                  people for being nice. 
+                The heritage language worth preserving and learning.
                 </p>
                 {/* <div className="buttons">
                   <button type="button" className="btn bg-gradient-dark mt-4">
