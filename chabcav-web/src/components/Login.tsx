@@ -87,6 +87,7 @@ const Login: React.FC = () => {
           <div className="input-group input-group-outline mb-3">
             <label className="form-label">Email</label>
             <input type="email" className="form-control" 
+            style={{ backgroundColor: 'white' }}
                 id="email"
                 placeholder="Enter your email"
                 value={email}
@@ -96,6 +97,7 @@ const Login: React.FC = () => {
           <div className="input-group input-group-outline mb-3">
             <label className="form-label">Password</label>
             <input type="password" className="form-control" 
+            style={{ backgroundColor: 'white' }}
                 id="password"
                 placeholder="Enter your password"
                 value={password}
