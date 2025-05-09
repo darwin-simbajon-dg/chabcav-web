@@ -29,7 +29,7 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({ contentImageUrl
               <div className="col-xl-4 col-md-5 z-index-2 position-relative px-md-3 px-5 my-md-auto mt-4">
                 <p className="text-white text-3xl">{headline}</p>
                 {/*<p className="text-lg text-white">{content}</p>*/}
-                <p className="text-lg text-white w-full max-w-6xl px-4">{content}</p>
+                <p className="text-white w-full max-w-6xl px-4">{content}</p>
 
                 <hr className="vertical start-100 ms-n5 d-xl-block d-none" />
               </div>
