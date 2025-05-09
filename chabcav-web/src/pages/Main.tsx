@@ -106,11 +106,11 @@ const Main = () => {
     <div className="coworking bg-gray-100">
 
       <Header backgroundImageUrl={bannerImage} />
-      {/* Overlay Text */}
+      {/* Overlay Text 
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center px-4 z-10">
         <h1 className="text-4xl font-bold">Learn Chabacano de Cavite</h1>
         <p className="text-xl mt-2">The heritage language worth preserving and learning.</p>
-      </div>
+      </div> */}
       <div className="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-4">
         {/* Features Section */}
         {/* <FeaturesSection /> */}
