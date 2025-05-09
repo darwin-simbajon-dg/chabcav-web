@@ -287,7 +287,7 @@ const Dictionary: React.FC = () => {
           button.setAttribute("data-pronunciation", cleanedText);
           button.setAttribute("class", "audio-btn");
 
-          button.style.cssText = `
+          /*button.style.cssText = `
           background: none;
           border: none;
           font-size: 1.1em;
@@ -297,7 +297,22 @@ const Dictionary: React.FC = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-        `;
+        `;*/
+
+        button.style.cssText = `
+            background: none;
+            border: none;
+            font-size: 1.3em;
+            padding: 0;
+            margin: 0;
+            margin-right: 100px;
+            margin-left: 0px;
+            cursor: pointer;
+            line-height: 1;
+            display: inline-block;
+            vertical-align: middle;
+            transform: translateY(-1px);
+          `;
 
           /*button.addEventListener("click", () => {
             const synth = window.speechSynthesis;
