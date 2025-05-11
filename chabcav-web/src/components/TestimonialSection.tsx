@@ -27,19 +27,20 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({ contentImageUrl
 
               {/* Quote Section */}
               <div className="col-xl-4 col-md-5 z-index-2 position-relative px-md-3 px-5 my-md-auto mt-4">
-                <p className="text-white text-3xl">{headline}</p>
-                {/*<p className="text-lg text-white">{content}</p>*/} 
+                <p className="text-white text-3xl" style={{ whiteSpace: "nowrap" }}>{headline}</p>
+                <p className="text-lg text-white" style={{ width: "640px", textAlign: "justify"}}>{content}</p>
                 {/*<div>
                 <p className="text-white w-full max-w-6xl px-4">{content}</p>
                 </div>*/}
-                <div className="w-full flex justify-center"> 
+                {/*<div className="w-full flex justify-center"> 
                   <div className="text-white w-full max-w-2xl px-4"> {content} 
                     </div> 
-                  </div>
+                  </div>*/}
                 <hr className="vertical start-100 ms-n5 d-xl-block d-none" />
               </div>
 
-              <div className="col-1"></div>
+              {/*<div className="col-1"></div>*/}
+
             </div>
           </div>
         </div>

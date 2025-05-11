@@ -20,50 +20,62 @@ const UserCMS: React.FC = () => {
   const [headline, setHeadline] = useState("");
   const [imageDataList, setImageDataList] = useState<ImageData[]>([]);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  
+
+  //newly added
+  const [aboutus, setAboutUs] = useState("");
+  const [bannercontent, setBannerContent] = useState("");
+  const [bannersecondcontent, setBannerSecondContent] = useState("");
+  const [characterreference, setCharacterReference] = useState("");
+
   const [isLoading, setIsLoading] = useState(false); // State to control spinner
 
-  async function fetchCMS(){
+  async function fetchCMS() {
     const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("authToken")}`
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch profile data");
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("authToken")}`
       }
+    });
 
-      const data = await response.json();
-      console.log(data);
-      /*setBannerImage(`https://chabcav-api-development.up.railway.app/uploads/${data.banner}`);
-      setMidContentImage(`https://chabcav-api-development.up.railway.app/uploads/${data.midcontentimage}`);
-      setCard1Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card1}`);
-      setCard2Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card2}`);
-      setCard3Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card3}`);
-      setCard4Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card4}`);
-      setCard5Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card5}`);
-      setCard6Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card6}`);
-      setCard7Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card7}`);
-      setCard8Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card8}`);*/
+    if (!response.ok) {
+      throw new Error("Failed to fetch profile data");
+    }
+
+    const data = await response.json();
+    console.log(data);
+    /*setBannerImage(`https://chabcav-api-development.up.railway.app/uploads/${data.banner}`);
+    setMidContentImage(`https://chabcav-api-development.up.railway.app/uploads/${data.midcontentimage}`);
+    setCard1Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card1}`);
+    setCard2Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card2}`);
+    setCard3Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card3}`);
+    setCard4Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card4}`);
+    setCard5Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card5}`);
+    setCard6Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card6}`);
+    setCard7Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card7}`);
+    setCard8Image(`https://chabcav-api-development.up.railway.app/uploads/${data.card8}`);*/
 
 
-      setBannerImage(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.banner}?alt=media`);
-      setMidContentImage(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.midcontentimage}?alt=media`);
-      setCard1Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card1}?alt=media`);
-      setCard2Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card2}?alt=media`);
-      setCard3Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card3}?alt=media`);
-      setCard4Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card4}?alt=media`);
-      setCard5Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card5}?alt=media`);
-      setCard6Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card6}?alt=media`);
-      setCard7Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card7}?alt=media`);
-      setCard8Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card8}?alt=media`);
+    setBannerImage(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.banner}?alt=media`);
+    setMidContentImage(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.midcontentimage}?alt=media`);
+    setCard1Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card1}?alt=media`);
+    setCard2Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card2}?alt=media`);
+    setCard3Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card3}?alt=media`);
+    setCard4Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card4}?alt=media`);
+    setCard5Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card5}?alt=media`);
+    setCard6Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card6}?alt=media`);
+    setCard7Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card7}?alt=media`);
+    setCard8Image(`https://firebasestorage.googleapis.com/v0/b/chabcav-d81fa.firebasestorage.app/o/public%2F${data.card8}?alt=media`);
 
-      setContent(data.content);
-      setHeadline(data.headline);
-}  
+    setContent(data.content);
+    setHeadline(data.headline);
+
+    // Set the new state for the new fields
+    setAboutUs(data.aboutus);
+    setBannerContent(data.bannercontent);
+    setBannerSecondContent(data.bannersecondcontent);
+    setCharacterReference(data.characterreference);
+  }
 
   async function handleContentChanges() {
     try {
@@ -76,22 +88,26 @@ const UserCMS: React.FC = () => {
         body: JSON.stringify({
           content: content,
           headline: headline,
+          aboutus: aboutus,
+          bannercontent: bannercontent,
+          bannersecondcontent: bannersecondcontent,
+          characterreference: characterreference,
         }),
       });
-      
+
       if (!response.ok) {
         throw new Error("Failed to update CMS content");
       }
-      
+
       const text = await response.text();
-      
+
       if (text) {
         const data = JSON.parse(text);
         console.log("Data:", data);
       } else {
         console.warn("No JSON content returned");
       }
-      
+
       /*const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms/update-contents", {
         method: "POST",
         headers: {
@@ -147,14 +163,14 @@ const UserCMS: React.FC = () => {
           },
           body: formData,
         });
-      
+
         if (!response.ok) {
           setIsLoading(false);
           throw new Error("Failed to submit image data");
         }
         setIsLoading(false);
       }
-      
+
       /*if (imageDataList.length) {
         console.warn("No images to upload. Skipping the request.");
         const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms/upload", {
@@ -244,6 +260,38 @@ const UserCMS: React.FC = () => {
 
         {/* Profile Card */}
         <div className="card card-body mx-2 mx-md-2 mt-n6">
+          {/* Banner content */}
+          <div className="col-10 mx-auto bg-gradient-dark border-radius-lg">
+            <div className="row py-2">
+              <div className="col-xl-4 col-md-6 px-5 position-relative d-flex align-items-center">
+
+              </div>
+              <div className="col-xl-4 col-md-5 z-index-2 position-relative px-md-3 px-5 my-md-auto mt-4">
+                <textarea
+                  className="form-control text-white bg-transparent border-0 text-3xl"
+                  rows={3}
+                  defaultValue={bannercontent}
+                  onChange={(e) => setBannerContent(e.target.value)}
+                  // defaultValue="Chabacano de Ciudad de Caivte History"
+                  style={{ resize: "none" }}
+                />
+                <textarea
+                  className="text-lg text-white bg-transparent border-0 text-8xl w-100"
+                  rows={3}
+                  defaultValue={bannersecondcontent}
+                  onChange={(e) => setBannerSecondContent(e.target.value)}
+                  // defaultValue="Chabacano de Ciudad de Caivte History"
+                  style={{ resize: "none" }}
+                />
+                <hr className="vertical start-100 ms-n5 d-xl-block d-none" />
+              </div>
+            </div>
+          </div>
+
+
+
+
+
 
           <div className="col-10 mx-auto bg-gradient-dark border-radius-lg">
             <div className="row py-5">
@@ -285,10 +333,57 @@ const UserCMS: React.FC = () => {
                 </textarea>
                 <hr className="vertical start-100 ms-n5 d-xl-block d-none" />
               </div>
-
               <div className="col-1"></div>
             </div>
           </div>
+
+          <div className="col-10 mx-auto bg-gradient-dark border-radius-lg">
+            <div className="row py-5">
+              <div className="col-xl-4 col-md-6 px-5 position-relative d-flex align-items-center">
+
+              </div>
+              <div className="col-xl-4 col-md-5 z-index-2 position-relative px-md-3 px-5 my-md-auto mt-4">
+                <textarea
+                  className="text-lg text-white bg-transparent border-0 text-8xl w-100"
+                  rows={10}
+                  defaultValue={aboutus}
+                  onChange={(e) => setAboutUs(e.target.value)}
+                  // defaultValue="Chabacano de Ciudad de Caivte History"
+                  style={{ resize: "none" }}
+                />
+
+                <hr className="vertical start-100 ms-n5 d-xl-block d-none" />
+              </div>
+            </div>
+          </div>
+
+
+
+          <div className="col-10 mx-auto bg-gradient-dark border-radius-lg">
+            <div className="row py-5">
+              <div className="col-xl-4 col-md-6 px-5 position-relative d-flex align-items-center">
+
+              </div>
+              <div className="col-xl-4 col-md-5 z-index-2 position-relative px-md-3 px-5 my-md-auto mt-4">
+
+                <textarea
+                  className="text-lg text-white bg-transparent border-0 text-8xl w-100"
+                  rows={2}
+                  defaultValue={characterreference}
+                  onChange={(e) => setCharacterReference(e.target.value)}
+                  // defaultValue="Chabacano de Ciudad de Caivte History"
+                  style={{ resize: "none" }}
+                />
+                <hr className="vertical start-100 ms-n5 d-xl-block d-none" />
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
           {/* </div> */}
 
           {/* Sections */}
@@ -482,9 +577,14 @@ const UserCMS: React.FC = () => {
               </div>
             </div>
           </div>
+
+
         </div>
+
+
+
         <button className="btn btn-outline-dark btn-sm mb-0" type="button" onClick={handleCMSChanges}>
-        Save Content
+          Save Content
         </button>
         <input
           type="file"
@@ -738,6 +838,11 @@ const UserCMS: React.FC = () => {
             }
           }}
         />
+
+
+
+
+
       </div>
     </>
 

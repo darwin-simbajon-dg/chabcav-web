@@ -1,6 +1,36 @@
 import React from "react";
+import { useEffect } from "react";
 
 const Prefooter: React.FC = () => {
+
+  const [characterReference, setCharacterReference] = React.useState<string>("");
+
+   useEffect(() => {
+      fetchCMS();
+    }, []);
+
+
+    
+      async function fetchCMS() {
+        const response = await fetch("https://chabcav-api-development.up.railway.app/api/cms", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+          }
+        });
+    
+        if (!response.ok) {
+          throw new Error("Failed to fetch profile data");
+        }
+    
+        const data = await response.json();
+        console.log(data);
+        // Set the new state for the new fields
+        setCharacterReference(data.characterreference);
+       
+      }
+  
   return (
     <div className="container">
       <div
@@ -14,7 +44,7 @@ const Prefooter: React.FC = () => {
           <div className="row">
             <div className="col-lg-5 col-md-8 m-auto text-start">
               <h5 className="text-white mb-lg-0 mb-5">
-              Dr. Enrique R. Escalante
+              {characterReference}
               
               </h5>
             </div>
