@@ -44,3 +44,270 @@
 .secDiv {
   max-width: 100%;
 }
+
+/* General Container */
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: rgb(251, 247, 247);
+  font-family: Arial, sans-serif;
+}
+
+/* Form Box */
+.register-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Title */
+.register-box h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #555;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Buttons */
+.register-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background: #2575fc;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.register-button:hover {
+  background: #1e63d6;
+}
+
+/* Links */
+.register-box p {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.register-box a {
+  color: #2575fc;
+  text-decoration: none;
+}
+
+.register-box a:hover {
+  text-decoration: underline;
+}
+
+/* Success and Error Messages */
+.success-message {
+  color: #4caf50;
+  margin-bottom: 10px;
+}
+
+.error-message {
+  color: #f44336;
+  margin-bottom: 10px;
+}
+
+
+/* General Container */
+.update-account-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #fff;
+  font-family: Arial, sans-serif;
+}
+
+/* Form Box */
+.update-account-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Title */
+.update-account-box h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #555;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Buttons */
+.update-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background: #2575fc;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.cancel-button {
+  margin-top: 10px;
+}
+
+.update-button:hover {
+  background: #1e63d6;
+}
+
+/* Success and Error Messages */
+.success-message {
+  color: #4caf50;
+  margin-bottom: 10px;
+}
+
+.error-message {
+  color: #f44336;
+  margin-bottom: 10px;
+}
+
+/* General Container */
+.account-container-wide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #fff;
+  font-family: Arial, sans-serif;
+}
+
+/* Account Box */
+.account-box-wide {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 80%; /* Wider width */
+  max-width: 800px; /* Maximum width */
+  text-align: left; /* Align text to the left for a wide layout */
+}
+
+/* Title and Paragraphs */
+.account-box-wide h1 {
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.account-box-wide p {
+  color: #555;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+/* Account Details */
+.account-details-wide {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns for wider display */
+  gap: 20px;
+}
+
+.account-details-wide p {
+  margin: 0;
+  font-size: 18px;
+}
+
+.account-details-wide strong {
+  color: #2575fc;
+}
+
+/* Update Account Link */
+.update-account-link {
+  display: block;
+  margin: 30px auto 0;
+  width: fit-content;
+  padding: 10px 20px;
+  background: #2575fc;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
+  text-align: center;
+  transition: background 0.3s;
+}
+
+.update-account-link:hover {
+  background: #1e63d6;
+}
+
+/* Error Message */
+.error-message {
+  color: #f44336;
+  text-align: center;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+/* Toast Container */
+.custom-toast-container {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 9999 !important;
+}
+
+.custom-toast-body {
+  margin: 0 auto;
+}
+
+

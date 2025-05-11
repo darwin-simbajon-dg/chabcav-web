@@ -1,0 +1,75 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+export const SidebarConfig = ({ setSelectedChapter }) => {
+  const [chapters, setChapters] = useState<
+    { chaptername: string; lessons: { lessonid: string; lessonname: string }[] }[]
+  >([]);
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        const response = await axios.get("https://chabcav-api-development.up.railway.app/user/get-all-lessons");
+        console.log("Fetched Lessons:", response.data);
+
+        if (response.data && Array.isArray(response.data.lessons)) {
+          const groupedChapters = response.data.lessons.reduce((acc, lesson) => {
+            const existingChapter = acc.find((ch) => ch.chaptername === lesson.chaptername);
+            if (existingChapter) {
+              existingChapter.lessons.push({ lessonid: lesson.lessonid, lessonname: lesson.lessonname });
+            } else {
+              acc.push({
+                chaptername: lesson.chaptername,
+                lessons: [{ lessonid: lesson.lessonid, lessonname: lesson.lessonname }],
+              });
+            }
+            return acc;
+          }, []);
+
+          console.log("Grouped Chapters:", groupedChapters);
+          setChapters(groupedChapters);
+        }
+      } catch (error) {
+        console.error("Error fetching lessons:", error);
+      }
+    };
+    fetchLessons();
+  }, []);
+
+  return {
+    profile: {
+      title: "Profile",
+      icon: "/src/assets/css/accounts/img/team-3.jpg",
+      items: [
+        { title: "My Profile", link: "../../pages/pages/profile/overview.html" },
+        { title: "Settings", link: "../../pages/pages/account/settings.html" },
+        { title: "CMS", link: "../../pages/pages/account/settings.html" },
+        { title: "Logout", link: "../../pages/authentication/signin/basic.html" },
+      ],
+    },
+    activity: {
+      title: "Activity",
+      icon: "browse_activity",
+      items: [{ title: "Go to Lesson", link: "../../pages/dashboards/analytics.html" }],
+    },
+    chapters: {
+      title: "Chapters",
+      icon: "browse_activity",
+      items:
+        chapters.length > 0
+          ? chapters.map((chapter) => ({
+              title: chapter.chaptername,
+              link: "#",
+              onClick: () => setSelectedChapter(chapter.chaptername),
+              items: chapter.lessons.map((lesson) => ({
+                title: lesson.lessonname,
+                link: "#",
+                onClick: () => setSelectedChapter({ chapter: chapter.chaptername, lesson: lesson.lessonname }),
+              })),
+            }))
+          : [{ title: "No Chapters Available", link: "#" }],
+    },
+  };
+};
+
+export default SidebarConfig;

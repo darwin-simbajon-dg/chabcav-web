@@ -1,10 +1,19 @@
 # Stage 1: Build the React app
 FROM node:18-alpine AS build
+
+# ARG REACT_APP_API_BASE_URL
+ARG VITE_APP_API_BASE_URL
+# ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
+ENV VITE_APP_API_BASE_URL=$VITE_APP_API_BASE_URL
+
 RUN apk add --no-cache bash curl
 WORKDIR /app
 COPY chabcav-web/package.json . 
 RUN npm install                         
-COPY chabcav-web/ .   
+COPY chabcav-web/ . 
+
+
+
 RUN npm run build
 
 # Stage 2: Serve the React app with Nginx server

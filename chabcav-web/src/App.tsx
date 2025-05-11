@@ -1,52 +1,65 @@
 
-import './App.css'
-import Header from './components/Header'
-import Login from './components/Login'
-import Content from './components/Content'
-import { useEffect, useState } from 'react';
-import PageData from './models/PageData';
+// import './App.css'
+// import Header from './components/Header'
+// import Login from './components/Login'
+// import Content from './components/Content'
+// import { useEffect, useState } from 'react';
+// import PageData from './models/PageData';
+
+
+
+import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Main from './pages/Main';
+import Register from './pages/Register';
+import UpdateAccount from './pages/UpdateAccount';
+import UserAccount from './pages/account/UserAccount';
+import ResetPassword from './pages/account/ResetPassword';
+import EnterEmailAddress from './pages/account/EnterEmailAddress';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const [data, setData] = useState<PageData | null>(null);
-  const [error, setError] = useState<string | null>(null);
+ 
+  const isLoggedIn = !!localStorage.getItem('authToken'); 
 
-  useEffect(() => {
-
-    const fetchData = async() => {
-
-      try {        
-        const apiBaseUrl = import.meta.env.VITE_CHABCAV_API_BASE_URL;
-        const response = await fetch(`${apiBaseUrl}/cms/configurations`);
-        if(!response.ok){
-          throw new Error(`HTTP error! status: ${response.json()}`);
-        }
-        else{
-          const result: PageData = await response.json();
-          setData(result);
-        }
-      } catch (error) {
-        setError(error instanceof Error ? error.message: 'Unknown error');
-      }
-    }
-
-    fetchData();
-
-  }, []);
-
-  if(error) {
-    return <div>Error: [error]</div>
-  }
-
-  if(!data){
-    return <div>Loading...</div>
-  }
 
   return (
-    <div>
-        <Header bannerImage={data.bannerImage} />
-        <Login/>
-        <Content content={data.content} />
-      </div>
+    // <div>
+    //     <Header bannerImage={data.bannerImage} />
+    //     <Login/>
+    //     <Content content={data.content} />
+    //   </div>
+
+    
+    <Router>
+      <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/account" element={<UserAccount />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/account/update" element={isLoggedIn ? <UpdateAccount /> : <Main />}/>
+          <Route path="/reset-password" element={<ResetPassword/>}/>
+          <Route path="/enter-emailAddress" element={<EnterEmailAddress/>}/>
+        
+          {/* <Route path="/user/lessons" element={isLoggedIn ? <View /> : <Main />} /> */}
+      </Routes>
+      <ToastContainer
+        toastClassName="custom-toast"
+       // bodyClassName="custom-toast-body"
+        className="custom-toast-container"
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      
+  
+      />
+    </Router>
   )
 }
 
